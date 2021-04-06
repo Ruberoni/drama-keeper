@@ -1,15 +1,29 @@
-import express from 'express'
-import dbg from 'debug'
+import dbg from "debug";
+import app from "./index";
 
-const debug = dbg('http')
-const app = express()
+const debug = dbg("http");
 
-const port = process.env.PORT || 3000
+const port: number = normalizePort(process.env.PORT || 3000);
 
-app.get('/', (req, res) => {
-	res.send("Route working")
-})
+/**
+ * Start server
+ */
+app.listen(port, onListening);
 
-app.listen(port, () => {
-	debug("Listening on port:", port)
-})
+function normalizePort(val: any): number {
+  const port = parseInt(val, 10);
+  if (isNaN(port)) {
+    throw new Error("Port invalid");
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  throw new Error("Port can not be negative");
+}
+
+function onListening() {
+  debug("Listening on port:", port);
+}
