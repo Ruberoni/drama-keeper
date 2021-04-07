@@ -1,9 +1,15 @@
-// import mongoose from "mongoose"; 
+import mongoose from "mongoose"; 
+
+const uri =
+  "mongodb+srv://RubenDB:zv3dTCTWZX4fQ3ox@main-db.qfh1y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 /*
-(async function () {
+ * Calling this function connects the server to the database
+ * In an error, the error is thrown to be handled by the server error handler
+ */
+export default async () : Promise<void> => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
@@ -12,6 +18,4 @@
   } catch (err) {
     throw new Error(err);
   }
-})();
-*/
-
+}

@@ -3,7 +3,9 @@
  */
 import dotenv from "dotenv";
 import express from "express";
-import dbg from "debug";
+import Debug from "debug";
+import mongoose from "mongoose";
+import ConnectDB from "./config/db"
 
 /**
  * Import routes
@@ -11,10 +13,17 @@ import dbg from "debug";
 import indexRouter from "./routes/index";
 
 /**
+ * Initial configuration
+ */
+dotenv.config();
+const debug = Debug("http");
+ConnectDB()
+
+
+/**
  * Import Middlewares
  */
 
-dotenv.config();
 const app = express();
 
 /**

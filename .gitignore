@@ -4,7 +4,7 @@
 .eslint*
 .prettier*
 tsconfig.json
-
+babel.config.json
 # misc
 .DS_Store
 .env.local
