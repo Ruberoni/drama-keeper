@@ -1,10 +1,12 @@
 import express from "express";
+import usersRouter from "./users";
 
 const router = express.Router();
-const hola = "gfff"
+
+router.use("/users", usersRouter);
 
 router.get("/", (req, res) => {
-	res.send("API router working");
+  res.send("API router working");
 });
 
 export default router;
