@@ -8,7 +8,7 @@
 
 ### Pre-hooks
 
-- For **Save:** Checks email already registered, encrypt password
+- Before **Save:** Checks email already registered, encrypt password
 
 ### Methods
 
@@ -25,12 +25,15 @@ const userSchema = new Schema<IUser>({
     required: true,
     unique: true,
     lowercase: true,
-    validator: (val: string) => isEmail(val),
+    validate: {
+      validator: (val: string) => isEmail(val),
+      message: "{VALUE} is not an email"
+    }
   },
   password: {
     type: String,
     required: true,
-    validator: (val: string) => val.length > 7,
+    minLength: 7
   },
 });
 
