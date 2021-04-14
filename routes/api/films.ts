@@ -34,7 +34,15 @@ router.post("/", FilmsController.createFilm);
  * Adds the image in assets/img to a document
  * @params {integer} id The id of the document to add the image
  */
-router.post("/test/addcover/:id", FilmsController.test.addCover)
+router.get("/test/addcover/:id", FilmsController.test.addCover)
+
+/*
+ * TESTING PURPOSES ROUTE
+ *
+ * Adds the image in assets/img to a document
+ * @params {integer} id The id of the document to add the image
+ */
+router.get("/test/addcovercompressed/:id", FilmsController.test.addCoverCompressed)
 
 /*
  * TESTING PURPOSES ROUTE
@@ -42,7 +50,7 @@ router.post("/test/addcover/:id", FilmsController.test.addCover)
  * Shows the image in images.cover property of the document
  * @params {integer} id The id of the document to add the image
  */
-router.post("/test/showcover/:id", FilmsController.test.showCover)
+router.get("/test/showcover/:id", FilmsController.test.showCover)
 
 
 export default router;

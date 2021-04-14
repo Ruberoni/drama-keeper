@@ -4,7 +4,7 @@
   "description": "Keep a record of the films watched",
   "main": "index.js",
   "scripts": {
-    "start": "DEBUG='user' nodemon server.ts --trace-warnings",
+    "start": "DEBUG='film' nodemon server.ts --trace-warnings",
     "test": "jest",
     "eslint-staged": "LIST=`git diff --cached --name-only | grep .*\\.ts | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST && prettier $LIST --write; fi"
   },
@@ -17,6 +17,8 @@
   "private": true,
   "dependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/imagemin": "^7.0.0",
+    "@types/imagemin-pngquant": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "bcrypt": "^5.0.1",
@@ -24,6 +26,8 @@
     "debug": "^4.3.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "imagemin": "^7.0.1",
+    "imagemin-pngquant": "^9.0.2",
     "jest": "26.6.0",
     "mongodb": "^3.6.6",
     "mongoose": "^5.12.3",

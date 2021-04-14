@@ -34,7 +34,7 @@ const debug = Debug("film");
 export const getAllFilms = async (
   req: Request,
   res: Response
-): Promise<void | Response> => {
+  ): Promise<void | Response> => {
   debug("CONTROLLER: getAllFilms | EXECUTED");
   try {
     const films = await FilmsModel.find();
@@ -53,13 +53,13 @@ export const getAllFilms = async (
 export const createFilm = async (
   req: Request,
   res: Response
-): Promise<void | Response> => {
+  ): Promise<void | Response> => {
   debug("CONTROLLER: createFilm | EXECUTED");
 
   try {
     const filmInfo = req.body;
     await FilmsModel.create(filmInfo);
-    res.send("User created");
+    res.send("Film created");
     debug("CONTROLLER: createFilm | FINISHED GOOD");
   } catch (err) {
     debug("CONTROLLER: createFilm | ERROR:", err.message);
@@ -67,11 +67,11 @@ export const createFilm = async (
   }
 };
 
-const imagePath = path.resolve("../../assets/img/panes.png");
+const imagePath = path.resolve("./assets/img/panes.png");
 
 /*
  * TESTING PURPOSES CONTROLLERS
- * CALL THEM WITH /api/films/test/<function name>/<optional params>
+ * CALL THEM WITH /api/films/test/<function name>/<uri params>
  */
 export const test = {
   
@@ -80,29 +80,58 @@ export const test = {
    * @uriparams {integer} id The film to add the image
    */
   async addCover(req: Request, res: Response): Promise<void | Response> {
-    debug("TEST CONTROLLER: addImage | EXECUTED");
+    debug("TEST CONTROLLER: addCover | EXECUTED");
     try {
       // Get film id from params
       const id = req.params.id;
       // Get film with id
       const Film = await FilmsModel.findById(id);
       if (!Film) throw "Film doesn't exist";
-      debug("TEST CONTROLLER: addImage Film exist");
+      debug("TEST CONTROLLER: addCover Film exist");
 
       // Save img with fs module
       fs.readFile(imagePath, async (err, imageData) => {
         if (err) throw err;
-        await Film.addCoverPNG(imageData);
+        await Film.addCover(imageData, 'png');
 
         // Call film method to save img (await)
 
         // Send success response
-        debug("TEST CONTROLLER: addImage | FINISHED GOOD");
+        debug("TEST CONTROLLER: addCover | FINISHED GOOD");
         res.send("Success adding image to film");
       });
     } catch (err) {
       // Send error response
-      debug("TEST CONTROLLER: addImage | ERROR:", err.message);
+      debug("TEST CONTROLLER: addCover | ERROR:", err.message);
+      res.status(400).send(err.message);
+    }
+  },
+
+  async addCoverCompressed(req: Request, res: Response): Promise<void | Response> {
+    debug("TEST CONTROLLER: addCoverCompressed | EXECUTED");
+    try {
+      // Get film id from params
+      const id = req.params.id;
+      // Get film with id
+      const Film = await FilmsModel.findById(id);
+      if (!Film) throw "Film doesn't exist";
+      debug("TEST CONTROLLER: addCoverCompressed Film exist");
+
+      // Save img with fs module
+      fs.readFile(imagePath, async (err, imageData) => {
+        if (err) throw err;
+
+        await Film.addCoverCompressed(imageData, 'png');
+
+        // Call film method to save img (await)
+                               
+        // Send success response
+        debug("TEST CONTROLLER: addCoverCompressed | FINISHED GOOD");
+        res.send("Success adding image to film");
+      });
+    } catch (err) {
+      // Send error response
+      debug("TEST CONTROLLER: addCoverCompressed | ERROR:", err.message);
       res.status(400).send(err.message);
     }
   },
