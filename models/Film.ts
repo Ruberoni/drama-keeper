@@ -27,7 +27,7 @@
 import { Schema, model, Document } from "mongoose";
 import isURL from "validator/lib/isURL";
 import { IUser } from "./User"
-import { compressImagePng } from '../utils/compressImage'
+import { compressImagePng, compressImage, knowFileTypeFromBuffer } from '../utils/compressImage'
 
 const filmSchema = new Schema<IFilm>({
   user: Schema.Types.ObjectId,
@@ -97,13 +97,13 @@ enum ImagesContentTypes {
  */
 filmSchema.methods.addCover = async function (
   this: IFilm,
-  imageData: Record<string, unknown>,
-  imageType: keyof typeof ImagesContentTypes
+  imageData: Buffer,
 ){
+  const fileType = await knowFileTypeFromBuffer(imageData)
   await this.update({
     $set: {
       'images.cover.data': imageData,
-      'images.cover.contentType': ImagesContentTypes[imageType]
+      'images.cover.contentType': fileType?.mime
     }
   })
 }
@@ -114,15 +114,16 @@ filmSchema.methods.addCover = async function (
 filmSchema.methods.addCoverCompressed = async function (
   this: IFilm,
   imageData: Buffer,
-  imageType: keyof typeof ImagesContentTypes
 ){
-  const imageDataCompressed = await compressImagePng(imageData)
-  await this.update({
-    $set: {
-      'images.cover.data': imageDataCompressed,
-      'images.cover.contentType': ImagesContentTypes[imageType]
-    }
-  })
+  const imageDataCompressed = await compressImage(imageData)
+  // const fileType = await knowFileTypeFromBuffer(imageData)
+  // await this.update({
+  //   $set: {
+  //     'images.cover.data': imageDataCompressed,
+  //     'images.cover.contentType': fileType?.mime
+  //   }
+  // })
+  this.addCover(imageDataCompressed)
 }
 
 const Film = model<IFilm>("Film", filmSchema)

@@ -1,24 +1,23 @@
-/**
-# Film
-
-## Create
-POST `/films/{user_id}`
-
-## Get films by user
-GET `/films/{user_id}`
-
-## Get films by user where watched is true:
-GET `/films/{user_id}?watched=true`
-
-## Get films by user where watched is false:
-GET `/films/{user_id}?watched=false`
-
-## Delete film by id
-DELETE `/films/{film_id}`
-
-## Update film by id
-PUT `/films/{film_id}`
-**/
+/*
+ * Here goes the controllers for user routes: /api/users
+ *
+ *   RESUME:
+ *
+ * - For retrieve all the films:
+ *   getAllFilms
+ *
+ * - For creating a film:
+ *   createFilm
+ *
+ * - For delete a film:
+ *   deleteFilmById
+ *
+ * - For updating a film:
+ *   updateFilmById
+ *
+ * - For retrieving films of a user
+ *   getFilmsByUserId
+ */
 
 import FilmsModel from "../../models/Film";
 import Debug from "debug";
@@ -37,7 +36,13 @@ export const getAllFilms = async (
   ): Promise<void | Response> => {
   debug("CONTROLLER: getAllFilms | EXECUTED");
   try {
-    const films = await FilmsModel.find();
+
+    let films = await FilmsModel.find();
+    const watchedString = req.query.watched
+    if (watchedString) {
+      const watched = (watchedString === 'true')
+      films = films.filter((film) => film?.watched === watched)
+    }
     res.send(films);
     debug("CONTROLLER: getAllFilms | FINISHED GOOD");
   } catch (err) {
@@ -66,6 +71,73 @@ export const createFilm = async (
     res.status(400).send(err.message);
   }
 };
+
+/*
+ * Send all the films of the user to the response.
+ */
+export const getFilmsByUserId = async (
+  req: Request,
+  res: Response
+  ): Promise<void | Response> => {
+  debug("CONTROLLER: getFilmsByUser | EXECUTED");
+  try {
+    const userId = req.params.user_id;
+    let films = await FilmsModel.find({user: userId});
+
+    const watchedString = req.query.watched
+    if (watchedString) {
+      const watched = (watchedString === 'true')
+      films = films.filter((film) => film?.watched === watched)
+    }
+
+    res.send(films);
+    debug("CONTROLLER: getFilmsByUser | FINISHED GOOD");
+  } catch (err) {
+    debug("CONTROLLER: getFilmsByUser | ERROR:", err.message);
+    res.status(400).send(err.message);
+  }
+};
+
+/*
+ * Deletes a film by id. 
+ */
+export const deleteFilmById = async (
+  req: Request,
+  res: Response
+  ): Promise<void | Response> => {
+  debug("CONTROLLER: deleteFilmById | EXECUTED");
+  try {
+    const id = req.params.id;
+    await FilmsModel.findByIdAndDelete(id);
+    res.send("Film deleted");
+    debug("CONTROLLER: deleteFilmById | FINISHED GOOD");
+  } catch (err) {
+    debug("CONTROLLER: deleteFilmById | ERROR:", err.message);
+    res.status(400).send(err.message);
+  }
+};
+
+/*
+ * Updates a film by id. 
+ */
+export const updateFilmById = async (
+  req: Request,
+  res: Response
+  ): Promise<void | Response> => {
+  debug("CONTROLLER: updateFilmById | EXECUTED");
+  try {
+    const id = req.params.id;
+    const filmInfo = req.body;
+
+    await FilmsModel.findByIdAndUpdate(id, filmInfo);
+
+    res.send("Film updated");
+    debug("CONTROLLER: updateFilmById | FINISHED GOOD");
+  } catch (err) {
+    debug("CONTROLLER: updateFilmById | ERROR:", err.message);
+    res.status(400).send(err.message);
+  }
+}
 
 const imagePath = path.resolve("./assets/img/panes.png");
 
