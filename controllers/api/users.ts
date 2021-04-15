@@ -3,11 +3,17 @@
  *
  *   RESUME:
  *
- * - For retrieveng all the users:
+ * - For retrieve all the users:
  *   getAllUsers
  *
  * - For creating an user:
  *   creteUser
+ *
+ * - For delete an user:
+ *   deleteUserById
+ *
+ * - For updating an user:
+ *   updateUserById
  */
 
 import UserModel from "../../models/User";
@@ -54,3 +60,45 @@ export const createUser = async (
     res.status(400).send(err.message);
   }
 };
+
+/*
+ * Deletes a user by id. 
+ */
+export const deleteUserById = async (
+  req: Request,
+  res: Response
+  ): Promise<void | Response> => {
+  debug("CONTROLLER: deleteUserById | EXECUTED");
+  try {
+    const id = req.params.id;
+    await UserModel.findByIdAndDelete(id);
+    res.send("User deleted");
+    debug("CONTROLLER: deleteUserById | FINISHED GOOD");
+  } catch (err) {
+    debug("CONTROLLER: deleteUserById | ERROR:", err.message);
+    res.status(400).send(err.message);
+  }
+};
+
+/*
+ * Updates a user by id.
+ * req.body has to have the information needes for creating an user document.
+ */
+export const updateUserById = async (
+  req: Request,
+  res: Response
+  ): Promise<void | Response> => {
+  debug("CONTROLLER: updateUserById | EXECUTED");
+  try {
+    const id = req.params.id;
+    const userInfo = req.body;
+
+    await UserModel.findByIdAndUpdate(id, userInfo);
+
+    res.send("User updated");
+    debug("CONTROLLER: updateUserById | FINISHED GOOD");
+  } catch (err) {
+    debug("CONTROLLER: updateUserById | ERROR:", err.message);
+    res.status(400).send(err.message);
+  }
+}
