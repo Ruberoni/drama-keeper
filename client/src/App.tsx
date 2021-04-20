@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
+import { createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
+import { red } from '@material-ui/core/colors'
 import './App.css';
+import TopBar from './components/TopBar/TopBar'
 
-function App() {
+const theme = createMuiTheme({
+  palette: {
+    primary: red
+  }
+})
+
+function MyApp() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme}>
+      <TopBar/>
+    </ThemeProvider>
+  )
 }
 
-export default App;
+
+export default MyApp;
