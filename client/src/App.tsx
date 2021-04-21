@@ -3,7 +3,9 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { red } from '@material-ui/core/colors'
 import './App.css';
-import TopBar from './components/TopBar/TopBar'
+import FilmItem from './components/FilmItem/FilmItem'
+// import TopBar from './components/TopBar/TopBar'
+// import Login from './components/Login/Login'
 
 const theme = createMuiTheme({
   palette: {
@@ -14,10 +16,9 @@ const theme = createMuiTheme({
 function MyApp() {
   return (
     <ThemeProvider theme={theme}>
-      <TopBar/>
+      <FilmItem/>
     </ThemeProvider>
   )
 }
-
 
 export default MyApp;
