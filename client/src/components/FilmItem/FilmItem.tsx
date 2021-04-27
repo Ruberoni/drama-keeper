@@ -10,16 +10,15 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
-import cover from '../../assets/img/when-harry-met-sally-cover.jpg'
+import _cover from '../../assets/img/when-harry-met-sally-cover.jpg'
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
+import correctImageBuffer from '../../utils/correctImageBuffer'
 
 const scale = 1
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      marginTop: "10%",
-      marginLeft: "10%",
       display: "flex",
       maxWidth: 360 * scale  ,
       height: 80 * scale
@@ -72,7 +71,14 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function FilmItem() {
+export interface IFilm {
+  title?: string,
+  rottenTomatoesLink?: string,
+  watched?: boolean,
+  cover?: Buffer
+}
+
+export default function FilmItem({title, rottenTomatoesLink, watched, cover} : IFilm) {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -92,14 +98,14 @@ export default function FilmItem() {
       <CardMedia
         className={classes.media}
         title="Film cover">
-          <img src={cover} alt="Cover" className={classes.cover} />
+          <img src={(cover && correctImageBuffer(cover)) || _cover} alt="Cover" className={classes.cover} />
       </CardMedia>
       <div className={classes.details}>
         <CardContent className={classes.content}>
-          <Typography variant="body1">When Harry Met Sally</Typography>
+          <Typography variant="body1">{title || 'Film Title'}</Typography>
           <div className={classes.divider}></div>
           <div className={classes.rottenTomatoesSection}>
-            <a href="#" className={classes.rottenTomatoesLink}>
+            <a href={rottenTomatoesLink || '#'} className={classes.rottenTomatoesLink} target='_blank' rel='noreferrer'>
               <Typography variant="body2">RottenTomatoes</Typography>
               <img className={classes.rottenTomatoesLogo} src={rottenTomatoesLogoPng} />
             </a> 
@@ -119,9 +125,10 @@ export default function FilmItem() {
         >
             <MenuItem onClick={handleClose}>Delete</MenuItem>
             <MenuItem onClick={handleClose}>Update</MenuItem>
-            <MenuItem onClick={handleClose}>Watched</MenuItem>
+            <MenuItem onClick={handleClose}>{watched ? 'Watched' : 'Unwatch'}</MenuItem>
       </Menu>
       </CardActions>
     </Card>
   );
 }
+

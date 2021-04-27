@@ -7,6 +7,7 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
+import { IFormValues } from '../Register/Register'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,11 +30,6 @@ const useStyles = makeStyles(() =>
   })
 );
 
-interface formValues {
-  email: string,
-  password: string,
-}
-
 const validationSchema = yup.object({
   email: yup
     .string()
@@ -54,7 +50,7 @@ export function Forms ()  {
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values: formValues) => {
+    onSubmit: (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
     }
   })

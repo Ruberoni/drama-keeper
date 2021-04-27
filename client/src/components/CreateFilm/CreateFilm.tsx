@@ -37,13 +37,13 @@ const useFormStyles = makeStyles(() =>
   })
 )
 
-interface formValues {
+export interface IFormValues {
   title: string,
   rottenTomatoesLink: string,
   watched: boolean
 }
 
-const validationSchema = yup.object({
+export const validationSchema = yup.object({
   title: yup
     .string()
     .required('film title is required'),
@@ -61,7 +61,7 @@ export function Forms () {
       watched: false
     },
     validationSchema: validationSchema,
-    onSubmit: (values: formValues) => {
+    onSubmit: (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
     }
   })
