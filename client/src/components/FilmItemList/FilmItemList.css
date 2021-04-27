@@ -1,0 +1,20 @@
+/* Set a limited height and enable scroll*/
+.filmList {
+  height: inherit;
+  width: 100%;
+  overflow: auto;
+}
+
+.filmList::-webkit-scrollbar {
+  display: none;
+}
+
+.filmList {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Center Film Items */
+.filmList > * {
+  margin: 60px auto;
+}

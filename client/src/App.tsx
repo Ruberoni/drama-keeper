@@ -7,7 +7,10 @@ import './App.css';
 // import TopBar from './components/TopBar/TopBar'
 // import CreateFilm from './components/CreateFilm/CreateFilm'
 // import Login from './components/Login/Login'
-import UpdateFilm from './components/UpdateFilm/UpdateFilm'
+// import UpdateFilm from './components/UpdateFilm/UpdateFilm'
+// import Register from './components/Register/Register'
+import FilmItemList from './components/FilmItemList/FilmItemList'
+// import { IFilm } from './components/FilmItem/FilmItem'
 
 const theme = createMuiTheme({
   palette: {
@@ -16,9 +19,18 @@ const theme = createMuiTheme({
 })
 
 function MyApp() {
+
+  // Fetch films by user
+  // Response template: Film[]
+  // where Film = {User: , Title: , Watched: , Links: , Cover: } 
+
   return (
     <ThemeProvider theme={theme}>
-      <UpdateFilm />
+      <div className='FilmItemListWrapper'>
+        <FilmItemList filmList={[{title: 'hola'}, {title: 'como'}, {title: 'estas'}, {title: 'ddd'}, {title: 'eee'}, {title: 'fff'}]} />
+        <FilmItemList filmList={[{title: 'aaa'}, {title: 'bbb'}, {title: 'ccc'}]} />
+      </div>
+ 
     </ThemeProvider>
   )
 }
