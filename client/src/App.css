@@ -1,15 +1,53 @@
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+}
+
 .FilmItemListWrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex-grow: 1;
   width: 100vw;
-  height: 100vh;
+  height: 90%;
 }
 
-.FilmItemListWrapper > :nth-child(1) {
+@media (max-width: 720px) {
+  .FilmItemListWrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100vw;
+    height: 90%;
+  }
+
+  .credit {
+    display: none;
+  }
+}
+
+/*.FilmItemListWrapper > :nth-child(1) {
   background-color: purple;
 }
 
 .FilmItemListWrapper > :nth-child(2) {
   background-color: green;
+}*/
+
+.credit {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  margin: auto auto 10px auto;
+  text-align: center;
+}
+
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

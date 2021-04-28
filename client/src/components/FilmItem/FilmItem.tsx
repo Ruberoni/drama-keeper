@@ -71,14 +71,21 @@ const useStyles = makeStyles(() =>
   })
 );
 
+export interface IFilmActions {
+  update?: () => void,
+  remove?: () => void,
+}
+
 export interface IFilm {
   title?: string,
   rottenTomatoesLink?: string,
   watched?: boolean,
-  cover?: Buffer
+  cover?: Buffer,
+  actions?: IFilmActions
 }
 
-export default function FilmItem({title, rottenTomatoesLink, watched, cover} : IFilm) {
+// eslint-disable-next-line no-undef
+export default function FilmItem({title, rottenTomatoesLink, watched, cover, actions} : IFilm) : JSX.Element {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -124,7 +131,7 @@ export default function FilmItem({title, rottenTomatoesLink, watched, cover} : I
           onClose={handleClose}
         >
             <MenuItem onClick={handleClose}>Delete</MenuItem>
-            <MenuItem onClick={handleClose}>Update</MenuItem>
+            <MenuItem onClick={actions?.update}>Update</MenuItem>
             <MenuItem onClick={handleClose}>{watched ? 'Watched' : 'Unwatch'}</MenuItem>
       </Menu>
       </CardActions>

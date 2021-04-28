@@ -16,8 +16,8 @@ const useStyles = makeStyles(() =>
       maxWidth: 300,
       padding: '1px 0px  17px',
       backgroundColor: "white",
-      borderRadius: 23,
-      margin: 'auto'
+      borderRadius: 20,
+      // margin: 'auto'
     },
     form: {
       display: 'flex', 

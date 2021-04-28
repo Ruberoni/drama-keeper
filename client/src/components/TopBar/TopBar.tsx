@@ -44,7 +44,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 ) 
 
-function TopBar() {
+
+export interface ITopBarActions  {
+  login: () => void,
+  register: () => void,
+  createFilm: () => void
+}
+
+export interface ITopBar {
+  actions: ITopBarActions
+}
+
+function TopBar({actions} : ITopBar) {
   const classes = useStyles();
   // const [auth, setAuth] = React.useState(true);
   const auth = false
@@ -61,12 +72,12 @@ function TopBar() {
 
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="static" color="primary" style={{}}>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           Drama Keeper
         </Typography> 
-        <Fab color="secondary" aria-label="add" className={classes.fabButton}>
+        <Fab onClick={actions.createFilm} color="secondary" aria-label="add" className={classes.fabButton}>
           <AddIcon />
         </Fab>
         <div className={classes.toLeft} />
@@ -108,8 +119,8 @@ function TopBar() {
           </div>
         ) : (
           <React.Fragment>
-            <Button variant="contained" color="secondary" className={`${classes.button} ${classes.login}`}>Login</Button>
-            <Button variant="contained" color="primary">Register</Button>
+            <Button onClick={actions.login} variant="contained" color="secondary" className={`${classes.button} ${classes.login}`}>Login</Button>
+            <Button onClick={actions.register} variant="contained" color="primary">Register</Button>
           </React.Fragment>
         )}
       </Toolbar>

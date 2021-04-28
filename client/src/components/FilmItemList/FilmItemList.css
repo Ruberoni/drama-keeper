@@ -1,15 +1,16 @@
 /* Set a limited height and enable scroll*/
-.filmList {
-  height: inherit;
-  width: 100%;
+.root {
+  height: -webkit-fill-available;
+  width: inherit;
   overflow: auto;
+
 }
 
-.filmList::-webkit-scrollbar {
+.root::-webkit-scrollbar {
   display: none;
 }
 
-.filmList {
+.root {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -17,4 +18,9 @@
 /* Center Film Items */
 .filmList > * {
   margin: 60px auto;
+}
+
+.header {
+  text-align: center;
+  padding-top: 60px;
 }
