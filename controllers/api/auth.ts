@@ -5,3 +5,32 @@ POST `/login`
 ## Register
 POST `/register`
 **/
+
+import UserModel from '../../models/User'
+import * as authServices from '../../services/Auth'
+import { Request, Response } from "express";
+
+export const login = async (req: Request, res: Response) => {
+  const authData = req.body
+  try {
+    const token = await authServices.login(authData)
+    res.json({message: 'Logged In', token})
+
+  } catch(err) {
+    res.status(400).send(err.message)
+  }
+}  
+
+// export interface RequestWithUser extends Request {
+//   userId?: string | object
+// }
+
+export const proc = async (req: Request, res: Response) => {
+  try {
+    // const userData = await UserModel.findById(req.currentUser)
+    res.send(`Welcome to a protected route ${req.currentUser.email}`)
+  } catch (err) {
+    res.status(400).send(err.message)
+  }
+ 
+}

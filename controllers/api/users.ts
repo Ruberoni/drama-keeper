@@ -53,7 +53,7 @@ export const createUser = async (
   try {
     const userInfo = req.body;
     await UserModel.create(userInfo);
-    res.send("User created");
+    res.json({message: "User Created"});
     debug("CONTROLLER: createUser | FINISHED GOOD");
   } catch (err) {
     debug("CONTROLLER: createUser | ERROR:", err.message);
