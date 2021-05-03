@@ -7,6 +7,7 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
+import * as authActions from '../../actions/auth'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -60,8 +61,12 @@ export function Forms ()  {
       passwordConfirmation: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values: IFormValues) => {
+    onSubmit: async (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
+      const registerOK = await authActions.register(values)
+      if (registerOK ==! true) {
+        alert(registerOK)
+      }
     }
   })
 

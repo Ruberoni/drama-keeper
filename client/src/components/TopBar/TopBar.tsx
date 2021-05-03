@@ -13,6 +13,9 @@ import Avatar from '@material-ui/core/Avatar';
 import Hidden from '@material-ui/core/Hidden';
 import withWidth from '@material-ui/core/withWidth';
 import Button from '@material-ui/core/Button';
+import Cookies from 'universal-cookie';
+import * as authActions from '../../actions/auth'
+
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -58,10 +61,10 @@ export interface ITopBar {
 function TopBar({actions} : ITopBar) {
   const classes = useStyles();
   // const [auth, setAuth] = React.useState(true);
-  const auth = false
+  const [auth, setAuth] = React.useState<boolean>(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
+  const cookies = new Cookies();
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -70,6 +73,18 @@ function TopBar({actions} : ITopBar) {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    handleClose()
+    authActions.logout()
+  }
+
+  React.useEffect(() => {
+    if (cookies.get('token')) {
+      setAuth(true)
+    } else {
+      setAuth(false)
+    }
+  })
 
   return (
     <AppBar position="static" color="primary" style={{}}>
@@ -113,8 +128,7 @@ function TopBar({actions} : ITopBar) {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
         ) : (

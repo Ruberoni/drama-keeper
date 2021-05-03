@@ -8,6 +8,7 @@ import * as yup from 'yup'
 import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues } from '../Register/Register'
+import * as authActions from '../../actions/auth'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -50,8 +51,12 @@ export function Forms ()  {
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values: IFormValues) => {
+    onSubmit: async (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
+      const loginOK = await authActions.login(values)
+      if (loginOK ==! true) {
+        alert(loginOK)
+      }
     }
   })
 
