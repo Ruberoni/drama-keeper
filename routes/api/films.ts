@@ -1,5 +1,6 @@
 import express from "express";
 import * as FilmsController from "../../controllers/api/films";
+import * as authMiddlewares from '../../middlewares/Auth'
 
 const router = express.Router();
 
@@ -34,5 +35,13 @@ router.get("/test/addcovercompressed/:id", FilmsController.test.addCoverCompress
  * @params {integer} id The id of the document to add the image
  */
 router.get("/test/showcover/:id", FilmsController.test.showCover)
+
+/*
+ * TESTING PURPOSES ROUTE
+ *
+ * Shows the image in images.cover property of the document
+ * @params {integer} id The id of the document to add the image
+ */
+router.get("/test/getFilmsAuthorized", authMiddlewares.authorize, FilmsController.test.getFilmsAuthorized)
 
 export default router;

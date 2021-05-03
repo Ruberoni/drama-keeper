@@ -27,7 +27,7 @@
 import { Schema, model, Document } from "mongoose";
 import isURL from "validator/lib/isURL";
 import { IUser } from "./User"
-import { compressImagePng, compressImage, knowFileTypeFromBuffer } from '../utils/compressImage'
+import { compressImage, knowFileTypeFromBuffer } from '../utils/compressImage'
 
 const filmSchema = new Schema<IFilm>({
   user: Schema.Types.ObjectId,

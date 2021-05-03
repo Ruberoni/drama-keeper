@@ -12,7 +12,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import _cover from '../../assets/img/when-harry-met-sally-cover.jpg'
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
-import correctImageBuffer from '../../utils/correctImageBuffer'
+import { correctImageBuffer } from '../../utils/index'
 
 const scale = 1
 
@@ -71,21 +71,31 @@ const useStyles = makeStyles(() =>
   })
 );
 
+export interface IFilmLinks {
+  rottenTomatoes?: string,
+  imdb?: string
+}
+
+export interface IFilmImages {
+  cover?: Buffer
+}
+
 export interface IFilmActions {
   update?: () => void,
   remove?: () => void,
 }
 
 export interface IFilm {
+  user?: string,
   title?: string,
-  rottenTomatoesLink?: string,
   watched?: boolean,
-  cover?: Buffer,
+  links?: IFilmLinks,
+  images?: IFilmImages,
   actions?: IFilmActions
 }
 
 // eslint-disable-next-line no-undef
-export default function FilmItem({title, rottenTomatoesLink, watched, cover, actions} : IFilm) : JSX.Element {
+export default function FilmItem({title, watched, links, images, actions} : IFilm) : JSX.Element {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -105,14 +115,14 @@ export default function FilmItem({title, rottenTomatoesLink, watched, cover, act
       <CardMedia
         className={classes.media}
         title="Film cover">
-          <img src={(cover && correctImageBuffer(cover)) || _cover} alt="Cover" className={classes.cover} />
+          <img src={(images?.cover && correctImageBuffer(images?.cover)) || _cover} alt="Cover" className={classes.cover} />
       </CardMedia>
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography variant="body1">{title || 'Film Title'}</Typography>
           <div className={classes.divider}></div>
           <div className={classes.rottenTomatoesSection}>
-            <a href={rottenTomatoesLink || '#'} className={classes.rottenTomatoesLink} target='_blank' rel='noreferrer'>
+            <a href={links?.rottenTomatoes || '#'} className={classes.rottenTomatoesLink} target='_blank' rel='noreferrer'>
               <Typography variant="body2">RottenTomatoes</Typography>
               <img className={classes.rottenTomatoesLogo} src={rottenTomatoesLogoPng} />
             </a> 

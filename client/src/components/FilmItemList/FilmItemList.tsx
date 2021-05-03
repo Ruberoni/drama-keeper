@@ -17,7 +17,15 @@ export default function FilmItemList({header, filmList}: IFilmItemList) : JSX.El
     <div className='root'>
       <Typography variant='h2' className='header'>{header}</Typography>  
       <div className='filmList'>
-        {filmList.map((film, index) => <FilmItem key={index} title={film.title} actions={film.actions}/>)}
+        {filmList.map((film, index) => 
+          <FilmItem 
+            key={index} 
+            title={film.title}
+            watched={film.watched}
+            links={film.links}
+            images={film.images}
+            actions={film.actions}/>
+        )}
       </div>
     </div>
   )

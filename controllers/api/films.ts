@@ -21,7 +21,7 @@
 
 import FilmsModel from "../../models/Film";
 import Debug from "debug";
-import { Response, Request } from "express";
+import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
 
@@ -33,7 +33,7 @@ const debug = Debug("film");
 export const getAllFilms = async (
   req: Request,
   res: Response
-  ): Promise<void | Response> => {
+  ) => {
   debug("CONTROLLER: getAllFilms | EXECUTED");
   try {
 
@@ -81,8 +81,8 @@ export const getFilmsByUserId = async (
   ): Promise<void | Response> => {
   debug("CONTROLLER: getFilmsByUser | EXECUTED");
   try {
-    const userId = req.params.user_id;
-    let films = await FilmsModel.find({user: userId});
+    const currentUser = req.params.user_id;
+    let films = await FilmsModel.find({user: currentUser});
 
     const watchedString = req.query.watched
     if (watchedString) {
@@ -90,7 +90,7 @@ export const getFilmsByUserId = async (
       films = films.filter((film) => film?.watched === watched)
     }
 
-    res.send(films);
+    res.json({message: `Films of user ${currentUser}`, films});
     debug("CONTROLLER: getFilmsByUser | FINISHED GOOD");
   } catch (err) {
     debug("CONTROLLER: getFilmsByUser | ERROR:", err.message);
@@ -232,4 +232,20 @@ export const test = {
       res.status(400).send(err.message);
     }
   },
+
+  /*
+   * Retrieve the films of the user in the req.uerId
+   */
+  getFilmsAuthorized: async (req: Request, res: Response) => {
+    try {
+      const currentUser = req.currentUser
+
+      const films = await FilmsModel.find({user: currentUser})
+
+      res.json({message: `Films of user ${currentUser}`, films});
+
+    } catch (err) {
+      res.status(400).json({message: 'error', err: err.message})
+    }
+  }
 };
