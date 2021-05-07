@@ -14,7 +14,7 @@ import _cover from '../../assets/img/when-harry-met-sally-cover.jpg'
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
 import { correctImageBuffer } from '../../utils/index'
 import { AppContext } from '../../App'
-import { deleteFilm } from '../../actions/films'
+import { deleteFilm, updateFilm } from '../../actions/films'
 
 const scale = 1
 
@@ -88,7 +88,7 @@ export interface IFilmActions {
 }
 
 export interface IFilm {
-  _id?: string,
+  _id: string
   user?: string,
   title?: string,
   watched?: boolean,
@@ -113,6 +113,15 @@ export default function FilmItem({_id, title, watched, links, images} : IFilm) :
 
   const handleDelete = async () => {
     const response = await deleteFilm(_id)
+    if (typeof response !== 'string') {
+      handleClose()
+      context.triggerAppUpdate()
+    }
+  }
+
+  const handleChangeWatched = async () => {
+    const updateData = {watched: !watched }
+    const response = await updateFilm(updateData, _id)
     if (typeof response !== 'string') {
       handleClose()
       context.triggerAppUpdate()
@@ -157,7 +166,7 @@ export default function FilmItem({_id, title, watched, links, images} : IFilm) :
           >
               <MenuItem onClick={handleDelete}>Delete</MenuItem>
               <MenuItem onClick={handleUpdate}>Update</MenuItem>
-              <MenuItem onClick={handleClose}>{watched ? 'Watched' : 'Unwatch'}</MenuItem>
+              <MenuItem onClick={handleChangeWatched}>{watched ? 'Watched' : 'Unwatch'}</MenuItem>
         </Menu>
         </CardActions>
     </Card>

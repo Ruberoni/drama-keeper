@@ -39,9 +39,9 @@ const useFormStyles = makeStyles(() =>
 )
 
 export interface IFormValues {
-  title: string,
-  rottenTomatoesLink: string,
-  watched: boolean
+  title?: string,
+  rottenTomatoesLink?: string,
+  watched?: boolean
 }
 
 export const validationSchema = yup.object({
@@ -53,14 +53,8 @@ export const validationSchema = yup.object({
   watched: yup
     .boolean()
 })
-/*
-export interface IFormModal {
-  // eslint-disable-next-line no-unused-vars
-  onSubmit?: (res: boolean) => void
-}
-*/
 
-export function Forms (/*{ onSubmit}: IFormModal*/)  {
+export function Forms ()  {
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -134,7 +128,7 @@ export function Forms (/*{ onSubmit}: IFormModal*/)  {
   )
 }
 
-export default function CreateFilm(/*{onSubmit} : IFormModal*/) {
+export default function CreateFilm() {
   const classes = useStyles();
   return (
     <Paper className={classes.root} elevation={0}>
