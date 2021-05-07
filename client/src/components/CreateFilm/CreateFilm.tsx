@@ -10,6 +10,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
 import { TogglerAdvancedSettings } from '../Button/Button'
+import * as filmActions from '../../actions/films'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -52,8 +53,14 @@ export const validationSchema = yup.object({
   watched: yup
     .boolean()
 })
+/*
+export interface IFormModal {
+  // eslint-disable-next-line no-unused-vars
+  onSubmit?: (res: boolean) => void
+}
+*/
 
-export function Forms () {
+export function Forms (/*{ onSubmit}: IFormModal*/)  {
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -61,8 +68,12 @@ export function Forms () {
       watched: false
     },
     validationSchema: validationSchema,
-    onSubmit: (values: IFormValues) => {
+    onSubmit: async (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
+        const response = await filmActions.createFilmAuthUser(values)
+        if (typeof response === 'string') {
+          alert(response)
+       }
     }
   })
 
@@ -123,7 +134,7 @@ export function Forms () {
   )
 }
 
-export default function CreateFilm() {
+export default function CreateFilm(/*{onSubmit} : IFormModal*/) {
   const classes = useStyles();
   return (
     <Paper className={classes.root} elevation={0}>

@@ -36,7 +36,7 @@ const filmSchema = new Schema<IFilm>({
     required: true
   },
   watched: {
-    type: Boolean
+    type: Boolean,
   },
   links: {
     rottenTomatoes: { 

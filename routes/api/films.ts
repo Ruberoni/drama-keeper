@@ -39,9 +39,15 @@ router.get("/test/showcover/:id", FilmsController.test.showCover)
 /*
  * TESTING PURPOSES ROUTE
  *
- * Shows the image in images.cover property of the document
- * @params {integer} id The id of the document to add the image
+ * Gets the films of the authorizated user
  */
-router.get("/test/getFilmsAuthorized", authMiddlewares.authorize, FilmsController.test.getFilmsAuthorized)
+router.get("/test/getfilmsauthorized", authMiddlewares.authorize, FilmsController.test.getFilmsAuthorized)
+
+/*
+ * TESTING PURPOSES ROUTE
+ *
+ * Creates a film with the authorizated user
+ */
+router.post("/test/createfilmauthorized", authMiddlewares.authorize, FilmsController.test.createFilmAuthorized)
 
 export default router;

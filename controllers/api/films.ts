@@ -247,5 +247,18 @@ export const test = {
     } catch (err) {
       res.status(400).json({message: 'error', err: err.message})
     }
+  },
+  createFilmAuthorized: async (req: Request, res: Response) => {
+    try {
+      const currentUser = req.currentUser
+      const filmData = req.body
+
+      await FilmsModel.create({user: currentUser._id, ...filmData})
+
+      res.json({message: 'Film created'});
+
+    } catch (err) {
+      res.status(400).json({message: 'error', err: err.message})
+    }
   }
 };
