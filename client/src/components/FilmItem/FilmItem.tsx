@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -13,6 +13,8 @@ import IconButton from "@material-ui/core/IconButton";
 import _cover from '../../assets/img/when-harry-met-sally-cover.jpg'
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
 import { correctImageBuffer } from '../../utils/index'
+import { AppContext } from '../../App'
+import { deleteFilm } from '../../actions/films'
 
 const scale = 1
 
@@ -86,23 +88,36 @@ export interface IFilmActions {
 }
 
 export interface IFilm {
+  _id?: string,
   user?: string,
   title?: string,
   watched?: boolean,
   links?: IFilmLinks,
   images?: IFilmImages,
-  actions?: IFilmActions
 }
 
 // eslint-disable-next-line no-undef
-export default function FilmItem({title, watched, links, images, actions} : IFilm) : JSX.Element {
+export default function FilmItem({_id, title, watched, links, images} : IFilm) : JSX.Element {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const context = useContext(AppContext)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleUpdate = () => {
+    context.triggerFilmUpdate(_id)
+  }
+
+  const handleDelete = async () => {
+    const response = await deleteFilm(_id)
+    if (typeof response !== 'string') {
+      handleClose()
+      context.triggerAppUpdate()
+    }
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -110,41 +125,41 @@ export default function FilmItem({title, watched, links, images, actions} : IFil
 
   return (
     <Card className={classes.root} square>
-      <div className={classes.bar}>
-      </div>
-      <CardMedia
-        className={classes.media}
-        title="Film cover">
-          <img src={(images?.cover && correctImageBuffer(images?.cover)) || _cover} alt="Cover" className={classes.cover} />
-      </CardMedia>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography variant="body1">{title || 'Film Title'}</Typography>
-          <div className={classes.divider}></div>
-          <div className={classes.rottenTomatoesSection}>
-            <a href={links?.rottenTomatoes || '#'} className={classes.rottenTomatoesLink} target='_blank' rel='noreferrer'>
-              <Typography variant="body2">RottenTomatoes</Typography>
-              <img className={classes.rottenTomatoesLogo} src={rottenTomatoesLogoPng} />
-            </a> 
-          </div>
-        </CardContent>
-      </div>
-      <CardActions className={classes.actions}>
-        <IconButton edge='end' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-          <MoreHorizIcon />
-        </IconButton>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-            <MenuItem onClick={handleClose}>Delete</MenuItem>
-            <MenuItem onClick={actions?.update}>Update</MenuItem>
-            <MenuItem onClick={handleClose}>{watched ? 'Watched' : 'Unwatch'}</MenuItem>
-      </Menu>
-      </CardActions>
+        <div className={classes.bar}>
+        </div>
+        <CardMedia
+          className={classes.media}
+          title="Film cover">
+            <img src={(images?.cover && correctImageBuffer(images?.cover)) || _cover} alt="Cover" className={classes.cover} />
+        </CardMedia>
+        <div className={classes.details}>
+          <CardContent className={classes.content}>
+            <Typography variant="body1">{title || 'Film Title'}</Typography>
+            <div className={classes.divider}></div>
+            <div className={classes.rottenTomatoesSection}>
+              <a href={links?.rottenTomatoes || '#'} className={classes.rottenTomatoesLink} target='_blank' rel='noreferrer'>
+                <Typography variant="body2">RottenTomatoes</Typography>
+                <img className={classes.rottenTomatoesLogo} src={rottenTomatoesLogoPng} />
+              </a> 
+            </div>
+          </CardContent>
+        </div>
+        <CardActions className={classes.actions}>
+          <IconButton edge='end' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+            <MoreHorizIcon />
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+              <MenuItem onClick={handleUpdate}>Update</MenuItem>
+              <MenuItem onClick={handleClose}>{watched ? 'Watched' : 'Unwatch'}</MenuItem>
+        </Menu>
+        </CardActions>
     </Card>
   );
 }

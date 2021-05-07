@@ -9,6 +9,7 @@ import { useFormik } from 'formik'
 import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues, validationSchema } from '../CreateFilm/CreateFilm'
+import * as filmActions from '../../actions/films'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,7 +32,11 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export function Forms ()  {
+export interface IUpdateFilm {
+  _id: string
+}
+
+export function Forms ({_id}: IUpdateFilm)  {
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -39,8 +44,12 @@ export function Forms ()  {
       watched: false
     },
     validationSchema: validationSchema,
-    onSubmit: (values: IFormValues) => {
+    onSubmit: async (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
+      const response = await filmActions.updateFilm(values, _id)
+        if (typeof response === 'string') {
+          alert(response)
+       }
     }
   })
 
@@ -84,7 +93,7 @@ export function Forms ()  {
           <Typography style={{display: 'inline'}} variant='body2'>Already seen?</Typography>
         </div>
          <Fab style={{width: 115}} color='primary' variant='extended' type="submit">
-           <AddIcon /> Login
+           <AddIcon /> Update
          </Fab>
          
        </form>
@@ -92,12 +101,12 @@ export function Forms ()  {
   )
 }
 
-export default function Login() {
+export default function Update({_id}: IUpdateFilm) {
   const classes = useStyles();
   return (
     <Paper className={classes.root} elevation={0}>
       <p><UnderlinedHeading text="Update a Film" /></p>
-      <Forms />
+      <Forms _id={_id}/>
     </Paper>
   );
 }

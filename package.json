@@ -6,7 +6,8 @@
   "scripts": {
     "start": "DEBUG='auth' nodemon --files server.ts --trace-warnings",
     "test": "jest",
-    "eslint-staged": "LIST=`git diff --cached --name-only | grep .*\\.ts | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST && prettier $LIST --write; fi"
+    "eslint-staged": "LIST=`git diff --cached --name-only | grep .*\\.ts | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST && prettier $LIST --write; fi",
+    "dev": "concurrently \"yarn start\" \"cd client/ && yarn start\""
   },
   "pre-commit": [
     "eslint-staged"
@@ -25,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "bcrypt": "^5.0.1",
+    "concurrently": "^6.0.2",
     "core-js": "^3.10.0",
     "cors": "^2.8.5",
     "debug": "^4.3.1",

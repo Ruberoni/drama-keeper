@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext, useReducer } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { red } from '@material-ui/core/colors'
@@ -9,6 +9,7 @@ import CreateFilm from './components/CreateFilm/CreateFilm'
 import Login from './components/Login/Login'
 // import UpdateFilm from './components/UpdateFilm/UpdateFilm'
 import Register from './components/Register/Register'
+import UpdateFilm from './components/UpdateFilm/UpdateFilm'
 import FilmItemList from './components/FilmItemList/FilmItemList'
 import Typography from "@material-ui/core/Typography";
 // import { IFilm } from './components/FilmItem/FilmItem'
@@ -16,11 +17,6 @@ import Modal from '@material-ui/core/Modal';
 import * as filmActions from './actions/films' 
 import * as utils from './utils/index'
 import { IFilm } from './components/FilmItem/FilmItem'
-
-// const fakeData = {
-//   filmList1: [{title: 'hola'}, {title: 'como'}, {title: 'estas'}, {title: 'ddd'}, {title: 'eee'}, {title: 'fff'}],
-//   filmList2: [{title: 'aaa'}, {title: 'bbb'}, {title: 'ccc'}]
-// }
 
 const theme = createMuiTheme({
   palette: {
@@ -37,15 +33,6 @@ export interface ISimpleModal {
 
 function SimpleModal({open, onClose, body} : ISimpleModal) {
 
-  // const body = (
-  //   <div>
-  //     <h2 id="simple-modal-title">Text in a modal</h2>
-  //     <p id="simple-modal-description">
-  //       Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-  //     </p>
-  //   </div>
-  // );
-
   return (
     <Modal
       className='modal'
@@ -59,6 +46,21 @@ function SimpleModal({open, onClose, body} : ISimpleModal) {
   );
 
 }
+
+export interface IFilmsReduced {
+  toSee: IFilm[],
+  seen: IFilm[]
+}
+
+const reducer = (films: IFilmsReduced, action: {films: IFilm[]}) => {
+
+    return {
+      toSee: action.films.filter(film => film.watched === false),
+      seen: action.films.filter(film => film.watched === true)
+    }
+  }
+
+export const AppContext = createContext<any>('e')
 
 function MyApp() {
 
@@ -77,21 +79,41 @@ function MyApp() {
   })
 
 
-  const [films, setFilms] = useState<IFilm[]>([])
-  useEffect(() => {
+
+  const getFilms = () => {
     if (auth) {
       filmActions.getFilmsFromAuthUser().then((data) => {
-
         if (typeof data === 'string') {
-          alert(data)
+          console.log(data)
         } else {
-          setFilms(data)
+          setFilms({films: data})
         }
       })
-    } else if (films.length !== 0) {
-      setFilms([])
+    } else {
+      setFilms({films: []})
     }
-  })
+  }
+
+  /*
+  const onModalSubmit = (res: boolean) => {
+    if (res) {
+      getFilms()
+    }
+  }
+  */
+
+  /*
+    I call dispatch(films)
+    and it separate films with watched = true and those with watched = false
+    then returns an object as {toSee: IFilm[], seen: IFilm[]}
+    so i can call films.toSee or films.seen
+  */
+
+  // const [films, setFilms] = useState<IFilm[]>([])
+  const [films, setFilms] = useReducer(reducer, {toSee: [], seen: []})
+  useEffect(() => {
+     getFilms()
+  }, [auth])
   // Fetch films by user
   // Response template: Film[]
   // where Film = {User: , Title: , Watched: , Links: , Cover: } 
@@ -114,10 +136,10 @@ function MyApp() {
     setOpen(true);
   };
 
-  // const openUpdateFilmModal = () => {
-  //   setModalComponent(<UpdateFilm />);  
-  //   setOpen(true);
-  // };
+  const openUpdateFilmModal = (_id: string) => {
+    setModalComponent(<UpdateFilm _id={_id}/>);  
+    setOpen(true);
+  };
   
   const topBarActions = {
     login: openLoginModal,
@@ -127,21 +149,23 @@ function MyApp() {
 
   const handleClose = () => {
     setOpen(false);
+    getFilms()
   };
 
-
   return (
-    <ThemeProvider theme={theme}>
-      <SimpleModal open={open} onClose={handleClose} body={modalComponent}/>
-      <div className='App'>
-        <TopBar actions={topBarActions}/>
-        <div className='FilmItemListWrapper'>
-          <FilmItemList header='To see' filmList={films} />
-          <FilmItemList header='Seen' filmList={[]} />
+    <AppContext.Provider value={{triggerAppUpdate: getFilms, triggerFilmUpdate: openUpdateFilmModal}}>
+      <ThemeProvider theme={theme}>
+        <SimpleModal open={open} onClose={handleClose} body={modalComponent}/>
+        <div className='App'>
+          <TopBar actions={topBarActions}/>
+          <div className='FilmItemListWrapper'>
+            <FilmItemList header='To see' filmList={films.toSee} />
+            <FilmItemList header='Seen' filmList={films.seen} />
+          </div>
         </div>
-      </div>
-      <Typography className='credit'>Made by Ruben</Typography>
-    </ThemeProvider>
+        <Typography className='credit'>Made by Ruben</Typography>
+      </ThemeProvider>
+    </AppContext.Provider>
   )
 }
 
