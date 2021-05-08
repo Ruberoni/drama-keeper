@@ -28,6 +28,7 @@ import { Schema, model, Document } from "mongoose";
 import isURL from "validator/lib/isURL";
 import { IUser } from "./User"
 import { compressImage, knowFileTypeFromBuffer } from '../utils/compressImage'
+import searchUtils from '../utils/search'
 
 const filmSchema = new Schema<IFilm>({
   user: Schema.Types.ObjectId,
@@ -85,6 +86,37 @@ export interface IFilm extends Document {
   addCover: any, // CHANGE type
   addCoverCompressed: any // Change type
 }
+
+/*
+ * Pre save hook, It performs three things 
+ * 1. If a rotten tomatoes links has not been provided. It will set one
+ * 2. Will set a images.cover
+ * 3. Will fetch and save an image related to the film title
+ */
+filmSchema.pre<IFilm>("save", async function (next) {
+  try {
+    if (!this.links.rottenTomatoes) {
+      this.links.rottenTomatoes = await searchUtils.getRottenTomatoesUrl(this.title)
+    }
+    if (!this.images.cover) {
+      this.images.cover = await searchUtils.getCover(this.title)
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+/*
+ * Post save hook, It performs two things
+ * 1. If a rotten tomatoes links has not been provided. It will set one
+ * 2. Will set a images.cover
+ */
+// filmSchema.post<IFilm>("save", async function (film) {
+//   if (!film.links.rottenTomatoes) {
+//     film.links.rottenTomatoes = await searchUtils.getRottenTomatoesUrl(film.title)
+//   }
+// });
 
 enum ImagesContentTypes {
   png ='image/png',

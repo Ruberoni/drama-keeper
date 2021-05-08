@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+import Debug from 'debug'
 
-const uri: string = process.env.MONGO_URI as string;
-// "mongodb+srv://RubenDB:zv3dTCTWZX4fQ3ox@main-db.qfh1y.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const debug = Debug('db')
+
+const uri: string = process.env.NODE_ENV == 'test' ? process.env.MONGO_URI_TEST as string : process.env.MONGO_URI as string;
 
 /*
  * Calling this function connects the server to the database
@@ -14,7 +16,7 @@ export default async (): Promise<void> => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
-    console.log("Connected to database");
+    debug("Connected to database");
   } catch (err) {
     throw new Error(err);
   }
