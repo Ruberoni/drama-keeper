@@ -8,6 +8,10 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import Checkbox from '@material-ui/core/Checkbox';
 import AddIcon from '@material-ui/icons/Add';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 import { UnderlinedHeading } from '../Text/Text'
 import { TogglerAdvancedSettings } from '../Button/Button'
 import * as filmActions from '../../actions/films'
@@ -40,6 +44,7 @@ const useFormStyles = makeStyles(() =>
 
 export interface IFormValues {
   title?: string,
+  filmType?: string, 
   rottenTomatoesLink?: string,
   watched?: boolean
 }
@@ -47,7 +52,10 @@ export interface IFormValues {
 export const validationSchema = yup.object({
   title: yup
     .string()
-    .required('film title is required'),
+    .required('Title is required'),
+  filmType: yup
+    .string()
+    .required('Type is required'),
   rottenTomatoesLink: yup
     .string(),
   watched: yup
@@ -58,15 +66,16 @@ export function Forms ()  {
   const formik = useFormik({
     initialValues: {
       title: '',
+      filmType: '',
       rottenTomatoesLink: '',
       watched: false
     },
     validationSchema: validationSchema,
     onSubmit: async (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
-        const response = await filmActions.createFilmAuthUser(values)
-        if (typeof response === 'string') {
-          alert(response)
+      const response = await filmActions.createFilmAuthUser(values)
+      if (typeof response === 'string') {
+        alert(response)
        }
     }
   })
@@ -90,7 +99,14 @@ export function Forms ()  {
            onChange={formik.handleChange}
            error={formik.touched.title && Boolean(formik.errors.title)}
            helperText={formik.touched.title && formik.errors.title}
-         />
+        />
+        <FormLabel error={formik.touched.filmType && Boolean(formik.errors.filmType)}>
+          {formik.touched.filmType && formik.errors.filmType}
+        </FormLabel>
+        <RadioGroup aria-label="filmType" row name="filmType" id="filmType" value={formik.values.filmType} onChange={formik.handleChange}>
+          <FormControlLabel value="TV" control={<Radio />} label="TV" />
+          <FormControlLabel value="Movie" control={<Radio />} label="Movie" />
+        </RadioGroup>
          
          {advanced && 
           <div className={classes.advancedSettings}>

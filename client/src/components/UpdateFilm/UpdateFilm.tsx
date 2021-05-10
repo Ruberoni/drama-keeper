@@ -7,6 +7,10 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useFormik } from 'formik'
 import AddIcon from '@material-ui/icons/Add';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues, validationSchema } from '../CreateFilm/CreateFilm'
 import * as filmActions from '../../actions/films'
@@ -40,6 +44,7 @@ export function Forms ({_id}: IUpdateFilm)  {
   const formik = useFormik({
     initialValues: {
       title: '',
+      filmType: '',
       rottenTomatoesLink: '',
       watched: false
     },
@@ -71,6 +76,14 @@ export function Forms ({_id}: IUpdateFilm)  {
             className={classes.textField}
 
          />
+
+         <FormLabel error={formik.touched.filmType && Boolean(formik.errors.filmType)}>
+          {formik.touched.filmType && formik.errors.filmType}
+        </FormLabel>
+        <RadioGroup aria-label="filmType" row name="filmType" id="filmType" value={formik.values.filmType} onChange={formik.handleChange}>
+          <FormControlLabel value="TV" control={<Radio />} label="TV" />
+          <FormControlLabel value="Movie" control={<Radio />} label="Movie" />
+        </RadioGroup>
          
          <TextField
            variant='outlined'
