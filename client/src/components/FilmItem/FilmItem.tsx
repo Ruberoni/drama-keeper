@@ -91,14 +91,14 @@ export interface IFilm {
   _id?: string
   user?: string,
   title?: string,
-  filmType?: string,
+  type?: string,
   watched?: boolean,
   links?: IFilmLinks,
   images?: IFilmImages,
 }
 
 // eslint-disable-next-line no-undef
-export default function FilmItem({_id, title, filmType, watched, links, images} : IFilm) : JSX.Element {
+export default function FilmItem({_id, title, type, watched, links, images} : IFilm) : JSX.Element {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

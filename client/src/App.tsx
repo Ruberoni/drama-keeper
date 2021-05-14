@@ -17,6 +17,8 @@ import Modal from '@material-ui/core/Modal';
 import * as filmActions from './actions/films' 
 import * as utils from './utils/index'
 import { IFilm } from './components/FilmItem/FilmItem'
+import { useInterval } from './hooks/useInterval'
+import useFilms from './hooks/useFilms'
 
 const theme = createMuiTheme({
   palette: {
@@ -47,6 +49,7 @@ function SimpleModal({open, onClose, body} : ISimpleModal) {
 
 }
 
+/*
 export interface IFilmsReduced {
   toSee: IFilm[],
   seen: IFilm[]
@@ -58,8 +61,8 @@ const reducer = (films: IFilmsReduced, action: {films: IFilm[]}) => {
       toSee: action.films.filter(film => film.watched === false),
       seen: action.films.filter(film => film.watched === true)
     }
-  }
-
+}
+*/
 export const AppContext = createContext<any>('e')
 
 function MyApp() {
@@ -78,29 +81,16 @@ function MyApp() {
     }
   })
 
+  const [films, updateFilms] = useFilms()
+  useEffect(() => {
+    updateFilms()
+  }, [auth])
 
-
-  const getFilms = () => {
+  useInterval(() => {
     if (auth) {
-      filmActions.getFilmsFromAuthUser().then((data) => {
-        if (typeof data === 'string') {
-          console.log(data)
-        } else {
-          setFilms({films: data})
-        }
-      })
-    } else {
-      setFilms({films: []})
+      updateFilms()
     }
-  }
-
-  /*
-  const onModalSubmit = (res: boolean) => {
-    if (res) {
-      getFilms()
-    }
-  }
-  */
+  }, 30000)
 
   /*
     I call dispatch(films)
@@ -110,10 +100,10 @@ function MyApp() {
   */
 
   // const [films, setFilms] = useState<IFilm[]>([])
-  const [films, setFilms] = useReducer(reducer, {toSee: [], seen: []})
-  useEffect(() => {
-     getFilms()
-  }, [auth])
+  // const [films, setFilms] = useReducer(reducer, {toSee: [], seen: []})
+  // useEffect(() => {
+  //    getFilms()
+  // }, [auth])
   // Fetch films by user
   // Response template: Film[]
   // where Film = {User: , Title: , Watched: , Links: , Cover: } 
@@ -149,18 +139,18 @@ function MyApp() {
 
   const handleClose = () => {
     setOpen(false);
-    getFilms()
+    updateFilms()
   };
 
   return (
-    <AppContext.Provider value={{triggerAppUpdate: getFilms, triggerFilmUpdate: openUpdateFilmModal}}>
+    <AppContext.Provider value={{triggerAppUpdate: updateFilms, triggerFilmUpdate: openUpdateFilmModal}}>
       <ThemeProvider theme={theme}>
         <SimpleModal open={open} onClose={handleClose} body={modalComponent}/>
         <div className='App'>
           <TopBar actions={topBarActions}/>
           <div className='FilmItemListWrapper'>
-            <FilmItemList header='To see' filmList={films.toSee} />
-            <FilmItemList header='Seen' filmList={films.seen} />
+            <FilmItemList header='To see' filmList={films.data.filter(film => film.watched === false) /*[{}]*/} />
+            <FilmItemList header='Seen' filmList={films.data.filter(film => film.watched === true)} />
           </div>
         </div>
         <Typography className='credit'>Made by Ruben</Typography>

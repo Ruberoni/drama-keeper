@@ -44,7 +44,7 @@ const useFormStyles = makeStyles(() =>
 
 export interface IFormValues {
   title?: string,
-  filmType?: string, 
+  type?: string, 
   rottenTomatoesLink?: string,
   watched?: boolean
 }
@@ -53,7 +53,7 @@ export const validationSchema = yup.object({
   title: yup
     .string()
     .required('Title is required'),
-  filmType: yup
+  type: yup
     .string()
     .required('Type is required'),
   rottenTomatoesLink: yup
@@ -66,7 +66,7 @@ export function Forms ()  {
   const formik = useFormik({
     initialValues: {
       title: '',
-      filmType: '',
+      type: '',
       rottenTomatoesLink: '',
       watched: false
     },
@@ -100,10 +100,10 @@ export function Forms ()  {
            error={formik.touched.title && Boolean(formik.errors.title)}
            helperText={formik.touched.title && formik.errors.title}
         />
-        <FormLabel error={formik.touched.filmType && Boolean(formik.errors.filmType)}>
-          {formik.touched.filmType && formik.errors.filmType}
+        <FormLabel error={formik.touched.type && Boolean(formik.errors.type)}>
+          {formik.touched.type && formik.errors.type}
         </FormLabel>
-        <RadioGroup aria-label="filmType" row name="filmType" id="filmType" value={formik.values.filmType} onChange={formik.handleChange}>
+        <RadioGroup aria-label="type" row name="type" id="type" value={formik.values.type} onChange={formik.handleChange}>
           <FormControlLabel value="TV" control={<Radio />} label="TV" />
           <FormControlLabel value="Movie" control={<Radio />} label="Movie" />
         </RadioGroup>
