@@ -1,6 +1,6 @@
 process.env.NODE_ENV = "test";
 import connectDb from '../../config/db' 
-import FilmsModel from "../../models/Film.ts";
+import FilmsModel from "../../models/Film";
 
 describe("Films model", () => {
   beforeAll(() => {
@@ -9,10 +9,11 @@ describe("Films model", () => {
 
   beforeEach(async () => {
     // add a film
-    // const data = {
-    //   title: 'Modern family',
-    // }
-    // await FilmsModel.create(data)
+    const data = {
+      title: 'Modern family',
+      type: 'TV'
+    }
+    await FilmsModel.create(data)
     jest.setTimeout(10000);
   });
 
@@ -20,104 +21,123 @@ describe("Films model", () => {
     // remove all the films
     await FilmsModel.deleteMany({});
   });
-  describe("General", () => {
-    it("Creating a film with only title, the collection should have length 1", async () => {
-      // Arrange
-      const movieData = {
-        title: "La la land",
-      };
+  describe("Methods", () => {
+    describe("getAndSetLink", () => {
+      it("Calling with param page: 'Rotten Tomatoes', the document should have a rotten tomatoes link", async () => {
+        // Arrange
+        let film = (await FilmsModel.find({}))[0]
+        // film = film[0]
+        const page = "Rotten Tomatoes"
 
-      // Act
-      // Create the film
-      await FilmsModel.create(movieData);
-      // Retrieve all the films
-      const films = await FilmsModel.find({});
+        // Act
+        // Call the method
+        await film.getAndSetLink(page)
 
-      // Assert
-      expect(films).toHaveLength(1)
-      // expect(film[0]).toHaveProperty('title')
-    });
-    it("Creating a film with only title, the collection should have a doc with a property named 'title' with value 'La la land'", async () => {
-      // Arrange
-      const movieData = {
-        title: "La la land",
-      };
+        // Assert
+        expect(film.links.rottenTomatoes).toMatch(/tv/)
+      });
 
-      // Act
-      // Create the film
-      await FilmsModel.create(movieData);
-      // Retrieve all the films
-      const films = await FilmsModel.find({});
+      it("Calling with param page: 'hola', the document should have an empty rotten tomatoes link", async () => {
+        // Arrange
+        let film = (await FilmsModel.find({}))[0]
+        const page = "hola"
 
-      // Assert
-      expect(films[0]).toHaveProperty('title', movieData.title)
+        // Act
+        // Call the method
+        await film.getAndSetLink(page)
+
+        // Assert
+        expect(film.links.rottenTomatoes).toBe('')
+      });
     })
-  });
+  })
   describe("Links", () => {
-    it("Creating a film with a known movie title, the document rotten tomatoes link should have the url to the movie", async () => {
+
+    it("Creating a film with an empty link, should resolve OK", async () => {
       // Arrange
       const movieData = {
         title: "La la land",
+        type: "Movie",
+        links: {
+          rottenTomatoes: ''
+        }
       };
-
-      // Act
-      // Create the film
-      await FilmsModel.create(movieData);
-      // Retrieve the film just created
-      const film = await FilmsModel.findOne(movieData);
-
-      // Assert
-      expect(film.links.rottenTomatoes).toMatch(/m/);
+      // Act & Assert
+      return expect(FilmsModel.create(movieData)).resolves.toBeTruthy()
+    });
+    it("Creating a film with a valid link, should resolve OK", async () => {
+      // Arrange
+      const movieData = {
+        title: "La la land",
+        type: "Movie",
+        links: {
+          rottenTomatoes: 'https://www.rottentomatoes.com/m/la_la_land'
+        }
+      };
+      // Act & Assert
+      return expect(FilmsModel.create(movieData)).resolves.toBeTruthy()
     });
 
-    it('Creating a film with a known serie title, the document rotten tomatoes link should have the url to the serie', async () => {
+    it("Creating a film with an invalid link, should throw an error", async () => {
       // Arrange
-      const serieData = {
-        title: 'Modern Family'
-      }
-
-      // Act
-      // Create the film
-      await FilmsModel.create(serieData)
-      // Retrieve the film just created
-      const film = await FilmsModel.findOne(serieData)
-
-      // Assert
-      expect(film.links.rottenTomatoes).toMatch(/tv/)
-    });
-
-    it('Creating a film with an invalid film title, the document should not have a rotten tomatoes link', async () => {
-      // Arrange
-      const serieData = {
-        title: 'Modern Familysss'
-      }
-
-      // Act
-      // Create the film
-      await FilmsModel.create(serieData)
-      // Retrieve the film just created
-      const film = await FilmsModel.findOne(serieData)
-
-      // Assert
-      expect(film.links.rottenTomatoes).toBe('')
+      const movieData = {
+        title: "La la land",
+        type: "Movie",
+        links: {
+          rottenTomatoes: 'E'
+        }
+      };
+      // Act & Assert
+      return expect(FilmsModel.create(movieData)).rejects.toThrow("E is not an URL")
     });
   });
 
-  describe("Images", () => {
-    it("Creating a film with known film title, should have a cover image", () => {
+  
+  describe('Type', () => {
+    it("Creating a film with empty type, should be OK", async () => {
       // Arrange
       const filmData = {
-        title: 'Modern Familysss'
+        title: "Title",
+        type: ""
       }
 
-      // Act
-      // Create the film
-      await FilmsModel.create(filmData)
-      // Retrieve the film just created
-      const film = await FilmsModel.findOne(filmData)
+      // Act & Assert
+      return expect(FilmsModel.create(filmData)).resolves.toBeTruthy();
+    })
 
-      // Assert
-      expect(film.images.cover)
+    it("Creating a film with a 'TV' type, should be OK", async () => {
+      // Arrange
+      const filmData = {
+        title: "Title",
+        type: "TV"
+      }
+
+      // Act & Assert
+      return expect(FilmsModel.create(filmData)).resolves.toBeTruthy();
+    })
+
+    it("Creating a film with a 'Movie' type, should be OK", async () => {
+      // Arrange
+      const filmData = {
+        title: "Title",
+        type: "Movie"
+      }
+
+      // Act & Assert
+      return expect(FilmsModel.create(filmData)).resolves.toBeTruthy();
+
+    })
+
+    it("Creating a film with an invalid type, should throw an error", async () => {
+      // Arrange
+      const filmData = {
+        title: "Title",
+        type: "A"
+      }
+
+      // Act & Assert
+      return expect(FilmsModel.create(filmData)).rejects.toThrow();
+
     })
   })
 });

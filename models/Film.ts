@@ -36,6 +36,10 @@ const filmSchema = new Schema<IFilm>({
     type: String, 
     required: true
   },
+  type: {
+    type: String,
+    enum: ['Movie', 'TV', '']
+  },
   watched: {
     type: Boolean,
   },
@@ -43,9 +47,11 @@ const filmSchema = new Schema<IFilm>({
     rottenTomatoes: { 
       type: String, 
       validate: {
-        validator: (val: string) : boolean => isURL(val),
+        validator: (val: string): boolean => (isURL(val) || val === '#' || val === ''),
         message: "{VALUE} is not an URL"
-      }
+      },
+      default: ''
+
     },
     imdb: { 
       type: String, 
@@ -64,7 +70,7 @@ const filmSchema = new Schema<IFilm>({
 })
 
 export interface IFilmLinks extends Document  {
-  rottenTomatoes?: string,
+  rottenTomatoes: string,
   imdb?: string
 }
 
@@ -80,11 +86,14 @@ export interface IFilmImages extends Document {
 export interface IFilm extends Document {
   user: IUser['_id'],
   title: string,
+  type?: string,
   watched?: boolean,
-  links?: IFilmLinks
+  links: IFilmLinks
   images?: IFilmImages,
   addCover: any, // CHANGE type
-  addCoverCompressed: any // Change type
+  addCoverCompressed: any, // Change type,
+  getAndSetLinks: any, // Change type,
+  getAndSetLink: any, // Change type,
 }
 
 /*
@@ -93,30 +102,34 @@ export interface IFilm extends Document {
  * 2. Will set a images.cover
  * 3. Will fetch and save an image related to the film title
  */
-filmSchema.pre<IFilm>("save", async function (next) {
-  try {
-    if (!this.links.rottenTomatoes) {
-      this.links.rottenTomatoes = await searchUtils.getRottenTomatoesUrl(this.title)
-    }
-    if (!this.images.cover) {
-      this.images.cover = await searchUtils.getCover(this.title)
-    }
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
+// filmSchema.pre<IFilm>("save", async function (next) {
+//   try {
+//     if (!this.links.rottenTomatoes) {
+//       this.links.rottenTomatoes = await searchUtils.getRottenTomatoesUrl(this.title)
+//     }
+//     if (!this.images.cover.data) {
+//       this.images.cover = await searchUtils.getCover(this.title)
+//     }
+//     next();
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
 /*
  * Post save hook, It performs two things
  * 1. If a rotten tomatoes links has not been provided. It will set one
- * 2. Will set a images.cover
+ * 2. TO DO: If a images.cover has not been provided. It will set one
  */
-// filmSchema.post<IFilm>("save", async function (film) {
-//   if (!film.links.rottenTomatoes) {
-//     film.links.rottenTomatoes = await searchUtils.getRottenTomatoesUrl(film.title)
-//   }
-// });
+filmSchema.post<IFilm>("save", function (film) {
+  if (!film.links.rottenTomatoes) {
+    console.log('Executing post save hook for film:', film._id)
+    film.getAndSetLink("Rotten Tomatoes").then(() => {console.log("AAAAAAAAAAAAAAA")})
+    console.log('Finished post save hook for film:', film._id)
+
+    // film.links.rottenTomatoes = await searchUtils.getRottenTomatoesUrl(film.title)
+  }
+});
 
 enum ImagesContentTypes {
   png ='image/png',
@@ -138,6 +151,40 @@ filmSchema.methods.addCover = async function (
       'images.cover.contentType': fileType?.mime
     }
   })
+}
+
+/*
+ * Sets various links to the doc
+ */
+filmSchema.methods.getAndSetLinks = function (
+  this: IFilm,
+  pages: string[]
+) {
+  for (const page of pages) { 
+    this.getAndSetLink(page)
+  }
+}
+
+/*
+ * Set a link to the doc
+ */
+filmSchema.methods.getAndSetLink = async function (
+  this: IFilm,
+  page: string
+) {
+  switch (page) {
+    case "Rotten Tomatoes": {
+      const url = await searchUtils.getRottenTomatoesUrl(this)
+      this.links.rottenTomatoes = url || "#"
+      // this.update({ })
+      this.save()
+      break;
+  }
+    default:
+      
+      break;
+  }
+  
 }
 
 /*

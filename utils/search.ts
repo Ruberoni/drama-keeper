@@ -7,29 +7,30 @@ export default {
    * Gets https://www.rottentomatoes.com/m/${filmName}, if OK, return the url
    */
   getRottenTomatoesUrl: async (
-    filmName: string | undefined
+    {title, type} : {title: string, type?: string }
   ): Promise<string> => {
-    if (!filmName) return '';
-    let response;
+    if (!title || !type) return '';
     let url;
-
-    filmName = filmName.replaceAll(' ', '_').toLowerCase()
-
+    title = title.replaceAll(' ', '_').toLowerCase()
     try {
-      url = `https://www.rottentomatoes.com/m/${filmName}`;
-      response = await axios.get(url);
-      if (response.statusText == "OK") return url;
-    } catch (err) {
-      debug(err);
-    }
-    try {
-      url = `https://www.rottentomatoes.com/tv/${filmName}`;
-      response = await axios.get(url);
-      if (response.statusText == "OK") return url;
-    } catch (err) {
-      debug(err);
-    }
+      if (type === 'Movie') {
+        url = `https://www.rottentomatoes.com/m/${title}`;
+        await axios.get(url);
+        return url
+      }
 
-    return "";
+      if (type === 'TV') {
+        url = `https://www.rottentomatoes.com/tv/${title}`;
+        return await axios.get(url) && url
+      }
+      return ''
+    } catch (err) {
+      debug('getRottenTomatoesUrl error:', err.message)
+      return ''
+    }
   },
+
+  // getCover: async () : Promise<{data: Buffer, contentType: string}> => {
+    
+  // }
 };

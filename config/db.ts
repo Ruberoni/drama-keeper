@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import Debug from 'debug'
+// import Debug from 'debug'
 
-const debug = Debug('db')
+// const debug = Debug('db')
 
 const uri: string = process.env.NODE_ENV == 'test' ? process.env.MONGO_URI_TEST as string : process.env.MONGO_URI as string;
 
@@ -16,7 +16,7 @@ export default async (): Promise<void> => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
-    debug("Connected to database");
+    console.log("Connected to database");
   } catch (err) {
     throw new Error(err);
   }
