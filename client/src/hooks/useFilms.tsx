@@ -14,6 +14,8 @@ const cookies = new Cookies();
  *            }, 
  *            fetchData: function that fetch films and updates data
  *          ]
+ * @todo
+ * - Error state
  *
  */
 export default function useFilms() : [{data: IFilm[], isLoading: boolean}, () => Promise<void>] {

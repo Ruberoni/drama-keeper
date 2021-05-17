@@ -102,21 +102,21 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const context = useContext(AppContext)
+  const app = useContext(AppContext)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleUpdate = () => {
-    context.triggerFilmUpdate(_id)
+    app.dispatch({type: 'FILM/UPDATE'})
   }
 
   const handleDelete = async () => {
     const response = await deleteFilm(_id)
     if (typeof response !== 'string') {
       handleClose()
-      context.triggerAppUpdate()
+      app.dispatch({type: 'FILM/DELETE'})
     }
   }
 
@@ -125,7 +125,7 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
     const response = await updateFilm(updateData, _id)
     if (typeof response !== 'string') {
       handleClose()
-      context.triggerAppUpdate()
+      app.dispatch({type: 'FILM/UPDATE'})
     }
   }
 

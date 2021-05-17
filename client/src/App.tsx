@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useReducer } from 'react';
+import React, { useState, useEffect, createContext, useReducer, useMemo } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { red } from '@material-ui/core/colors'
@@ -63,9 +63,41 @@ const reducer = (films: IFilmsReduced, action: {films: IFilm[]}) => {
     }
 }
 */
+// Gonna move this to ./context
 export const AppContext = createContext<any>('e')
 
+// export interface IAppContextState {
+//   reloadFilms: boolean
+// }
+
+// export interface IAppContextAction {
+//   type: string
+// }
+
+function reducer(state: any/*: IAppContextState*/, action: any/*: IAppContextAction*/) {
+  // to do: save authToken
+  // to do: save component to render as modal. Not <Login /> -> Login
+  switch (action.type) {
+    case 'FILM/ADD':
+    case 'FILM/UPDATE':
+    case 'FILM/DELETE':
+      return {
+        reloadFilms: true
+      }
+    case 'FILM/READY':
+      return {
+        reloadFilms: false
+      }
+  }
+}
+
 function MyApp() {
+
+  const [state, dispatch] = useReducer(reducer, { reloadFilms: false})
+
+  const app = useMemo(() => {
+    return {state, dispatch}
+  },[state, dispatch])
 
   const [open, setOpen] = useState<boolean>(false);
   // eslint-disable-next-line no-undef
@@ -81,16 +113,30 @@ function MyApp() {
     }
   })
 
-  const [films, updateFilms] = useFilms()
+  const [films, reloadFilms] = useFilms()
   useEffect(() => {
-    updateFilms()
+    reloadFilms()
   }, [auth])
 
   useInterval(() => {
     if (auth) {
-      updateFilms()
+      reloadFilms()
     }
   }, 30000)
+
+  useEffect(() => {
+    if (app?.state?.reloadFilms) {
+      reloadFilms()
+      app.dispatch({type: 'FILM/READY'})
+    }
+
+    /*
+    if (!app.state.reloadFilms) {
+      
+    }
+    */
+
+  }, [app.state?.reloadFilms])
 
   /*
     I call dispatch(films)
@@ -139,11 +185,26 @@ function MyApp() {
 
   const handleClose = () => {
     setOpen(false);
-    updateFilms()
+    reloadFilms()
   };
 
+  /*
+    Using this:
+    value={{triggerAppUpdate: reloadFilms, triggerFilmUpdate: openUpdateFilmModal}}
+    As context value means that I need an useReducer
+    Reducer prototype:
+    case 'FILM/ADD' or 'FILM_ADDED':
+    case 'FILM/UPDATE':
+    case 'FILM/DELETE':
+      isLoading: true
+    case 'APP_READY':
+      isLoading: false
+
+    So I listen to isLoading here in App.tsx with an useEffect(function, [state.isLoading])
+    and in the function body I should call reloadFilms()
+  */
   return (
-    <AppContext.Provider value={{triggerAppUpdate: updateFilms, triggerFilmUpdate: openUpdateFilmModal}}>
+    <AppContext.Provider value={app/*{triggerAppUpdate: reloadFilms, triggerFilmUpdate: openUpdateFilmModal}*/}>
       <ThemeProvider theme={theme}>
         <SimpleModal open={open} onClose={handleClose} body={modalComponent}/>
         <div className='App'>
