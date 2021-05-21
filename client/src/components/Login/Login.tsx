@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues } from '../Register/Register'
-import * as authActions from '../../actions/auth'
+// import * as authActions from '../../actions/auth'
+import { AppContext } from '../../App'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -45,6 +46,9 @@ const validationSchema = yup.object({
 
 
 export function Forms ()  {
+
+  const app = React.useContext(AppContext)
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -53,7 +57,8 @@ export function Forms ()  {
     validationSchema: validationSchema,
     onSubmit: async (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
-      const loginOK = await authActions.login(values)
+      // const loginOK = await authActions.login(values)
+      const loginOK = app.auth.login(values)
       if (loginOK ==! true) {
         alert(loginOK)
       }

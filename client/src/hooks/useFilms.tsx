@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Cookies from 'universal-cookie';
 import { IFilm } from '../components/FilmItem/FilmItem'
 import api from "../api";
+import { AppContext } from "../App"
 
 const cookies = new Cookies();
 
@@ -18,17 +19,19 @@ const cookies = new Cookies();
  * - Error state
  *
  */
-export default function useFilms() : [{data: IFilm[], isLoading: boolean}, () => Promise<void>] {
+export default function useFilms(/*token : string | null = ''*/) : [{data: IFilm[], isLoading: boolean}, () => Promise<void>] {
+  const app = useContext(AppContext)
   const [data, setData] = useState<IFilm[]>([{}]);
   const [isLoading, setLoading] = useState(false)
-  
-  const token = cookies.get('token')
+
+  // if (!token) return [{data: [], isLoading: false}, () => new Promise((resolve, reject) => {0})]
+  // const token = cookies.get('token')
 
   const fetchData = async () => {
     setLoading(true)
     const options = {
       headers: {
-				'Authorization': `Bearer ${token}`
+				'Authorization': `Bearer ${app.state.authToken/*token*/}`
       }
     }
     try {
