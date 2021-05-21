@@ -9,7 +9,8 @@ import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues } from '../Register/Register'
 // import * as authActions from '../../actions/auth'
-import { AppContext } from '../../App'
+// import { AppContext } from '../../App'
+import { useApp } from '../../context'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -47,7 +48,8 @@ const validationSchema = yup.object({
 
 export function Forms ()  {
 
-  const app = React.useContext(AppContext)
+  // const app = React.useContext(AppContext)
+  const app = useApp()
 
   const formik = useFormik({
     initialValues: {

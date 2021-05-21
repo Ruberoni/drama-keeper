@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useReducer, useMemo } from 'react';
+import React, { useState, useEffect} from 'react';
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { red } from '@material-ui/core/colors'
@@ -16,12 +16,13 @@ import Typography from "@material-ui/core/Typography";
 import Modal from '@material-ui/core/Modal';
 import Cookies from 'universal-cookie';
 // import * as filmActions from './actions/films' 
-import * as utils from './utils/index'
+// import * as utils from './utils/index'
 // import { IFilm } from './components/FilmItem/FilmItem'
 import { useInterval } from './hooks/useInterval'
 import useFilms from './hooks/useFilms'
-import { IFormValues } from './components/Register/Register'
-import API from './api'
+// import { IFormValues } from './components/Register/Register'
+// import API from './api'
+import { useApp } from "./context"
 
 const cookies = new Cookies();
 
@@ -69,7 +70,7 @@ const reducer = (films: IFilmsReduced, action: {films: IFilm[]}) => {
 }
 */
 // Gonna move this to ./context
-export const AppContext = createContext<any>('e')
+// export const AppContext = createContext<any>('e')
 
 // export interface IAppContextState {
 //   reloadFilms: boolean
@@ -79,49 +80,44 @@ export const AppContext = createContext<any>('e')
 //   type: string
 // }
 
-function reducer(state: any/*: IAppContextState*/, action: any/*: IAppContextAction*/) {
-  // to do: save authToken
-  // to do: save component to render as modal. Not <Login /> -> Login
-  switch (action.type) {
-    case 'FILM/ADD':
-    case 'FILM/UPDATE':
-    case 'FILM/DELETE':
-      return {
-        ...state,
-        reloadFilms: true
-      }
-    case 'FILM/READY':
-      return {
-        ...state,
-        reloadFilms: false
-      }
-    case 'LOGIN':
-      return {
-        ...state,
-        authToken: action.token
-      }
-    case 'LOGOUT':
-      return {
-        ...state,
-        authToken: null
-      }
-  }
-}
+
+// function reducer(state: any/*: IAppContextState*/, action: any/*: IAppContextAction*/) {
+//   // to do: save authToken
+//   // to do: save component to render as modal. Not <Login /> -> Login
+//   switch (action.type) {
+//     case 'FILM/ADD':
+//     case 'FILM/UPDATE':
+//     case 'FILM/DELETE':
+//       return {
+//         ...state,
+//         reloadFilms: true
+//       }
+//     case 'FILM/READY':
+//       return {
+//         ...state,
+//         reloadFilms: false
+//       }
+//     case 'LOGIN':
+//       return {
+//         ...state,
+//         authToken: action.token
+//       }
+//     case 'LOGOUT':
+//       return {
+//         ...state,
+//         authToken: null
+//       }
+//   }
+// }
 
 function MyApp() {
-
-  const [state, dispatch] = useReducer(reducer, { reloadFilms: false, authToken: null})
-
-  const app = useMemo(() => {
-    return {state, dispatch}
-  },[state, dispatch])
 
   const [open, setOpen] = useState<boolean>(false);
   // eslint-disable-next-line no-undef
   const [modalComponent, setModalComponent] = useState<JSX.Element>(<div></div>)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   // const [auth, setAuth] = useState<boolean>(false)
-  
+  const app = useApp()
   // useEffect(() => {
   //   // const _isAuth = utils.isAuth()
   //   const token = cookies.get('token')
@@ -245,45 +241,45 @@ function MyApp() {
     reloadFilms()
   };
 
-  const authFunctions = {
-    /*
-    * Post to API login URI. 
-    * If OK then sets token cookie and return true
-    * If ERROR returns err.message
-    */
-    login: async (userData: IFormValues) : Promise<boolean | string> => {
-      try {
+  // const authFunctions = {
+  //   /*
+  //   * Post to API login URI. 
+  //   * If OK then sets token cookie and return true
+  //   * If ERROR returns err.message
+  //   */
+  //   login: async (userData: IFormValues) : Promise<boolean | string> => {
+  //     try {
 
-        const options = {
-          email: userData.email,
-          password: userData.password 
-        }
+  //       const options = {
+  //         email: userData.email,
+  //         password: userData.password 
+  //       }
 
-        // Do POST fetch
-        const response = await API.post('/api/auth/login', options)
-        alert(response.data.message)
+  //       // Do POST fetch
+  //       const response = await API.post('/api/auth/login', options)
+  //       alert(response.data.message)
 
-        // Set cookie with token
-        cookies.set('token', response.data.token)
-        app.dispatch({type: 'LOGIN', token: response.data.token})
-        return true
-      } catch (err) {
-        return err.message
-      }
-    },
+  //       // Set cookie with token
+  //       cookies.set('token', response.data.token)
+  //       app.dispatch({type: 'LOGIN', token: response.data.token})
+  //       return true
+  //     } catch (err) {
+  //       return err.message
+  //     }
+  //   },
 
-    /*
-    * Removes token cookie
-    */
-    logout:  () => {
-      // const cookies = new Cookies(); //  Remove this and test
-      cookies.remove('token')
-      alert('Logged out')
-      app.dispatch({type: 'LOGOUT'})
+  //   /*
+  //   * Removes token cookie
+  //   */
+  //   logout:  () => {
+  //     // const cookies = new Cookies(); //  Remove this and test
+  //     cookies.remove('token')
+  //     alert('Logged out')
+  //     app.dispatch({type: 'LOGOUT'})
 
-    }
+  //   }
 
-  }
+  // }
 
   /*
     Using this:
@@ -301,7 +297,6 @@ function MyApp() {
     and in the function body I should call reloadFilms()
   */
   return (
-    <AppContext.Provider value={{auth: authFunctions, ...app}/*{triggerAppUpdate: reloadFilms, triggerFilmUpdate: openUpdateFilmModal}*/}>
       <ThemeProvider theme={theme}>
         <SimpleModal open={open} onClose={handleClose} body={modalComponent}/>
         <div className='App'>
@@ -313,7 +308,6 @@ function MyApp() {
         </div>
         <Typography className='credit'>Made by Ruben</Typography>
       </ThemeProvider>
-    </AppContext.Provider>
   )
 }
 

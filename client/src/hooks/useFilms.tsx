@@ -2,9 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import Cookies from 'universal-cookie';
 import { IFilm } from '../components/FilmItem/FilmItem'
 import api from "../api";
-import { AppContext } from "../App"
+import { useApp } from "../context"
 
-const cookies = new Cookies();
+// const cookies = new Cookies();
 
 /*
  * Hook for fetching authenticated user films
@@ -20,14 +20,15 @@ const cookies = new Cookies();
  *
  */
 export default function useFilms(/*token : string | null = ''*/) : [{data: IFilm[], isLoading: boolean}, () => Promise<void>] {
-  const app = useContext(AppContext)
+  const app = useApp()
   const [data, setData] = useState<IFilm[]>([{}]);
   const [isLoading, setLoading] = useState(false)
 
-  // if (!token) return [{data: [], isLoading: false}, () => new Promise((resolve, reject) => {0})]
+  // if (!app.state.authToken) return [{data: [], isLoading: false}, () => new Promise((resolve, reject) => {0})]
   // const token = cookies.get('token')
 
   const fetchData = async () => {
+    if (!app.state.authToken) setData([])
     setLoading(true)
     const options = {
       headers: {
@@ -47,10 +48,14 @@ export default function useFilms(/*token : string | null = ''*/) : [{data: IFilm
       // This way if hook had an error I could display it 
     }
   };
+  // if (!app.state.authToken) {
+  //   return [{data: [], isLoading: false}, async () => {await (2+2)}]
+  // }
+
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [app.state.authToken]);
 
   return [{ data, isLoading }, fetchData];
 }

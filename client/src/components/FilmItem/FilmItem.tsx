@@ -13,7 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import _cover from '../../assets/img/when-harry-met-sally-cover.jpg'
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
 import { correctImageBuffer } from '../../utils/index'
-import { AppContext } from '../../App'
+import { useApp } from '../../context'
 import { deleteFilm, updateFilm } from '../../actions/films'
 
 const scale = 1
@@ -102,7 +102,8 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const app = useContext(AppContext)
+  // const app = useContext(AppContext)
+  const app = useApp()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

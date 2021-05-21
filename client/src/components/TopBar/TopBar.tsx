@@ -15,7 +15,8 @@ import withWidth from '@material-ui/core/withWidth';
 import Button from '@material-ui/core/Button';
 // import Cookies from 'universal-cookie';
 // import * as authActions from '../../actions/auth'
-import { AppContext } from '../../App'
+// import { AppContext } from '../../context'
+import { useApp } from '../../context'
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -70,7 +71,8 @@ function TopBar({actions} : ITopBar) {
     setAnchorEl(event.currentTarget);
   };
 
-  const app = React.useContext(AppContext)
+  // const app = React.useContext(AppContext)
+  const app = useApp()
 
   const handleClose = () => {
     setAnchorEl(null);
