@@ -63,8 +63,8 @@ const filmSchema = new Schema<IFilm>({
   },
   images: {
     cover: {
-      data: Buffer,
-      contentType: String
+      type: String,
+      default: ''
     }
   },
 })
@@ -73,14 +73,14 @@ export interface IFilmLinks extends Document  {
   rottenTomatoes: string,
   imdb?: string
 }
-
+/*
 export interface IImage extends Document  {
   data: Record<string, unknown>,
   contentType: ImagesContentTypes
 }
-
+*/
 export interface IFilmImages extends Document {
-  cover?: IImage
+  cover?: string
 }
 
 export interface IFilm extends Document {
@@ -89,11 +89,12 @@ export interface IFilm extends Document {
   type?: string,
   watched?: boolean,
   links: IFilmLinks
-  images?: IFilmImages,
-  addCover: any, // CHANGE type
-  addCoverCompressed: any, // Change type,
+  images: IFilmImages,
+  // addCover: any, // CHANGE type
+  // addCoverCompressed: any, // Change type,
   getAndSetLinks: any, // Change type,
   getAndSetLink: any, // Change type,
+  getAndSetCover: any, // Change type,
 }
 
 /*
@@ -122,24 +123,40 @@ export interface IFilm extends Document {
  * 2. TO DO: If a images.cover has not been provided. It will set one
  */
 filmSchema.post<IFilm>("save", function (film) {
+  /**
+    Maybe delete this conditional 
+    Why? What happens if a existent film is updated? Maybe the title changed so a new search has to be done
+    but this conditional will prevent.
+    Why not? A client will never set its own URL AND as getAndSetLink calls save() then this hook
+    will again execute and create an infinite loop
+    But if the idea of this app is that the client will only create a film with title and film type and then the server will do the rest
+   */
   if (!film.links.rottenTomatoes) {
-    console.log('Executing post save hook for film:', film._id)
-    film.getAndSetLink("Rotten Tomatoes").then(() => {console.log("AAAAAAAAAAAAAAA")})
-    console.log('Finished post save hook for film:', film._id)
+    // console.log('Executing post save hook for film:', film._id)
+    film.getAndSetLink("Rotten Tomatoes").then(() => {null})
+    // console.log('Finished post save hook for film:', film._id)
 
     // film.links.rottenTomatoes = await searchUtils.getRottenTomatoesUrl(film.title)
   }
+
+  if (!film.images.cover) {
+
+   film.getAndSetCover().then(() => {null})
+  }
 });
 
+/* DEPRECATED AS THE IMAGE FIELD IS NOW A URL
 enum ImagesContentTypes {
   png ='image/png',
   jpeg = 'image/jpeg'
 }
-
+*/
 /*
+ * DEPRECATED AS THE IMAGE FIELD IS NOW A URL
  * Adds an image to the cover field
  * https://gist.github.com/aheckmann/2408370
  */
+/*
 filmSchema.methods.addCover = async function (
   this: IFilm,
   imageData: Buffer,
@@ -152,7 +169,7 @@ filmSchema.methods.addCover = async function (
     }
   })
 }
-
+*/
 /*
  * Sets various links to the doc
  */
@@ -166,6 +183,20 @@ filmSchema.methods.getAndSetLinks = function (
 }
 
 /*
+ * Set a cover url to the doc
+ */
+ 
+filmSchema.methods.getAndSetCover = async function (
+  this: IFilm,
+) {
+  // console.log('Executed')
+  const cover = await searchUtils.getTMDbCover(this)
+  this.images.cover = cover || '#'
+  this.save()
+}
+
+
+/*
  * Set a link to the doc
  */
 filmSchema.methods.getAndSetLink = async function (
@@ -173,23 +204,28 @@ filmSchema.methods.getAndSetLink = async function (
   page: string
 ) {
   switch (page) {
-    case "Rotten Tomatoes": {
+    case "Rotten Tomatoes": 
       const url = await searchUtils.getRottenTomatoesUrl(this)
+      console.log('method url:', url)
       this.links.rottenTomatoes = url || "#"
+      
+      // const _ = await this.update({ $set :{'links.rottenTomatoes': url || '#'} })
       // this.update({ })
       this.save()
       break;
+    
+    default: 
+      this.links.rottenTomatoes = "#"
+      this.save()
+    
   }
-    default:
-      
-      break;
-  }
-  
 }
 
-/*
+/* 
+ * DEPRECATED AS THE IMAGE FIELD IS NOW A URL
  * Adds an image compressed to the cover field
  */
+/*
 filmSchema.methods.addCoverCompressed = async function (
   this: IFilm,
   imageData: Buffer,
@@ -204,6 +240,6 @@ filmSchema.methods.addCoverCompressed = async function (
   // })
   this.addCover(imageDataCompressed)
 }
-
+*/
 const Film = model<IFilm>("Film", filmSchema)
 export default Film

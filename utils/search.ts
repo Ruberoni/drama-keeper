@@ -30,7 +30,26 @@ export default {
     }
   },
 
-  // getCover: async () : Promise<{data: Buffer, contentType: string}> => {
-    
-  // }
+  getTMDbCover: async ({title, type} : {title: string, type?: string }) : Promise<string> => {
+    let url;
+
+    try {
+      if (type === 'Movie') {
+        url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDb_API_KEY}&query=${title}`;
+        const response = await axios.get(url);
+        return response.data.results[0].poster_path || ''
+      }
+
+      if (type === 'TV') {
+        url = `https://api.themoviedb.org/3/search/tv?api_key=${process.env.TMDb_API_KEY}&query=${title}`;
+        const response = await axios.get(url);
+        return response.data.results[0].poster_path || ''
+      }
+
+      return ''
+    } catch (err) {
+      console.log('getTMDbCover error:', err)
+      return ''
+    }
+  }
 };

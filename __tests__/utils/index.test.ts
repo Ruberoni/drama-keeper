@@ -119,4 +119,32 @@ describe('Search', () => {
     });
 
   })
+  describe("getTMDbCover", () => {
+    it("With a known movie info, return should be a string finishing in jpg.", async () => {
+      // Arrange
+      const Film = {title:'La la land', type:'Movie'}
+      // Act
+      const coverPath = await searchUtils.getTMDbCover(Film)
+      // Assert
+      expect(coverPath).toMatch(/.jpg/)
+    })
+
+    it("With incorrect input: known movie title but with TV type, return should be the empty string", async () => {
+      // Arrange
+      const Film = {title:'La la land', type:'TV'}
+      // Act
+      const coverPath = await searchUtils.getTMDbCover(Film)
+      // Assert
+      expect(coverPath).toBe('')
+    })
+
+    it("With a known serie info, return should be a string finishing in jpg.", async () => {
+      // Arrange
+      const Film = {title:'Modern Family', type:'TV'}
+      // Act
+      const coverPath = await searchUtils.getTMDbCover(Film)
+      // Assert
+      expect(coverPath).toMatch(/.jpg/)
+    })
+  })
 })

@@ -10,7 +10,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
-import _cover from '../../assets/img/when-harry-met-sally-cover.jpg'
+// import _cover from '../../assets/img/when-harry-met-sally-cover.jpg'
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
 import { correctImageBuffer } from '../../utils/index'
 import { useApp } from '../../context'
@@ -79,7 +79,7 @@ export interface IFilmLinks {
 }
 
 export interface IFilmImages {
-  cover?: Buffer
+  cover?: string
 }
 
 export interface IFilmActions {
@@ -97,20 +97,26 @@ export interface IFilm {
   images?: IFilmImages,
 }
 
+const _cover = 'https://images-na.ssl-images-amazon.com/images/I/51DzJ4yEp4L._AC_.jpg'
+
 // eslint-disable-next-line no-undef
 export default function FilmItem({_id, title, type, watched, links, images} : IFilm) : JSX.Element {
   const classes = useStyles();
+  const app = useApp()
+
+  const cover = (images?.cover && `https://image.tmdb.org/t/p/w200/${images.cover}`) || _cover
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   // const app = useContext(AppContext)
-  const app = useApp()
+
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleUpdate = () => {
-    app.dispatch({type: 'FILM/UPDATE'})
+    // app.dispatch({type: 'FILM/UPDATE', _id})
+    app.openUpdateFilmModal(_id)
   }
 
   const handleDelete = async () => {
@@ -141,7 +147,7 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
         <CardMedia
           className={classes.media}
           title="Film cover">
-            <img src={(images?.cover && correctImageBuffer(images?.cover)) || _cover} alt="Cover" className={classes.cover} />
+            <img src={cover} alt="Cover" className={classes.cover} />
         </CardMedia>
         <div className={classes.details}>
           <CardContent className={classes.content}>

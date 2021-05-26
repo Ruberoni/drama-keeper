@@ -1,7 +1,4 @@
 import React, { useState, useEffect} from 'react';
-import { createMuiTheme } from '@material-ui/core/styles'
-import { ThemeProvider } from '@material-ui/styles'
-import { red } from '@material-ui/core/colors'
 import './App.css';
 // import FilmItem from './components/FilmItem/FilmItem'
 import TopBar from './components/TopBar/TopBar'
@@ -23,14 +20,12 @@ import useFilms from './hooks/useFilms'
 // import { IFormValues } from './components/Register/Register'
 // import API from './api'
 import { useApp } from "./context"
+import TMDbLogo from './assets/img/tmdbattribution.svg'
+
 
 const cookies = new Cookies();
 
-const theme = createMuiTheme({
-  palette: {
-    primary: red
-  }
-})
+
 
 export interface ISimpleModal {
   open: boolean, 
@@ -297,17 +292,21 @@ function MyApp() {
     and in the function body I should call reloadFilms()
   */
   return (
-      <ThemeProvider theme={theme}>
+    <>
         <SimpleModal open={open} onClose={handleClose} body={modalComponent}/>
         <div className='App'>
           <TopBar actions={topBarActions}/>
           <div className='FilmItemListWrapper'>
-            <FilmItemList header='To see' filmList={films.data.filter(film => film.watched === false) /*[{}]*/} />
+            <FilmItemList header='To see' filmList={films.data.filter(film => film.watched === false)/*[{_id: 'asda'}]*/} />
             <FilmItemList header='Seen' filmList={films.data.filter(film => film.watched === true)} />
           </div>
         </div>
-        <Typography className='credit'>Made by Ruben</Typography>
-      </ThemeProvider>
+        <div className='credit'>
+          <a href="https://www.themoviedb.org/" target='_blank' rel='noreferrer'><img src={TMDbLogo} className='tmdblogo'/></a>
+          <Typography >Made by Ruben</Typography>
+          <Typography className='tmdbattribution' variant='caption'>This product uses the TMDb API but is not endorsed or certified by TMDb</Typography>
+        </div>
+    </>
   )
 }
 

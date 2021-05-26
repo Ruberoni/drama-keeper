@@ -1,6 +1,7 @@
 import express from "express";
 import * as FilmsController from "../../controllers/api/films";
 import * as authMiddlewares from '../../middlewares/Auth'
+// import FilmsModel from "../../models/Film";
 
 const router = express.Router();
 
@@ -13,12 +14,28 @@ router.put("/:id", FilmsController.updateFilmById)
 router.get("/user/:user_id", FilmsController.getFilmsByUserId)
 
 /*
+ * DEVELOPMENT PURPOSES ROUTE
+ *
+ * Removes all the docs in Films model
+ */
+/*
+router.get('/deleteall', async (req, res) => {
+  try {
+    await FilmsModel.deleteMany({})
+    res.send("All models deleted")
+      
+  } catch (error) {
+      res.send(`ERROR:${error.message}`)
+  }
+})
+*/
+/*
  * TESTING PURPOSES ROUTE
  *
  * Adds the image in assets/img to a document
  * @params {integer} id The id of the document to add the image
  */
-router.get("/test/addcover/:id", FilmsController.test.addCover)
+// router.get("/test/addcover/:id", FilmsController.test.addCover)
 
 /*
  * TESTING PURPOSES ROUTE
@@ -26,7 +43,7 @@ router.get("/test/addcover/:id", FilmsController.test.addCover)
  * Adds the image in assets/img to a document
  * @params {integer} id The id of the document to add the image
  */
-router.get("/test/addcovercompressed/:id", FilmsController.test.addCoverCompressed)
+// router.get("/test/addcovercompressed/:id", FilmsController.test.addCoverCompressed)
 
 /*
  * TESTING PURPOSES ROUTE
@@ -34,7 +51,7 @@ router.get("/test/addcovercompressed/:id", FilmsController.test.addCoverCompress
  * Shows the image in images.cover property of the document
  * @params {integer} id The id of the document to add the image
  */
-router.get("/test/showcover/:id", FilmsController.test.showCover)
+// router.get("/test/showcover/:id", FilmsController.test.showCover)
 
 /*
  * TESTING PURPOSES ROUTE

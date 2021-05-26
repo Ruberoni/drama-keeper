@@ -1,9 +1,38 @@
-import React, { createContext, useReducer, useContext, useMemo } from 'react'
+import React, { createContext, useReducer, useContext, useMemo, useState } from 'react'
 import Cookies from 'universal-cookie';
+import Modal from '@material-ui/core/Modal';
+
+// import useModal from '../hooks/useModal'
 import API from '../api'
 import { IFormValues } from '../components/Register/Register'
+import UpdateFilm from '../components/UpdateFilm/UpdateFilm'
+
+
 
 const cookies = new Cookies();
+
+export interface ISimpleModal {
+  open: boolean, 
+  onClose: () => void,
+  // eslint-disable-next-line no-undef
+  body: JSX.Element
+}
+
+function SimpleModal({open, onClose, body} : ISimpleModal) {
+
+  return (
+    <Modal
+      className='modal'
+      open={open}
+      onClose={onClose}
+      aria-labelledby="simple-modal-title"
+      aria-describedby="simple-modal-description"
+    >
+      {body}
+    </Modal>
+  );
+
+}
 
 
 export const AppContext = createContext<any>('e')
@@ -88,9 +117,28 @@ export function AppProvider({ children }: AppProviderProps ) {
     }
   }
 
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [modalComponent, setModalComponent] = useState<JSX.Element>(<div></div>)
+  const handleClose = () => {
+    setOpen(false);
+  };
+  // const [modal, openModal] = useModal(open, setOpen)
+  // const handleOpenModal = (modal: any, extraParams: any) => {
+  //   console.log('Hola')
+  //   openModal(modal, extraParams)
+  // }
+ 
+
+  const openUpdateFilmModal = (_id: string) => {
+    setModalComponent(<UpdateFilm _id={_id}/>);  
+    setOpen(true);
+  };
+
 
   return (
-    <AppContext.Provider value={{auth: authFunctions, ...app}}>
+    <AppContext.Provider value={{auth: authFunctions, openUpdateFilmModal, ...app}}>
+      <SimpleModal open={open} onClose={handleClose} body={modalComponent}/>
+
       {children}
     </ AppContext.Provider>
   )
