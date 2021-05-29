@@ -18,3 +18,6 @@ yarn-error.log*
 
 *.sublime-project
 *.sublime-workspace
+
+# Only for branch server/heroku
+/client
