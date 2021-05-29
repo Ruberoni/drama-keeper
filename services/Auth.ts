@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken'
 import UserModel, { IUserDocument } from '../models/User'
 const debug = Debug('auth') 
 
-/*
+/**
  * Checks is email and password exist and are correct, then signs and return a JWT with the user id
- * @params {IUser}
+ * @param {IUser}
  * @returns {string} The JWT with the user id
  */
 export const login = async ({email, password} : IUserDocument) => {

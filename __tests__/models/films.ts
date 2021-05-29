@@ -21,66 +21,28 @@ afterEach(async () => {
   await FilmsModel.deleteMany({});
 });
 
-describe("asd", () => {
-
-  it("e", () => {
-    return FilmsModel.find({}).then(films => {
-      expect(films).toHaveLength(1)
-      expect(films[0]).toHaveProperty('title')
-    });
-  })
-
-  it("a", () => {
-    return FilmsModel.find({}).then(films => {
-      expect(films).toHaveLength(1)
-      expect(films[0]).toHaveProperty('title')
-    });
-  })
-})
-
 describe("Films model", () => {
   describe("Methods", () => {
     describe("getAndSetLink", () => {
       it("Calling with param page: 'Rotten Tomatoes', the document should have a rotten tomatoes link", () => {
-        // Arrange
-        /*
-        let film = (await FilmsModel.find({}))[0]
-        // film = film[0]
-        const page = "Rotten Tomatoes"
-        
-        // Act
-        // Call the method
-        await film.getAndSetLink(page)
-
-        // Assert
-        expect(film.links.rottenTomatoes).toMatch(/tv/)
-        */
 
         return FilmsModel.find({}).then(films => {
           const film = films[0]
+          // Act
           film.getAndSetLink("Rotten Tomatoes").then(() => {
+            // Assert
             expect(film.links.rottenTomatoes).toMatch(/tv/)
           })
         })
       });
 
       it("Calling with param page: 'hola', the document should have an empty rotten tomatoes link", () => {
-        // Arrange
-        /*
-        const films = await FilmsModel.find({})
-        const film = films[0]
-        const page = "hola"
-
-        // Act
-        // Call the method
-        film.getAndSetLink(page)
-        // Assert
-        expect(film.links.rottenTomatoes).toBe('#')
-        */
         
         return FilmsModel.find({}).then(films => {
           const film = films[0]
+          // Act
           film.getAndSetLink("hola").then(() => {
+            // Assert
             expect(film.links.rottenTomatoes).toBe('#')
           })
         })
@@ -89,19 +51,11 @@ describe("Films model", () => {
     })
     describe("getAndSetCover", () => {
       it("Calling with a known serie, the document should have a string with '.jpg' in images.cover", () => {
-        // Arrange
-        /*
-        let film = (await FilmsModel.find({}))[0]
-        // Act
-        await film.getAndSetCover()
-        // const filmUpdated = (await FilmsModel.find({}))[0]
-        
-        // Assert
-        expect(film.images.cover).toMatch(/.jpg/)
-        */
         return FilmsModel.find({}).then(films => {
           const film = films[0]
+          // Act
           film.getAndSetCover().then(() => {
+            // Assert
             expect(film.images.cover).toMatch(/.jpg/)
           })
         })
@@ -109,18 +63,12 @@ describe("Films model", () => {
 
       it("Calling with a known movie, the document should have a string with '.jpg' in images.cover", () => {
         // Arrange
-        
         const filmData = {title: 'La la land', type: 'Movie'}
-        /*
-        await FilmsModel.create(filmData)
-        // Act
-        const film = await FilmsModel.findOne(filmData)
-        await film.getAndSetCover()
-        // Assert
-        expect(film.images.cover).toMatch(/.jpg/)
-        */
+
         return FilmsModel.create(filmData).then(film => {
+          // Act
           film.getAndSetCover().then(() => {
+            // Assert
             expect(film.images.cover).toMatch(/.jpg/)
           })
         })

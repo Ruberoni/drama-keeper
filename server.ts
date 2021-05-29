@@ -18,7 +18,6 @@ function normalizePort(val: string | number): number {
   }
 
   if (port >= 0) {
-    // port number
     return port;
   }
 

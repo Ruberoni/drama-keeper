@@ -2,7 +2,6 @@ import Debug from 'debug'
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import UserModel from '../models/User'
-// import { RequestWithUser } from '../controllers/api/auth'
 
 const debug = Debug('auth')
 /*

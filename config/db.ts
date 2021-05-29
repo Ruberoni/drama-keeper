@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-// import Debug from 'debug'
-
-// const debug = Debug('db')
 
 const uri: string = process.env.NODE_ENV == 'test' ? process.env.MONGO_URI_TEST as string : process.env.MONGO_URI as string;
 
