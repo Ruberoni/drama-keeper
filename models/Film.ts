@@ -132,9 +132,7 @@ filmSchema.post<IFilm>("save", function (film) {
     But if the idea of this app is that the client will only create a film with title and film type and then the server will do the rest
    */
   if (!film.links.rottenTomatoes) {
-    // console.log('Executing post save hook for film:', film._id)
     film.getAndSetLink("Rotten Tomatoes").then(() => {null})
-    // console.log('Finished post save hook for film:', film._id)
 
     // film.links.rottenTomatoes = await searchUtils.getRottenTomatoesUrl(film.title)
   }
@@ -189,7 +187,6 @@ filmSchema.methods.getAndSetLinks = function (
 filmSchema.methods.getAndSetCover = async function (
   this: IFilm,
 ) {
-  // console.log('Executed')
   const cover = await searchUtils.getTMDbCover(this)
   this.images.cover = cover || '#'
   this.save()
@@ -206,7 +203,6 @@ filmSchema.methods.getAndSetLink = async function (
   switch (page) {
     case "Rotten Tomatoes": 
       const url = await searchUtils.getRottenTomatoesUrl(this)
-      console.log('method url:', url)
       this.links.rottenTomatoes = url || "#"
       
       // const _ = await this.update({ $set :{'links.rottenTomatoes': url || '#'} })

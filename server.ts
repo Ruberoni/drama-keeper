@@ -26,5 +26,5 @@ function normalizePort(val: string | number): number {
 }
 
 function onListening() {
-  debug("Listening on port:", port);
+  console.log("Server listening on port:", port);
 }

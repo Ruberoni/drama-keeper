@@ -174,7 +174,7 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
           >
               <MenuItem onClick={handleDelete}>Delete</MenuItem>
               <MenuItem onClick={handleUpdate}>Update</MenuItem>
-              <MenuItem onClick={handleChangeWatched}>{watched ? 'Watched' : 'Unwatch'}</MenuItem>
+              <MenuItem onClick={handleChangeWatched}>{watched ? 'Unwatch' : 'Watched'}</MenuItem>
         </Menu>
         </CardActions>
     </Card>

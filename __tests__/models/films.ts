@@ -25,7 +25,6 @@ describe("asd", () => {
 
   it("e", () => {
     return FilmsModel.find({}).then(films => {
-      console.log(films)
       expect(films).toHaveLength(1)
       expect(films[0]).toHaveProperty('title')
     });
@@ -33,7 +32,6 @@ describe("asd", () => {
 
   it("a", () => {
     return FilmsModel.find({}).then(films => {
-      console.log(films)
       expect(films).toHaveLength(1)
       expect(films[0]).toHaveProperty('title')
     });

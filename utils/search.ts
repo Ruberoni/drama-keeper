@@ -48,7 +48,7 @@ export default {
 
       return ''
     } catch (err) {
-      console.log('getTMDbCover error:', err)
+      debug('getTMDbCover error:', err)
       return ''
     }
   }
