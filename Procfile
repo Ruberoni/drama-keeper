@@ -1,1 +1,1 @@
-web: nodemon --files server.ts
+web: node build/server.js
