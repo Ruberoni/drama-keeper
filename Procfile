@@ -1,0 +1,1 @@
+web: nodemon --files server.ts
