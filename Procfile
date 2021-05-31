@@ -1,1 +1,1 @@
-web: yarn heroku
+web: node dist/server.js
