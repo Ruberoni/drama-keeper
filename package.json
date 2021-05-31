@@ -8,7 +8,8 @@
     "test": "jest",
     "eslint-staged": "LIST=`git diff --cached --name-only | grep .*\\.ts | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST && prettier $LIST --write; fi",
     "dev": "concurrently \"yarn start\" \"cd client/ && yarn start\"",
-    "build": "tsc --build tsconfig.json"
+    "build": "tsc --build tsconfig.json",
+    "heroku": "ts-node server.ts"
   },
   "pre-commit": [
     "eslint-staged"
