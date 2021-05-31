@@ -14,6 +14,10 @@
   "pre-commit": [
     "eslint-staged"
   ],
+  "engines": {
+    "node": "15.7.0",
+    "yarn": "1.22.10"
+  },
   "repository": "https://github.com/Ruberoni/drama-keeper",
   "author": "Ruben Paredes",
   "license": "MIT",
