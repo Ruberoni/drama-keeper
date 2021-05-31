@@ -4,11 +4,11 @@
   "description": "Keep a record of the films watched",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --files server.ts --trace-warnings",
+    "start": "ts-node --files server.ts",
+    "server": "nodemon --files server.ts --trace-warnings",
+    "dev": "concurrently \"yarn start\" \"cd client/ && yarn start\"",
     "test": "jest",
     "eslint-staged": "LIST=`git diff --cached --name-only | grep .*\\.ts | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST && prettier $LIST --write; fi",
-    "dev": "concurrently \"yarn start\" \"cd client/ && yarn start\"",
-    "build": "tsc",
     "heroku": "ts-node server.ts"
   },
   "pre-commit": [
@@ -50,6 +50,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.6",
     "mongoose": "^5.12.3",
+    "ts-node": "^10.0.0",
     "validator": "^13.5.2"
   },
   "devDependencies": {
@@ -74,7 +75,6 @@
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "supertest": "^6.1.3",
-    "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   }
 }
