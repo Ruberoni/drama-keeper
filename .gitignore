@@ -4,7 +4,6 @@
 .env
 .eslint*
 .prettier*
-tsconfig.json
 babel.config.json
 postman.yaml
 # misc

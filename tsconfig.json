@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "lib": ["es2021"],
+    "rootDir": "./",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "strict": true
+  },
+  "typeRoots": [
+      "./node_modules/@types",
+      "./@types/express.d.ts"
+  ],
+  "exclude": [
+      "node_modules",
+      "client"
+    ]
+}
