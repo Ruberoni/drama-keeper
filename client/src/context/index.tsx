@@ -1,13 +1,9 @@
 import React, { createContext, useReducer, useContext, useMemo, useState } from 'react'
 import Cookies from 'universal-cookie';
 import Modal from '@material-ui/core/Modal';
-
-// import useModal from '../hooks/useModal'
 import API from '../api'
 import { IFormValues } from '../components/Register/Register'
 import UpdateFilm from '../components/UpdateFilm/UpdateFilm'
-
-
 
 const cookies = new Cookies();
 
@@ -34,14 +30,12 @@ function SimpleModal({open, onClose, body} : ISimpleModal) {
 
 }
 
-
 export const AppContext = createContext<any>('e')
 
 type AppProviderProps = {children: React.ReactNode}
 
 function reducer(state: any/*: IAppContextState*/, action: any/*: IAppContextAction*/) {
-  // to do: save authToken
-  // to do: save component to render as modal. Not <Login /> -> Login
+  // to do: save component to render as modal. Not <Login /> but Login
   switch (action.type) {
     case 'FILM/ADD':
     case 'FILM/UPDATE':
@@ -110,7 +104,6 @@ export function AppProvider({ children }: AppProviderProps ) {
     * Removes token from cookie and context
     */
     logout:  () => {
-      // const cookies = new Cookies(); //  Remove this and test
       cookies.remove('token')
       alert('Logged out')
       app.dispatch({type: 'LOGOUT'})
@@ -121,19 +114,12 @@ export function AppProvider({ children }: AppProviderProps ) {
   const [modalComponent, setModalComponent] = useState<JSX.Element>(<div></div>)
   const handleClose = () => {
     setOpen(false);
-  };
-  // const [modal, openModal] = useModal(open, setOpen)
-  // const handleOpenModal = (modal: any, extraParams: any) => {
-  //   console.log('Hola')
-  //   openModal(modal, extraParams)
-  // }
- 
+  }; 
 
   const openUpdateFilmModal = (_id: string) => {
     setModalComponent(<UpdateFilm _id={_id}/>);  
     setOpen(true);
   };
-
 
   return (
     <AppContext.Provider value={{auth: authFunctions, openUpdateFilmModal, ...app}}>
@@ -142,7 +128,6 @@ export function AppProvider({ children }: AppProviderProps ) {
       {children}
     </ AppContext.Provider>
   )
-
 }
 
 export function useApp() {
@@ -150,8 +135,6 @@ export function useApp() {
 
   if (app === undefined) {
     throw new Error("useApp must be used within a AppProvider");
-    
   }
-
   return app
 }

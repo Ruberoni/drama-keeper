@@ -8,8 +8,6 @@ import * as yup from 'yup'
 import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues } from '../Register/Register'
-// import * as authActions from '../../actions/auth'
-// import { AppContext } from '../../App'
 import { useApp } from '../../context'
 
 const useStyles = makeStyles(() =>
@@ -20,7 +18,6 @@ const useStyles = makeStyles(() =>
       padding: '1px 0px  17px',
       backgroundColor: "white",
       borderRadius: 20,
-      // margin: 'auto'
     },
     form: {
       display: 'flex', 
@@ -48,7 +45,6 @@ const validationSchema = yup.object({
 
 export function Forms ()  {
 
-  // const app = React.useContext(AppContext)
   const app = useApp()
 
   const formik = useFormik({
@@ -59,7 +55,6 @@ export function Forms ()  {
     validationSchema: validationSchema,
     onSubmit: async (values: IFormValues) => {
       alert(JSON.stringify(values, null, 2))
-      // const loginOK = await authActions.login(values)
       const loginOK = app.auth.login(values)
       if (loginOK ==! true) {
         alert(loginOK)

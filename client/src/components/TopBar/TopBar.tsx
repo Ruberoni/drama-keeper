@@ -8,14 +8,10 @@ import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-// import AccountCircle from '@material-ui/icons/AccountCircle';
 import Avatar from '@material-ui/core/Avatar';
 import Hidden from '@material-ui/core/Hidden';
 import withWidth from '@material-ui/core/withWidth';
 import Button from '@material-ui/core/Button';
-// import Cookies from 'universal-cookie';
-// import * as authActions from '../../actions/auth'
-// import { AppContext } from '../../context'
 import { useApp } from '../../context'
 
 
@@ -62,16 +58,12 @@ export interface ITopBar {
 
 function TopBar({actions} : ITopBar) {
   const classes = useStyles();
-  // const [auth, setAuth] = React.useState(true);
-  // const [auth, setAuth] = React.useState<boolean>(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  // const cookies = new Cookies();
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  // const app = React.useContext(AppContext)
   const app = useApp()
 
   const handleClose = () => {
@@ -81,17 +73,7 @@ function TopBar({actions} : ITopBar) {
   const handleLogout = () => {
     handleClose()
     app.auth.logout()
-    // authActions.logout()
   }
-  /*
-  React.useEffect(() => {
-    if (cookies.get('token')) {
-      setAuth(true)
-    } else {
-      setAuth(false)
-    }
-  })
-  */
 
   return (
     <AppBar position="static" color="primary" style={{}}>

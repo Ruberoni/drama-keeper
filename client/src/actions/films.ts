@@ -1,4 +1,4 @@
-import { instance } from './index'
+import API from '../api'
 import Cookies from 'universal-cookie';
 import { IFilm } from '../components/FilmItem/FilmItem'
 import { IFormValues } from '../components/CreateFilm/CreateFilm'
@@ -15,7 +15,7 @@ export const getFilmsFromAuthUser = async () : Promise<string | IFilm[]>=> {
       headers: {'Authorization': `Bearer ${token}`}
     }
 
-    const response = await instance.get('/api/films/test/getfilmsauthorized', options)
+    const response = await API.get('/api/films/test/getfilmsauthorized', options)
 
     return response.data.films
   } catch (err) {
@@ -32,7 +32,7 @@ export const createFilmAuthUser = async (filmData: IFormValues) : Promise<string
 
     const token = cookies.get('token')
 
-    await instance.post('/api/films/test/createfilmauthorized',
+    await API.post('/api/films/test/createfilmauthorized',
       utils.fixFilmData(filmData),
     {
       headers: {'Authorization': `Bearer ${token}`}
@@ -51,7 +51,7 @@ export const createFilmAuthUser = async (filmData: IFormValues) : Promise<string
 export const deleteFilm = async (id: string | undefined) => {
   try {
 
-    const response = await instance.delete(`/api/films/${id}`)
+    const response = await API.delete(`/api/films/${id}`)
     if (response.statusText !== 'OK') {
       return response.data
     } 
@@ -69,7 +69,7 @@ export const deleteFilm = async (id: string | undefined) => {
  export const updateFilm = async (filmData: IFormValues, id: string | undefined) => {
   try {
 
-    const response = await instance.put(`/api/films/${id}`, utils.fixFilmData(filmData))
+    const response = await API.put(`/api/films/${id}`, utils.fixFilmData(filmData))
     if (response.statusText !== 'OK') {
       return response.data
     } 

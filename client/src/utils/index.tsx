@@ -35,6 +35,5 @@ export const fixFilmData = (filmData: IFormValues ): IFilm => {
       fixedFilmData[prop] = value
     }
   }
-  // console.log('util fixFilmData filmData:', filmData, 'fixedFilmData:', fixedFilmData)
   return fixedFilmData
 }

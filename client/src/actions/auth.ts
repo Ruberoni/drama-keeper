@@ -1,4 +1,4 @@
-import { instance } from './index'
+import API from '../api'
 import { IFormValues } from '../components/Register/Register'
 import Cookies from 'universal-cookie';
 
@@ -18,7 +18,7 @@ export const login = async (userData: IFormValues) : Promise<boolean | string> =
     }
 
     // Do POST fetch
-    const response = await instance.post('/api/auth/login', options)
+    const response = await API.post('/api/auth/login', options)
     alert(response.data.message)
 
     // Set cookie with token
@@ -52,7 +52,7 @@ export const register = async (userData: IFormValues) : Promise<boolean | string
     }
 
     // Do POST fetch
-    const response = await instance.post('/api/users', options)
+    const response = await API.post('/api/users', options)
     alert(response.data.message)
 
     return true

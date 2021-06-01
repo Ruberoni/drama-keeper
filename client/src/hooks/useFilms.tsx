@@ -1,10 +1,7 @@
-import { useState, useEffect, useContext } from "react";
-import Cookies from 'universal-cookie';
+import { useState, useEffect } from "react";
 import { IFilm } from '../components/FilmItem/FilmItem'
 import api from "../api";
 import { useApp } from "../context"
-
-// const cookies = new Cookies();
 
 /*
  * Hook for fetching authenticated user films
@@ -23,9 +20,6 @@ export default function useFilms(/*token : string | null = ''*/) : [{data: IFilm
   const app = useApp()
   const [data, setData] = useState<IFilm[]>([{}]);
   const [isLoading, setLoading] = useState(false)
-
-  // if (!app.state.authToken) return [{data: [], isLoading: false}, () => new Promise((resolve, reject) => {0})]
-  // const token = cookies.get('token')
 
   const fetchData = async () => {
     if (!app.state.authToken) setData([])
@@ -48,10 +42,6 @@ export default function useFilms(/*token : string | null = ''*/) : [{data: IFilm
       // This way if hook had an error I could display it 
     }
   };
-  // if (!app.state.authToken) {
-  //   return [{data: [], isLoading: false}, async () => {await (2+2)}]
-  // }
-
 
   useEffect(() => {
     fetchData();

@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-// import Paper from '@material-ui/core/Paper';
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -10,7 +9,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
-// import _cover from '../../assets/img/when-harry-met-sally-cover.jpg'
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
 import { correctImageBuffer } from '../../utils/index'
 import { useApp } from '../../context'
@@ -107,7 +105,6 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
   const cover = (images?.cover && `https://image.tmdb.org/t/p/w200/${images.cover}`) || _cover
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  // const app = useContext(AppContext)
 
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -115,7 +112,6 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
   };
 
   const handleUpdate = () => {
-    // app.dispatch({type: 'FILM/UPDATE', _id})
     app.openUpdateFilmModal(_id)
   }
 

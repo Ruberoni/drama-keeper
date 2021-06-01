@@ -27,11 +27,9 @@ function SimpleModal({open, onClose, body} : ISimpleModal) {
 
 export default function useModal(open: boolean, setOpen: (a: boolean) => void) : [JSX.Element | undefined, (modal: string, extraParams?: {_id?: string}) => void]{
 
-  // const [component, setComponent] = useState<JSX.Element | undefined>()
   const [opens, setOpens] = useState<boolean>(open);
   const [modal, setModal] = useState<JSX.Element | undefined>()
 
-  // type IOpenModal = (modal: string, extraParams?: {_id?: string}) => void
   const handleClose = () => {
     console.log('handleClose')
     setOpens(false);
@@ -43,16 +41,10 @@ export default function useModal(open: boolean, setOpen: (a: boolean) => void) :
     if (modal === 'update' && extraParams?._id) {
       console.log('inside')
 
-      // setComponent(<UpdateFilm _id={extraParams._id}/>)
       const component = (<UpdateFilm _id={extraParams._id}/>)
       setOpen(true)
       setModal(<SimpleModal open={opens} onClose={handleClose} body={component}/>)
     }
   }
-
-
-  // const modal = component && <SimpleModal open={open} onClose={handleClose} body={component}/>
-  
   return [modal, openModal]
-
 }

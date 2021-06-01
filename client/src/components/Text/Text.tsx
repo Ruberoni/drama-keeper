@@ -21,7 +21,3 @@ export function UnderlinedHeading({ text }: IUnderlinedHeading) {
     </div>
   );
 }
-
-// MyTitle.propTypes = {
-//   text: PropTypes.string,
-// };'

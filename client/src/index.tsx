@@ -7,7 +7,9 @@ import { AppProvider } from './context'
 import { red } from '@material-ui/core/colors'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
+import dotenv from 'dotenv'
 
+dotenv.config({ path: '../.env' })
 
 const theme = createMuiTheme({
   palette: {
