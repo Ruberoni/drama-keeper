@@ -81,7 +81,7 @@ export const getFilmsByUserId = async (
   ): Promise<void | Response> => {
   debug("CONTROLLER: getFilmsByUser | EXECUTED");
   try {
-    const currentUser = req.params.user_id;
+    const currentUser = req.params.user_id || '';
     let films = await FilmsModel.find({user: currentUser});
 
     const watchedString = req.query.watched
@@ -167,7 +167,7 @@ export const test = {
       const currentUser = req.currentUser
       const filmData = req.body
 
-      await FilmsModel.create({user: currentUser._id, ...filmData})
+      await FilmsModel.create({user: currentUser?._id, ...filmData})
 
       res.json({message: 'Film created'});
 

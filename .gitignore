@@ -1,9 +1,9 @@
 /node_modules
 /build
+/dist
 .env
 .eslint*
 .prettier*
-tsconfig.json
 babel.config.json
 postman.yaml
 # misc
@@ -18,3 +18,6 @@ yarn-error.log*
 
 *.sublime-project
 *.sublime-workspace
+
+# Only for branch server/heroku
+/client

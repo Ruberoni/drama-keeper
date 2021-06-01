@@ -1,0 +1,1 @@
+web: ts-node --files server.ts

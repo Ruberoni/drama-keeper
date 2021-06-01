@@ -19,7 +19,8 @@ export const authorize = async (req: Request, res: Response, next: NextFunction)
     const decoded = await jwt.verify(token, tokenKey)
     debug('decoded:', decoded)
 
-    const currentUser = await UserModel.findById(decoded)
+    const _currentUser = await UserModel.findById(decoded)
+    let currentUser = _currentUser || undefined
     debug('currentUser:', currentUser)
 
     req.currentUser = currentUser
