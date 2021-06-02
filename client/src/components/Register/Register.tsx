@@ -62,14 +62,14 @@ export function Forms ()  {
     },
     validationSchema: validationSchema,
     onSubmit: async (values: IFormValues) => {
-      alert(JSON.stringify(values, null, 2))
       const registerOK = await authActions.register(values)
+      alert("User registered.")
       if (registerOK ==! true) {
-        alert(registerOK)
+        alert("Error: " + registerOK)
+        console.warn(registerOK)
       }
     }
   })
-
 
   const classes = useStyles()
 

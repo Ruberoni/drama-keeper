@@ -50,10 +50,9 @@ export function Forms ({_id}: IUpdateFilm)  {
     },
     validationSchema: validationSchema,
     onSubmit: async (values: IFormValues) => {
-      alert(JSON.stringify(values, null, 2))
       const response = await filmActions.updateFilm(values, _id)
         if (typeof response === 'string') {
-          alert(response)
+          console.warn(response)
        }
     }
   })

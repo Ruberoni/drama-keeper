@@ -97,7 +97,7 @@ function TopBar({actions} : ITopBar) {
             >
               <Hidden xsDown>
                 <Typography className={classes.username}>
-                  Username
+                  Logged In
                 </Typography> 
               </Hidden>
               <Avatar />

@@ -89,13 +89,14 @@ export function AppProvider({ children }: AppProviderProps ) {
 
         // Do POST fetch
         const response = await API.post('/api/auth/login', options)
-        alert(response.data.message)
 
         // Set cookie with token
         cookies.set('token', response.data.token)
         app.dispatch({type: 'LOGIN', token: response.data.token})
+        alert("Logged in")
         return true
       } catch (err) {
+        alert("Error: " + err.message)
         return err.message
       }
     },

@@ -19,7 +19,6 @@ export const login = async (userData: IFormValues) : Promise<boolean | string> =
 
     // Do POST fetch
     const response = await API.post('/api/auth/login', options)
-    alert(response.data.message)
 
     // Set cookie with token
     cookies.set('token', response.data.token)
@@ -53,7 +52,6 @@ export const register = async (userData: IFormValues) : Promise<boolean | string
 
     // Do POST fetch
     const response = await API.post('/api/users', options)
-    alert(response.data.message)
 
     return true
     

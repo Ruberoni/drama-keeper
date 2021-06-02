@@ -72,10 +72,9 @@ export function Forms ()  {
     },
     validationSchema: validationSchema,
     onSubmit: async (values: IFormValues) => {
-      alert(JSON.stringify(values, null, 2))
       const response = await filmActions.createFilmAuthUser(values)
       if (typeof response === 'string') {
-        alert(response)
+        console.warn(response)
        }
     }
   })

@@ -54,10 +54,9 @@ export function Forms ()  {
     },
     validationSchema: validationSchema,
     onSubmit: async (values: IFormValues) => {
-      alert(JSON.stringify(values, null, 2))
       const loginOK = app.auth.login(values)
       if (loginOK ==! true) {
-        alert(loginOK)
+        console.warn(loginOK)
       }
     }
   })

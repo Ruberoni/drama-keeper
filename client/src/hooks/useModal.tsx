@@ -31,15 +31,11 @@ export default function useModal(open: boolean, setOpen: (a: boolean) => void) :
   const [modal, setModal] = useState<JSX.Element | undefined>()
 
   const handleClose = () => {
-    console.log('handleClose')
     setOpens(false);
   };
 
   function openModal (modal: string, extraParams?: {_id?: string}) : void {
-    console.log('holaa')
-    console.log('modal:', modal, ' and extraParams:', extraParams && extraParams)
     if (modal === 'update' && extraParams?._id) {
-      console.log('inside')
 
       const component = (<UpdateFilm _id={extraParams._id}/>)
       setOpen(true)
