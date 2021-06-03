@@ -59,6 +59,12 @@
   display: block;
 }
 
+.author {
+  text-decoration: none;
+  color: darkblue;
+  font-weight: bold;
+}
+
 .modal {
   display: flex;
   align-items: center;

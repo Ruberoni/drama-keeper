@@ -1,6 +1,7 @@
 # Drama Keeper
 
-Keep a record of the films watched
+Keep a record of the films you want to see or the ones you have watched.
+
 ![pc_loggedin_home](assets/readme/pc_loggedin_home.png)
 
 ## Goals
@@ -36,7 +37,7 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 * [React](https://reactjs.org/) - For the frontend
 * [Material UI](https://material-ui.com/) - To make it cute
 
-## Build the app by yourself
+## Build the app
 
 ### What you need before
 
@@ -56,10 +57,6 @@ $ yarn && cd client && yarn
 4. **Run the app:**
 ```
 $ yarn dev
-```
-This runs
-```
-concurrently \"yarn start\" \"cd client/ && yarn start\"
 ```
 
 The app should run ok.

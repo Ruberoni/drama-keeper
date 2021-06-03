@@ -117,7 +117,11 @@ function MyApp() {
         </div>
         <div className='credit'>
           <a href="https://www.themoviedb.org/" target='_blank' rel='noreferrer'><img src={TMDbLogo} className='tmdblogo'/></a>
-          <Typography >Made by Ruben</Typography>
+          <Typography >Made by&nbsp;
+            <a href="https://github.com/Ruberoni" target='_blank' rel='noreferrer' className='author'>
+             Ruben
+            </a>
+          </Typography>
           <Typography className='tmdbattribution' variant='caption'>This product uses the TMDb API but is not endorsed or certified by TMDb</Typography>
         </div>
     </>
