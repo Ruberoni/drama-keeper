@@ -4,7 +4,6 @@ import TopBar from './components/TopBar/TopBar'
 import CreateFilm from './components/CreateFilm/CreateFilm'
 import Login from './components/Login/Login'
 import Register from './components/Register/Register'
-import UpdateFilm from './components/UpdateFilm/UpdateFilm'
 import FilmItemList from './components/FilmItemList/FilmItemList'
 import Typography from "@material-ui/core/Typography";
 import Modal from '@material-ui/core/Modal';
@@ -71,7 +70,7 @@ function MyApp() {
       reloadFilms()
       app.dispatch({type: 'FILM/READY'})
     }
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state?.reloadFilms])
 
   const openLoginModal = () => {
@@ -88,11 +87,12 @@ function MyApp() {
     setModalComponent(<CreateFilm />);  
     setOpen(true);
   };
-
+  /*
   const openUpdateFilmModal = (_id: string) => {
     setModalComponent(<UpdateFilm _id={_id}/>);  
     setOpen(true);
   };
+  */
   
   const topBarActions = {
     login: openLoginModal,
@@ -111,12 +111,12 @@ function MyApp() {
         <div className='App'>
           <TopBar actions={topBarActions}/>
           <div className='FilmItemListWrapper'>
-            <FilmItemList header='To see' filmList={films.data.filter(film => film.watched === false)/*[{_id: 'asda'}]*/} />
+            <FilmItemList header='To see' filmList={films.data.filter(film => film.watched === false)/*[{_id: 'asda'}]} */}/>
             <FilmItemList header='Seen' filmList={films.data.filter(film => film.watched === true)} />
           </div>
         </div>
         <div className='credit'>
-          <a href="https://www.themoviedb.org/" target='_blank' rel='noreferrer'><img src={TMDbLogo} className='tmdblogo'/></a>
+          <a href="https://www.themoviedb.org/" target='_blank' rel='noreferrer'><img src={TMDbLogo} alt="tmdblogo" className='tmdblogo'/></a>
           <Typography >Made by&nbsp;
             <a href="https://github.com/Ruberoni" target='_blank' rel='noreferrer' className='author'>
              Ruben

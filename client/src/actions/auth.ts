@@ -51,7 +51,7 @@ export const register = async (userData: IFormValues) : Promise<boolean | string
     }
 
     // Do POST fetch
-    const response = await API.post('/api/users', options)
+    await API.post('/api/users', options)
 
     return true
     

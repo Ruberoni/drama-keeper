@@ -42,9 +42,9 @@ export default function useFilms(/*token : string | null = ''*/) : [{data: IFilm
       // This way if hook had an error I could display it 
     }
   };
-
   useEffect(() => {
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state.authToken]);
 
   return [{ data, isLoading }, fetchData];

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -10,7 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
-import { correctImageBuffer } from '../../utils/index'
 import { useApp } from '../../context'
 import { deleteFilm, updateFilm } from '../../actions/films'
 
@@ -152,7 +151,7 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
             <div className={classes.rottenTomatoesSection}>
               <a href={links?.rottenTomatoes || '#'} className={classes.rottenTomatoesLink} target='_blank' rel='noreferrer'>
                 <Typography variant="body2">RottenTomatoes</Typography>
-                <img className={classes.rottenTomatoesLogo} src={rottenTomatoesLogoPng} />
+                <img className={classes.rottenTomatoesLogo} src={rottenTomatoesLogoPng} alt="rt"/>
               </a>
             </div>
           </CardContent>

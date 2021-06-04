@@ -64,7 +64,7 @@ export function Forms ()  {
     onSubmit: async (values: IFormValues) => {
       const registerOK = await authActions.register(values)
       alert("User registered.")
-      if (registerOK ==! true) {
+      if (registerOK ===! true) {
         alert("Error: " + registerOK)
         console.warn(registerOK)
       }

@@ -1,5 +1,4 @@
-import { constants } from 'node:buffer';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useInterval(callback: () => void, delay: number) {
     const savedCallback = useRef<() => void>();
