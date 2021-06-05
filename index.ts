@@ -3,7 +3,6 @@
  */
 import express from "express";
 import ConnectDB from "./config/db";
-import cors from 'cors'
 import compression from 'compression'
 import helmet from 'helmet'
 
@@ -11,6 +10,7 @@ import helmet from 'helmet'
  * Import Middlewares
  */
 import { appRateLimiter } from './middlewares/rateLimiter'
+import requestAuthorization from './middlewares/requestAuthorization'
 
 /**
  * Import routes
@@ -20,7 +20,6 @@ import indexRouter from "./routes/index";
 /**
  * Import configuration
  */
-import { corsOptions } from './config'
 
 /**
  * Initial configuration
@@ -36,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(appRateLimiter) 
 app.use(compression())
 app.use(helmet())
-app.use(cors(corsOptions))
+app.use(requestAuthorization)
 
 /**
  * Apply Routing
