@@ -5,6 +5,7 @@ import express from "express";
 import ConnectDB from "./config/db";
 import compression from 'compression'
 import helmet from 'helmet'
+import cors from 'cors'
 
 /**
  * Import Middlewares
@@ -31,6 +32,7 @@ const app = express();
  * Apply Middlewares
  */
 app.use(express.json());
+app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(appRateLimiter) 
 app.use(compression())
