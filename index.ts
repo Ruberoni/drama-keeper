@@ -1,7 +1,7 @@
 /**
  * Import Modules
  */
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import ConnectDB from "./config/db";
 import compression from 'compression'
 import helmet from 'helmet'
@@ -32,7 +32,9 @@ const app = express();
  * Apply Middlewares
  */
 app.use(express.json());
-app.use(cors({
+app.use((req: Request, resp: Response, next: NextFunction) => {
+    next()
+  }, cors({
   maxAge: 86000
 }))
 app.use(express.urlencoded({ extended: false }));
@@ -49,7 +51,9 @@ app.use("/", indexRouter);
 /**
  * Enable cors on options request
  */
-app.options('*', cors({
+app.options('*', (req: Request, resp: Response, next: NextFunction) => {
+    next()
+  },cors({
   maxAge: 86000
 }))
 
