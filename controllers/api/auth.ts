@@ -14,10 +14,11 @@ export const login = async (req: Request, res: Response) => {
   const authData = req.body
   try {
     const token = await authServices.login(authData)
-    res.json({message: 'Logged In', token})
+    
+    return res.json({message: 'Logged In', token})
 
   } catch(err) {
-    res.status(400).send(err.message)
+    return res.status(400).send(err.message)
   }
 }  
 
