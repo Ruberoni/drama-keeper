@@ -32,7 +32,9 @@ const app = express();
  * Apply Middlewares
  */
 app.use(express.json());
-app.use(cors())
+app.use(cors({
+  maxAge: 86000
+}))
 app.use(express.urlencoded({ extended: false }));
 app.use(appRateLimiter) 
 app.use(compression())
@@ -43,5 +45,12 @@ app.use(requestAuthorization)
  * Apply Routing
  */
 app.use("/", indexRouter);
+
+/**
+ * Enable cors on options request
+ */
+app.options('*', cors({
+  maxAge: 86000
+}))
 
 export default app;
