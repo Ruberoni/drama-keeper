@@ -5,11 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node --files server.ts",
-    "server": "nodemon --files server.ts --trace-warnings",
-    "dev": "concurrently \"yarn start\" \"cd client/ && yarn start\"",
+    "nodemon": "nodemon --files server.ts --trace-warnings",
+    "app": "concurrently \"yarn start\" \"cd client/ && yarn start\"",
     "test": "jest",
     "eslint-staged": "LIST=`git diff --cached --name-only | grep .*\\.ts | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST && prettier $LIST --write; fi",
-    "heroku": "ts-node server.ts"
   },
   "pre-commit": [
     "eslint-staged"
