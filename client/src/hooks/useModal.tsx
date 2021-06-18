@@ -1,46 +1,32 @@
 import React, {useState} from 'react'
 import Modal from '@material-ui/core/Modal';
-import UpdateFilm from '../components/UpdateFilm/UpdateFilm'
 
-export interface ISimpleModal {
-  open: boolean, 
-  onClose: () => void,
-  // eslint-disable-next-line no-undef
-  body: JSX.Element
-}
+type ModalWrapperProps = {children: JSX.Element}
 
-function SimpleModal({open, onClose, body} : ISimpleModal) {
+export default function useModal() : [({ children }: ModalWrapperProps) => JSX.Element, () => void, () => void, boolean] {
 
-  return (
-    <Modal
-      className='modal'
-      open={open}
-      onClose={onClose}
-      aria-labelledby="simple-modal-title"
-      aria-describedby="simple-modal-description"
-    >
-      {body}
-    </Modal>
-  );
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const open = React.useCallback(() => {
+    setOpen(true)
+  }, [setOpen])
 
-}
+  const close = React.useCallback(() => {
+    setOpen(false)
+  }, [setOpen])
 
-export default function useModal(open: boolean, setOpen: (a: boolean) => void) : [JSX.Element | undefined, (modal: string, extraParams?: {_id?: string}) => void]{
+  const ModalWrapper = React.useCallback(({children} : ModalWrapperProps) => {
+    return (
+      <Modal
+        className='modal'
+        open={isOpen}
+        onClose={close}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {children}
+      </Modal>
+    )
+  }, [isOpen, close]);
 
-  const [opens, setOpens] = useState<boolean>(open);
-  const [modal, setModal] = useState<JSX.Element | undefined>()
-
-  const handleClose = () => {
-    setOpens(false);
-  };
-
-  function openModal (modal: string, extraParams?: {_id?: string}) : void {
-    if (modal === 'update' && extraParams?._id) {
-
-      const component = (<UpdateFilm _id={extraParams._id}/>)
-      setOpen(true)
-      setModal(<SimpleModal open={opens} onClose={handleClose} body={component}/>)
-    }
-  }
-  return [modal, openModal]
+  return [ModalWrapper, open, close, isOpen]
 }

@@ -14,7 +14,6 @@ import withWidth from '@material-ui/core/withWidth';
 import Button from '@material-ui/core/Button';
 import { useApp } from '../../context'
 
-
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     toLeft: {
@@ -45,18 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 ) 
 
-
-export interface ITopBarActions  {
-  login: () => void,
-  register: () => void,
-  createFilm: () => void
-}
-
-export interface ITopBar {
-  actions: ITopBarActions
-}
-
-function TopBar({actions} : ITopBar) {
+function TopBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -75,13 +63,25 @@ function TopBar({actions} : ITopBar) {
     app.auth.logout()
   }
 
+  const handleCreateModal = () => {
+    app.openAppModal({modal: "CREATE_FILM"})
+  }
+
+  const handleLoginModal = () => {
+    app.openAppModal({modal: "LOGIN"})
+  }
+
+  const handleRegisterModal = () => {
+    app.openAppModal({modal: "REGISTER"})
+  }
+
   return (
     <AppBar position="static" color="primary" style={{}}>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           Drama Keeper
         </Typography> 
-        <Fab onClick={actions.createFilm} color="secondary" aria-label="add" className={classes.fabButton}>
+        <Fab onClick={handleCreateModal} color="secondary" aria-label="add" className={classes.fabButton}>
           <AddIcon />
         </Fab>
         <div className={classes.toLeft} />
@@ -122,8 +122,8 @@ function TopBar({actions} : ITopBar) {
           </div>
         ) : (
           <React.Fragment>
-            <Button onClick={actions.login} variant="contained" color="secondary" className={`${classes.button} ${classes.login}`}>Login</Button>
-            <Button onClick={actions.register} variant="contained" color="primary">Register</Button>
+            <Button onClick={handleLoginModal} variant="contained" color="secondary" className={`${classes.button} ${classes.login}`}>Login</Button>
+            <Button onClick={handleRegisterModal} variant="contained" color="primary">Register</Button>
           </React.Fragment>
         )}
       </Toolbar>

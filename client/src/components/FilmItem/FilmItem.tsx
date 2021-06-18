@@ -111,7 +111,8 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
   };
 
   const handleUpdate = () => {
-    app.openUpdateFilmModal(_id)
+    // app.openUpdateFilmModal(_id)
+    app.openAppModal({modal: "UPDATE_FILM", _id})
   }
 
   const handleDelete = async () => {
