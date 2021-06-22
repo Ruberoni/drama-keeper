@@ -3,6 +3,7 @@ import './App.css';
 import TopBar from './components/TopBar/TopBar'
 import FilmItemList from './components/FilmItemList/FilmItemList'
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Cookies from 'universal-cookie';
 import { useInterval } from './hooks/useInterval'
 import useFilms from './hooks/useFilms'
@@ -47,6 +48,8 @@ function MyApp() {
     <>
         <div className='App'>
           <TopBar/>
+          { films.isLoading && (<div className='loadingIndicator'><CircularProgress /></div>) }
+          {/*<div className='loadingIndicator'><CircularProgress /></div>*/}
           <div className='FilmItemListWrapper'>
             <FilmItemList header='To see' filmList={films.data.filter(film => film.watched === false)}/>
             <FilmItemList header='Seen' filmList={films.data.filter(film => film.watched === true)} />

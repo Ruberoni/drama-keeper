@@ -34,11 +34,17 @@ const reducer = (state: reducerStateProps, action: reducerActionProps) => {
   }
 }  
 
-type useAppModalProps = [() => JSX.Element, (arg0: any) => void]
+type useAppModalProps = [() => JSX.Element, (action: reducerActionProps) => void]
 
+/**
+ * Wrapper of useModal hook for easily open a modal by just calling a function with the modal name.
+ * 
+ * Call it as: 'openWrapper({modal: 'LOGIN'})' to instant open the 'login' component as a modal 
+ * See 'reducerActionProps' and 'reducer' for others possibles values.
+ */
 export default function useAppModal() : useAppModalProps {
   const [state, dispatch] = React.useReducer(reducer, { modal: <Login />, isOpen: false })
-  const [Modal, open, close, isOpen] = useModal()
+  const [Modal, open, ] = useModal()
 
   const ModalWrapper = React.useCallback(() => {
     return (
@@ -48,7 +54,7 @@ export default function useAppModal() : useAppModalProps {
     )
   }, [state.modal, Modal]);
 
-  const openWrapper = (action: any) => {
+  const openWrapper = (action: reducerActionProps) => {
     dispatch(action)
     open()
   }
