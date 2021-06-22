@@ -14,6 +14,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues, validationSchema } from '../CreateFilm/CreateFilm'
 import * as filmActions from '../../actions/films'
+import { useApp } from '../../context/index'
+
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -41,6 +43,8 @@ export interface IUpdateFilm {
 }
 
 export function Forms ({_id}: IUpdateFilm)  {
+  const app = useApp()
+
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -53,6 +57,9 @@ export function Forms ({_id}: IUpdateFilm)  {
       const response = await filmActions.updateFilm(values, _id)
         if (typeof response === 'string') {
           console.warn(response)
+       } else {
+         app.reloadFilms('UPDATE')
+
        }
     }
   })

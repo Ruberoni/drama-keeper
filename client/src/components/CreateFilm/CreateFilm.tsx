@@ -15,6 +15,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { UnderlinedHeading } from '../Text/Text'
 import { TogglerAdvancedSettings } from '../Button/Button'
 import * as filmActions from '../../actions/films'
+import { useApp } from '../../context/index'
+
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -63,6 +65,8 @@ export const validationSchema = yup.object({
 })
 
 export function Forms ()  {
+  const app = useApp()
+
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -75,6 +79,8 @@ export function Forms ()  {
       const response = await filmActions.createFilmAuthUser(values)
       if (typeof response === 'string') {
         console.warn(response)
+       } else {
+         app.reloadFilms('CREATE')
        }
     }
   })

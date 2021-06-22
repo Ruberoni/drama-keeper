@@ -119,7 +119,7 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
     const response = await deleteFilm(_id)
     if (typeof response !== 'string') {
       handleClose()
-      app.dispatch({type: 'FILM/DELETE'})
+      app.reloadFilms('DELETE')
     }
   }
 
@@ -128,7 +128,7 @@ export default function FilmItem({_id, title, type, watched, links, images} : IF
     const response = await updateFilm(updateData, _id)
     if (typeof response !== 'string') {
       handleClose()
-      app.dispatch({type: 'FILM/UPDATE'})
+      app.reloadFilms('UPDATE')
     }
   }
 

@@ -11,12 +11,15 @@ export const AppContext = createContext<any>('e')
 
 type AppProviderProps = {children: React.ReactNode}
 
+type reloadFilmsReason = 'CREATE' | 'UPDATE' | 'DELETE'
+
 function reducer(state: any/*: IAppContextState*/, action: any/*: IAppContextAction*/) {
   // to do: save component to render as modal. Not <Login /> but Login
   switch (action.type) {
-    case 'FILM/ADD':
+    case 'FILM/RELOAD':
+    case 'FILM/CREATE':
     case 'FILM/UPDATE':
-    case 'FILM/DELETE':
+    case 'FILM/DELETE':  
       return {
         ...state,
         reloadFilms: true
@@ -85,13 +88,18 @@ export function AppProvider({ children }: AppProviderProps ) {
       cookies.remove('token')
       alert('Logged out')
       app.dispatch({type: 'LOGOUT'})
-    }
+    },
   }
+  const reloadFilms = (reason: reloadFilmsReason) => {
+    // I could use 'reason' to display like a simple inobstrusive popup.
+    app.dispatch({type: 'FILM/RELOAD'})
+  }
+
 
   const [AppModal, openAppModal] = useAppModal()
 
   return (
-    <AppContext.Provider value={{auth: authFunctions, openAppModal, ...app}}>
+    <AppContext.Provider value={{auth: authFunctions, openAppModal, reloadFilms, ...app}}>
       <AppModal />
 
       {children}
