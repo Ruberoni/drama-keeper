@@ -1,8 +1,9 @@
-import React, { createContext, useReducer, useContext, useMemo } from 'react'
+import React, { useState, useEffect, createContext, useReducer, useContext, useMemo } from 'react'
 import Cookies from 'universal-cookie';
 // import Modal from '@material-ui/core/Modal';
 import API from '../api'
 import { IFormValues } from '../components/Register/Register'
+import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import useAppModal from '../hooks/useAppModal'
 
 const cookies = new Cookies();
@@ -47,11 +48,15 @@ export function AppProvider({ children }: AppProviderProps ) {
       reducer, 
       { reloadFilms: false, authToken: null}
     )
+  const [appReady, setAppReady] = useState(false)
 
   const app = useMemo(() => {
     return {state, dispatch}
   },[state, dispatch])
 
+  useEffect(() => {
+    setAppReady(true)
+  }, [])
 
   const authFunctions = {
     /*
@@ -61,7 +66,7 @@ export function AppProvider({ children }: AppProviderProps ) {
     */
     login: async (userData: IFormValues) : Promise<boolean | string> => {
       try {
-
+        setAppReady(false)
         const options = {
           email: userData.email,
           password: userData.password 
@@ -73,11 +78,12 @@ export function AppProvider({ children }: AppProviderProps ) {
         // Set cookie with token
         cookies.set('token', response.data.token)
         app.dispatch({type: 'LOGIN', token: response.data.token})
-        alert("Logged in")
         return true
       } catch (err) {
         alert("Error: " + err.message)
         return err.message
+      } finally {
+        setAppReady(true)
       }
     },
 
@@ -86,7 +92,6 @@ export function AppProvider({ children }: AppProviderProps ) {
     */
     logout:  () => {
       cookies.remove('token')
-      alert('Logged out')
       app.dispatch({type: 'LOGOUT'})
     },
   }
@@ -101,7 +106,7 @@ export function AppProvider({ children }: AppProviderProps ) {
   return (
     <AppContext.Provider value={{auth: authFunctions, openAppModal, reloadFilms, ...app}}>
       <AppModal />
-
+      { !appReady && <LoadingIndicator />}
       {children}
     </ AppContext.Provider>
   )
