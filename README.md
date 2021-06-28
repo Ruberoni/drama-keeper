@@ -1,8 +1,8 @@
 # Drama Keeper
 
-> This is the server/heroku branch
-> This is the branch the heroku server runs.
-> As you can notice, there's no 'client' directory.
+> This is the server/monitored branch
+> In this branch, the server is monitored with the Elastic APM Services.
+> So there's more of configuration if you want to use this branch.
 
 Keep a record of the films you want to see or the ones you have watched.
 
@@ -40,6 +40,7 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 * [TypeScript](https://www.typescriptlang.org/) - For the strong typing
 * [React](https://reactjs.org/) - For the frontend
 * [Material UI](https://material-ui.com/) - To make it cute
+* [Elastic](https://www.elastic.co/es/) - To monitor the server
 
 ## Build the app
 
@@ -49,6 +50,7 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 - Yarn
 - A [MongoDB](https://www.mongodb.com/) database
 - A [TMDb API Key](https://developers.themoviedb.org/3/getting-started/introduction)
+- An [Elastic](https://www.elastic.co/es/) Cloud Deploy.
 
 ### Steps
 

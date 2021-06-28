@@ -1,4 +1,5 @@
 import "./config/env";
+import * as monitor from"./config/monitoring"
 import Debug from "debug";
 import app from "./index";
 
@@ -25,5 +26,6 @@ function normalizePort(val: string | number): number {
 }
 
 function onListening() {
-  console.log("Server listening on port:", port);
+  // console.log("Server listening on port:", port);
+  monitor.logger.info("Server listening on port: %d", port);
 }
