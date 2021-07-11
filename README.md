@@ -2,7 +2,7 @@
 
 **Live demo**
 
-[drama-keeper-client-c58a884a0-ruberoni.vercel.app](https://drama-keeper-client-c58a884a0-ruberoni.vercel.app/)
+[drama-keeper-client-oh71588gi-ruberoni.vercel.app](https://drama-keeper-client-oh71588gi-ruberoni.vercel.app/)
 
 > This uses the free plan on Vercel and Heroku
 > so it may be a bit laggy :) 
