@@ -1,8 +1,11 @@
 # Drama Keeper
 
-> This is the server/heroku branch
-> This is the branch the heroku server runs.
-> As you can notice, there's no 'client' directory.
+**Live demo**
+
+[drama-keeper-client-oh71588gi-ruberoni.vercel.app](https://drama-keeper-client-oh71588gi-ruberoni.vercel.app/)
+
+> This uses the free plan on Vercel and Heroku
+> so it may be a bit laggy :) 
 
 Keep a record of the films you want to see or the ones you have watched.
 
