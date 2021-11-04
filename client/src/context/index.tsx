@@ -64,7 +64,7 @@ export function AppProvider({ children }: AppProviderProps ) {
     * If OK then sets token cookie and context and return true
     * If ERROR returns err.message
     */
-    login: async (userData: IFormValues) : Promise<boolean | string> => {
+    login: async (userData: IFormValues): Promise<boolean | string> => {
       try {
         setAppReady(false)
         const options = {
@@ -86,7 +86,28 @@ export function AppProvider({ children }: AppProviderProps ) {
         setAppReady(true)
       }
     },
+    googleLogin: async (googleData: any): Promise<boolean | string> => {
+      try {
+        setAppReady(false)
+        const options = {
+          token: googleData.tokenId,
+        }
+        
+        // Do POST fetch
+        const response = await API.post('/api/auth/googleLogin', options)
+        // const data = await response.json()
 
+        // Set cookie with token
+        cookies.set('token', response.data.token)
+        app.dispatch({type: 'LOGIN', token: response.data.token})
+        return true
+      } catch (err) {
+        alert("Error: " + err.message)
+        return err.message
+      } finally {
+        setAppReady(true)
+      }
+    },
     /*
     * Removes token from cookie and context
     */

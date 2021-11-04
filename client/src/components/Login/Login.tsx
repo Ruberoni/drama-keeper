@@ -6,9 +6,11 @@ import TextField from '@material-ui/core/TextField';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import AddIcon from '@material-ui/icons/Add';
+import { GoogleLogin } from 'react-google-login';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues } from '../Register/Register'
 import { useApp } from '../../context'
+
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -105,10 +107,26 @@ export function Forms ()  {
 
 export default function Login() {
   const classes = useStyles();
+  const app = useApp()
+
+  const handleLogin = async (googleData: any) => {
+    const loginOK = app.auth.googleLogin(googleData)
+      if (loginOK ===! true) {
+        console.warn(loginOK)
+      }
+  }
+
   return (
     <Paper className={classes.root} elevation={0}>
       <p><UnderlinedHeading text="Login" /></p>
       <Forms />
+      <GoogleLogin
+        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
+        buttonText="Login"
+        onSuccess={handleLogin}
+        onFailure={handleLogin}
+        cookiePolicy={'single_host_origin'}
+      />
     </Paper>
   );
 }
