@@ -71,6 +71,7 @@ The app should run ok.
 ## Contact me!
 
 - Email: ruben.pardes25@gmail.com
+- Discord: Ruberoni#8428
 
 ## Attribution
 
