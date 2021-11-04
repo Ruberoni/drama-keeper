@@ -18,6 +18,8 @@ router.get('/', (req: express.Request, res: express.Response) => {
 
 router.post('/login', authController.login)
 
+router.post('/googleLogin', authController.googleLogin)
+
 router.get('/proc', authMiddlewares.authorize, authController.proc)
 
 export default router

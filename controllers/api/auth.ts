@@ -10,6 +10,7 @@ import UserModel from '../../models/User'
 import * as authServices from '../../services/Auth'
 import { Request, Response } from "express";
 
+
 export const login = async (req: Request, res: Response) => {
   const authData = req.body
   try {
@@ -31,3 +32,15 @@ export const proc = async (req: Request, res: Response) => {
   }
  
 }
+
+export const googleLogin = async (req: Request, res: Response) => {
+  const { token: googleToken } = req.body
+  try {
+    const token = await authServices.googleLogin(googleToken)
+    
+    return res.json({message: 'Logged In', token})
+
+  } catch(err) {
+    return res.status(400).send(err.message)
+  }
+}  

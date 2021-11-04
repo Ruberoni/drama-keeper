@@ -14,8 +14,8 @@
     "eslint-staged"
   ],
   "engines": {
-    "node": "15.7.0",
-    "yarn": "1.22.10"
+    "node": ">= 15.7.0",
+    "yarn": ">= 1.22.11"
   },
   "repository": "https://github.com/Ruberoni/drama-keeper",
   "author": "Ruben Paredes",
@@ -50,6 +50,7 @@
     "express": "^4.17.1",
     "express-rate-limit": "^5.2.6",
     "file-type": "^16.3.0",
+    "google-auth-library": "^7.10.1",
     "helmet": "^4.6.0",
     "imagemin": "^7.0.1",
     "imagemin-mozjpeg": "^9.0.0",

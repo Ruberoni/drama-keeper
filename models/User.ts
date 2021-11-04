@@ -35,6 +35,7 @@ const userSchema = new Schema<IUser>({
     required: true,
     minLength: 7
   },
+  googleId: String
 });
 
 export interface IUserDocument extends Document {

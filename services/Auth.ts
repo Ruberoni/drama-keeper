@@ -1,7 +1,9 @@
 import Debug from 'debug'
 import jwt from 'jsonwebtoken'
+import { OAuth2Client } from "google-auth-library"
 import UserModel, { IUserDocument } from '../models/User'
 const debug = Debug('auth') 
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 /**
  * Checks is email and password exist and are correct, then signs and return a JWT with the user id
@@ -36,3 +38,30 @@ export const login = async ({email, password} : IUserDocument) => {
 
   return token
 }
+
+export const googleLogin = async (token: string) => {
+  const ticket = await googleClient.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+  const payload = ticket.getPayload();
+  if (!payload) throw new Error("Google login error");
+  const { email, name, sub } = payload;
+  const _user = {
+    googleId: sub,
+    email,
+  };
+  const User = await UserModel.findOneAndUpdate(
+    { $or: [{ googleId: sub }, { email }] },
+    _user,
+    { upsert: true }
+  );
+  if (!User) {
+    // This part should never be executed thanks to `upsert` option
+    throw new Error("User does not exist");
+  }
+  const JWT = jwt.sign({ _id: User._id }, process.env.tokenKey as string, {
+    expiresIn: "1h",
+  });
+  return JWT;
+};
