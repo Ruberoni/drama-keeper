@@ -1,13 +1,16 @@
 import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Fab from '@material-ui/core/Fab';
+import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { GoogleLogin } from 'react-google-login';
 import AddIcon from '@material-ui/icons/Add';
 import { UnderlinedHeading } from '../Text/Text'
 import * as authActions from '../../actions/auth'
+import { useApp } from '../../context'
+
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -17,7 +20,10 @@ const useStyles = makeStyles(() =>
       padding: '1px 0px  17px',
       backgroundColor: "white",
       borderRadius: 23,
-      margin: 'auto'
+      margin: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
     },
     form: {
       display: 'flex', 
@@ -127,10 +133,28 @@ export function Forms ()  {
 
 export default function Login() {
   const classes = useStyles();
+  const app = useApp();
+
+  const handleLogin = async (googleData: any) => {
+    const loginOK = app.auth.googleLogin(googleData);
+    if (loginOK === !true) {
+      console.warn(loginOK);
+    }
+  };
   return (
-    <Paper className={classes.root} elevation={0}>
-      <p><UnderlinedHeading text="Register" /></p>
+    <Container className={classes.root}>
+      <p>
+        <UnderlinedHeading text="Register" />
+      </p>
+      <GoogleLogin
+        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
+        buttonText="Login with Google"
+        onSuccess={handleLogin}
+        onFailure={handleLogin}
+        cookiePolicy={"single_host_origin"}
+      />
+      <p style={{ fontWeight: 600 }}>or</p>
       <Forms />
-    </Paper>
+    </Container>
   );
 }

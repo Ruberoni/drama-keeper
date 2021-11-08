@@ -4,9 +4,6 @@
 
 [drama-keeper-client-oh71588gi-ruberoni.vercel.app](https://drama-keeper-client-oh71588gi-ruberoni.vercel.app/)
 
-> This uses the free plan on Vercel and Heroku
-> so it may be a bit laggy :) 
-
 Keep a record of the films you want to see or the ones you have watched.
 
 ![pc_loggedin_home](assets/readme/pc_loggedin_home.png)
