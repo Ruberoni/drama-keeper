@@ -2,7 +2,7 @@
 
 **Live demo**
 
-[drama-keeper-client-oh71588gi-ruberoni.vercel.app](https://drama-keeper-client-oh71588gi-ruberoni.vercel.app/)
+[drama-keeper-client.vercel.app](http://drama-keeper-client.vercel.app/)
 
 Keep a record of the films you want to see or the ones you have watched.
 
