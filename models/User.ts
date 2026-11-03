@@ -15,11 +15,25 @@
 - Compare Passwords
 **/
 
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Model, HydratedDocument } from "mongoose";
 import isEmail from "validator/lib/isEmail";
 import bcrypt from "bcrypt";
 
-const userSchema = new Schema<IUser>({
+export interface IUser {
+  email: string;
+  // Users created through Google sign-in have no password.
+  password?: string;
+  googleId?: string;
+}
+
+export interface IUserMethods {
+  verifyPassword(passwordAttempt: string): Promise<boolean>;
+}
+
+export type UserModel = Model<IUser, Record<string, never>, IUserMethods>;
+export type UserDocument = HydratedDocument<IUser, IUserMethods>;
+
+const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   email: {
     type: String,
     required: true,
@@ -38,41 +52,28 @@ const userSchema = new Schema<IUser>({
   googleId: String,
 });
 
-export interface IUserDocument extends Document {
-  email: string;
-  password: string;
-}
-
-export interface IUser extends IUserDocument {
-  verifyPassword: (arg0: string) => Promise<boolean>;
-}
-
 /*
- *	Encrypt the password before saving
+ * Encrypt the password before saving, only when it was set or changed,
+ * so re-saving a user doesn't hash the hash.
  */
-userSchema.pre<IUser>("save", async function (next) {
-  try {
-    if (!this.password) throw Error("Unexpected error, user has not password");
-    const salt = await bcrypt.genSalt(10);
-    const encryptedPassword = await bcrypt.hash(this.password, salt);
-    this.password = encryptedPassword;
-    next();
-  } catch (err) {
-    next(err as Error);
-  }
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+  if (!this.password)
+    throw new Error("Unexpected error, user has not password");
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 /*
  * Verify a password attempt with the real password.
+ * Users without a password (Google-only) never match.
  * @params {string} passwordAttempt
  */
-userSchema.methods.verifyPassword = async function (
-  this: IUser,
-  passwordAttempt: string,
-) {
+userSchema.methods.verifyPassword = async function (passwordAttempt: string) {
+  if (!this.password || typeof passwordAttempt !== "string") return false;
   return await bcrypt.compare(passwordAttempt, this.password);
 };
 
-const User = model<IUser>("User", userSchema);
+const User = model<IUser, UserModel>("User", userSchema);
 
 export default User;

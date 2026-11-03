@@ -21,10 +21,15 @@ export const authorize = async (
     const token = authHeader.replace(/^Bearer\s+/, "");
     debug("token:", token);
     const tokenKey: string = process.env.tokenKey as string;
-    const decoded = await jwt.verify(token, tokenKey);
+    const decoded = jwt.verify(token, tokenKey);
     debug("decoded:", decoded);
+    const userId =
+      typeof decoded === "object" && decoded !== null
+        ? (decoded as { _id?: unknown })._id
+        : undefined;
+    if (typeof userId !== "string") throw new Error("Invalid token payload");
 
-    const _currentUser = await UserModel.findById(decoded);
+    const _currentUser = await UserModel.findById(userId);
     const currentUser = _currentUser || undefined;
     debug("currentUser:", currentUser);
 
