@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import { errorMessage } from '../utils/errors'
 
 export default function requestAuthorization(req: Request, res: Response, next: NextFunction) {
   if (process.env.NODE_ENV === 'production') {
@@ -18,7 +19,7 @@ export default function requestAuthorization(req: Request, res: Response, next: 
       return
 
     } catch (err) {
-      res.status(400).end(err.message)
+      res.status(400).end(errorMessage(err))
       return
 
     }

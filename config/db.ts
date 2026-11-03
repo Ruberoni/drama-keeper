@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { errorMessage } from "../utils/errors";
 
 const uri: string = process.env.NODE_ENV == 'test' ? process.env.MONGO_URI_TEST as string : process.env.MONGO_URI as string;
 
@@ -15,6 +16,6 @@ export default async (): Promise<void> => {
     });
     console.log("Connected to database");
   } catch (err) {
-    throw new Error(err);
+    throw new Error(errorMessage(err), { cause: err });
   }
 };

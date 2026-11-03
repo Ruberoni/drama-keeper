@@ -6,10 +6,6 @@ const describeNetwork = process.env.RUN_NETWORK_TESTS ? describe : describe.skip
 
 describeNetwork('Search', () => {
   describe("getRottenTomatoesUrl", () => {
-    beforeEach(() => {
-      jest.setTimeout(10000);
-    });
-
     it("when an empty title and type are supplied, then return is ''", async () => {
       const film = {
         title: '',

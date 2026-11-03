@@ -1,4 +1,4 @@
-// Runs before every test file (see jest.config.ts setupFiles, after dotenv/config).
+// Runs before every test file (see vitest.config.ts setupFiles, after dotenv/config).
 // config/db.ts picks MONGO_URI_TEST only when NODE_ENV === 'test', and tests
 // delete documents, so refuse to run unless a separate test database is set.
 process.env.NODE_ENV = "test";

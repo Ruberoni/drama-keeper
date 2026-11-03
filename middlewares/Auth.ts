@@ -2,6 +2,7 @@ import Debug from 'debug'
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import UserModel from '../models/User'
+import { errorMessage } from '../utils/errors'
 
 const debug = Debug('auth')
 /*
@@ -31,7 +32,7 @@ export const authorize = async (req: Request, res: Response, next: NextFunction)
 
 
   } catch (err) {
-    debug('middlewares.authorize error:', err.message)
-    res.status(400).send(err.message)
+    debug('middlewares.authorize error:', errorMessage(err))
+    res.status(400).send(errorMessage(err))
   }
 }

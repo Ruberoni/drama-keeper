@@ -26,8 +26,10 @@
 import { Schema, model, Document } from "mongoose";
 import isURL from "validator/lib/isURL";
 import { IUser } from "./User"
-import { compressImage, knowFileTypeFromBuffer } from '../utils/compressImage'
+import Debug from "debug";
 import searchUtils from '../utils/search'
+
+const debug = Debug("models:film");
 
 const filmSchema = new Schema<IFilm>({
   user: Schema.Types.ObjectId,
@@ -98,50 +100,25 @@ export interface IFilm extends Document {
  */
 filmSchema.post<IFilm>("save", function (film) {
   if (!film.links.rottenTomatoes) {
-    film.getAndSetLink("Rotten Tomatoes").catch(() => {null})
+    film.getAndSetLink("Rotten Tomatoes").catch(debug)
 
   }
 
   if (!film.images.cover) {
 
-   film.getAndSetCover().catch(() => {null})
+   film.getAndSetCover().catch(debug)
   }
 });
 
-/* DEPRECATED AS THE IMAGE FIELD IS NOW A URL
-enum ImagesContentTypes {
-  png ='image/png',
-  jpeg = 'image/jpeg'
-}
-*/
-/*
- * DEPRECATED AS THE IMAGE FIELD IS NOW A URL
- * Adds an image to the cover field
- * https://gist.github.com/aheckmann/2408370
- */
-/*
-filmSchema.methods.addCover = async function (
-  this: IFilm,
-  imageData: Buffer,
-){
-  const fileType = await knowFileTypeFromBuffer(imageData)
-  await this.update({
-    $set: {
-      'images.cover.data': imageData,
-      'images.cover.contentType': fileType?.mime
-    }
-  })
-}
-*/
 /*
  * Sets various links to the doc
  */
-filmSchema.methods.getAndSetLinks = function (
+filmSchema.methods.getAndSetLinks = async function (
   this: IFilm,
   pages: string[]
 ) {
   for (const page of pages) { 
-    this.getAndSetLink(page)
+    await this.getAndSetLink(page)
   }
 }
 
@@ -180,25 +157,5 @@ filmSchema.methods.getAndSetLink = async function (
   }
 }
 
-/* 
- * DEPRECATED AS THE IMAGE FIELD IS NOW A URL
- * Adds an image compressed to the cover field
- */
-/*
-filmSchema.methods.addCoverCompressed = async function (
-  this: IFilm,
-  imageData: Buffer,
-){
-  const imageDataCompressed = await compressImage(imageData)
-  // const fileType = await knowFileTypeFromBuffer(imageData)
-  // await this.update({
-  //   $set: {
-  //     'images.cover.data': imageDataCompressed,
-  //     'images.cover.contentType': fileType?.mime
-  //   }
-  // })
-  this.addCover(imageDataCompressed)
-}
-*/
 const Film = model<IFilm>("Film", filmSchema)
 export default Film

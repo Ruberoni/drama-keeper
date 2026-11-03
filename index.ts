@@ -25,7 +25,10 @@ import indexRouter from "./routes/index";
 /**
  * Initial configuration
  */
-ConnectDB();
+ConnectDB().catch((err) => {
+  console.error(err);
+  process.exitCode = 1;
+});
 const app = express();
 
 /**

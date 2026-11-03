@@ -1,9 +1,13 @@
-process.env.NODE_ENV = "test";
-import connectDb from '../../config/db' 
+import mongoose from "mongoose";
+import connectDb from '../../config/db'
 import FilmsModel from "../../models/Film";
 
-beforeAll(() => {
-  connectDb()
+beforeAll(async () => {
+  await connectDb()
+});
+
+afterAll(async () => {
+  await mongoose.disconnect()
 });
 
 beforeEach(async () => {
@@ -13,7 +17,6 @@ beforeEach(async () => {
     type: 'TV'
   }
   await FilmsModel.create(data)
-  jest.setTimeout(15000);
 });
 
 afterEach(async () => {
@@ -31,7 +34,7 @@ describe("Films model", () => {
         return FilmsModel.find({}).then(films => {
           const film = films[0]
           // Act
-          film.getAndSetLink("Rotten Tomatoes").then(() => {
+          return film.getAndSetLink("Rotten Tomatoes").then(() => {
             // Assert
             expect(film.links.rottenTomatoes).toMatch(/tv/)
           })
@@ -43,7 +46,7 @@ describe("Films model", () => {
         return FilmsModel.find({}).then(films => {
           const film = films[0]
           // Act
-          film.getAndSetLink("hola").then(() => {
+          return film.getAndSetLink("hola").then(() => {
             // Assert
             expect(film.links.rottenTomatoes).toBe('#')
           })
@@ -56,7 +59,7 @@ describe("Films model", () => {
         return FilmsModel.find({}).then(films => {
           const film = films[0]
           // Act
-          film.getAndSetCover().then(() => {
+          return film.getAndSetCover().then(() => {
             // Assert
             expect(film.images.cover).toMatch(/.jpg/)
           })
@@ -69,7 +72,7 @@ describe("Films model", () => {
 
         return FilmsModel.create(filmData).then(film => {
           // Act
-          film.getAndSetCover().then(() => {
+          return film.getAndSetCover().then(() => {
             // Assert
             expect(film.images.cover).toMatch(/.jpg/)
           })
