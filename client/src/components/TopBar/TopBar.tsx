@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) =>
 function TopBar() {
   const { classes } = useStyles();
   // Show the "Logged In" label from the sm breakpoint up (was <Hidden xsDown>).
-  const showUsername = useMediaQuery(useTheme().breakpoints.up('sm'));
+  const showUsername = useMediaQuery(useTheme().breakpoints.up('sm'), { noSsr: true });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {

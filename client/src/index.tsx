@@ -11,7 +11,12 @@ const theme = createTheme({
     primary: red,
     // Material-UI v4's default secondary (MUI 5+ defaults to purple).
     secondary: { light: pink.A200, main: pink.A400, dark: pink.A700 },
-  }
+  },
+  components: {
+    // Material-UI v4 drew checkboxes and radios in the secondary color (MUI 5+ uses primary).
+    MuiCheckbox: { defaultProps: { color: 'secondary' } },
+    MuiRadio: { defaultProps: { color: 'secondary' } },
+  },
 })
 
 ReactDOM.render(

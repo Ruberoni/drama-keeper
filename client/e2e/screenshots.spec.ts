@@ -105,6 +105,7 @@ for (const vp of viewports) {
       await expect(page.getByRole('menuitem', { name: 'Logout' })).toBeVisible()
       await shoot(page, vp.name, '05-topbar-menu')
       await page.keyboard.press('Escape')
+      await expect(page.getByRole('menuitem', { name: 'Logout' })).toBeHidden()
 
       // Film card menu
       await page.locator('.MuiCard-root', { hasText: watched }).getByRole('button').click()
