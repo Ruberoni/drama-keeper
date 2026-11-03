@@ -25,73 +25,71 @@
 */
 import { Schema, model, Document } from "mongoose";
 import isURL from "validator/lib/isURL";
-import { IUser } from "./User"
+import { IUser } from "./User";
 import Debug from "debug";
-import searchUtils from '../utils/search'
+import searchUtils from "../utils/search";
 
 const debug = Debug("models:film");
 
 const filmSchema = new Schema<IFilm>({
   user: Schema.Types.ObjectId,
   title: {
-    type: String, 
-    required: true
+    type: String,
+    required: true,
   },
   type: {
     type: String,
-    enum: ['Movie', 'TV', '']
+    enum: ["Movie", "TV", ""],
   },
   watched: {
     type: Boolean,
   },
   links: {
-    rottenTomatoes: { 
-      type: String, 
+    rottenTomatoes: {
+      type: String,
       validate: {
-        validator: (val: string): boolean => (isURL(val) || val === '#' || val === ''),
-        message: "{VALUE} is not an URL"
+        validator: (val: string): boolean =>
+          isURL(val) || val === "#" || val === "",
+        message: "{VALUE} is not an URL",
       },
-      default: ''
-
+      default: "",
     },
-    imdb: { 
-      type: String, 
+    imdb: {
+      type: String,
       validate: {
-        validator: (val: string) : boolean => isURL(val),
-        message: "{VALUE} is not an URL"
-      }
-    }
+        validator: (val: string): boolean => isURL(val),
+        message: "{VALUE} is not an URL",
+      },
+    },
   },
   images: {
     cover: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
-})
+});
 
-export interface IFilmLinks extends Document  {
-  rottenTomatoes: string,
-  imdb?: string
+export interface IFilmLinks extends Document {
+  rottenTomatoes: string;
+  imdb?: string;
 }
 
 export interface IFilmImages extends Document {
-  cover?: string
+  cover?: string;
 }
 
 export interface IFilm extends Document {
-  user: IUser['_id'],
-  title: string,
-  type?: string,
-  watched?: boolean,
-  links: IFilmLinks
-  images: IFilmImages,
-  getAndSetLinks: any, // Change type,
-  getAndSetLink: any, // Change type,
-  getAndSetCover: any, // Change type,
+  user: IUser["_id"];
+  title: string;
+  type?: string;
+  watched?: boolean;
+  links: IFilmLinks;
+  images: IFilmImages;
+  getAndSetLinks: any; // Change type,
+  getAndSetLink: any; // Change type,
+  getAndSetCover: any; // Change type,
 }
-
-
 
 /*
  * Post save hook, It performs two things
@@ -100,13 +98,11 @@ export interface IFilm extends Document {
  */
 filmSchema.post<IFilm>("save", function (film) {
   if (!film.links.rottenTomatoes) {
-    film.getAndSetLink("Rotten Tomatoes").catch(debug)
-
+    film.getAndSetLink("Rotten Tomatoes").catch(debug);
   }
 
   if (!film.images.cover) {
-
-   film.getAndSetCover().catch(debug)
+    film.getAndSetCover().catch(debug);
   }
 });
 
@@ -115,47 +111,41 @@ filmSchema.post<IFilm>("save", function (film) {
  */
 filmSchema.methods.getAndSetLinks = async function (
   this: IFilm,
-  pages: string[]
+  pages: string[],
 ) {
-  for (const page of pages) { 
-    await this.getAndSetLink(page)
+  for (const page of pages) {
+    await this.getAndSetLink(page);
   }
-}
+};
 
 /*
  * Set a cover url to the doc
  */
- 
-filmSchema.methods.getAndSetCover = async function (
-  this: IFilm,
-) {
-  const cover = await searchUtils.getTMDbCover(this)
-  this.images.cover = cover || '#'
-  await this.save()
-}
 
+filmSchema.methods.getAndSetCover = async function (this: IFilm) {
+  const cover = await searchUtils.getTMDbCover(this);
+  this.images.cover = cover || "#";
+  await this.save();
+};
 
 /*
  * Set a link to the doc
  */
-filmSchema.methods.getAndSetLink = async function (
-  this: IFilm,
-  page: string
-) {
+filmSchema.methods.getAndSetLink = async function (this: IFilm, page: string) {
   switch (page) {
-    case "Rotten Tomatoes": 
-      const url = await searchUtils.getRottenTomatoesUrl(this)
-      this.links.rottenTomatoes = url || "#"
-      
-      await this.save()
-      break;
-    
-    default: 
-      this.links.rottenTomatoes = "#"
-      await this.save()
-    
-  }
-}
+    case "Rotten Tomatoes": {
+      const url = await searchUtils.getRottenTomatoesUrl(this);
+      this.links.rottenTomatoes = url || "#";
 
-const Film = model<IFilm>("Film", filmSchema)
-export default Film
+      await this.save();
+      break;
+    }
+
+    default:
+      this.links.rottenTomatoes = "#";
+      await this.save();
+  }
+};
+
+const Film = model<IFilm>("Film", filmSchema);
+export default Film;
