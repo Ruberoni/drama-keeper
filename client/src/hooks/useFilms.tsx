@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IFilm } from '../components/FilmItem/FilmItem'
 import api from "../api";
 import { useApp } from "../context"
@@ -32,6 +32,13 @@ export default function useFilms() : [{data: IFilm[], isLoading: boolean}, () =>
     if (!authToken) setData([])
   }
 
+  // The token of the latest commit. fetchData checks it so that a request started before
+  // logout (or a token change) can't write stale films back into the list when it settles.
+  const currentToken = useRef(authToken)
+  useEffect(() => {
+    currentToken.current = authToken
+  }, [authToken])
+
   useEffect(() => {
     let ignore = false
     getFilms(authToken)
@@ -43,14 +50,17 @@ export default function useFilms() : [{data: IFilm[], isLoading: boolean}, () =>
 
   // Called by the poll interval and after film changes.
   const fetchData = async () => {
+    const token = authToken
+    if (currentToken.current !== token) return
     setLoading(true)
-    if (!authToken) setData([])
+    if (!token) setData([])
     try {
-      setData(await getFilms(authToken));
+      const films = await getFilms(token)
+      if (currentToken.current === token) setData(films)
     } catch (err) {
       console.error(err)
     } finally {
-      setLoading(false)
+      if (currentToken.current === token) setLoading(false)
     }
   };
 

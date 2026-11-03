@@ -1,6 +1,6 @@
 # Drama Keeper client
 
-React 17 + Material-UI v4 app built with [Vite](https://vite.dev/).
+React 19 + MUI 9 app built with [Vite](https://vite.dev/).
 
 ## Scripts
 

@@ -62,7 +62,8 @@ jobs:
       - run: pnpm build
 
   e2e:
-    # Built client + real API + MongoDB: register, log in, add and delete a film.
+    # Production-like: built client (vite preview) + compiled API with NODE_ENV=production + MongoDB.
+    # Register, log in, add and delete a film.
     # Google sign-in cannot run here and stays a manual check.
     runs-on: ubuntu-latest
     services:
@@ -76,6 +77,9 @@ jobs:
       GOOGLE_CLIENT_ID: ci-dummy-google-client-id
       VITE_API_URL: http://localhost:4000
       VITE_GOOGLE_CLIENT_ID: ci-dummy-google-client-id
+      # The API runs with NODE_ENV=production here (see client/playwright.config.ts), which checks this token.
+      SERVER_AUTH_TOKEN: ci-dummy-server-auth-token
+      VITE_SERVER_AUTH_TOKEN: ci-dummy-server-auth-token
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
