@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+# mongo:7.0 is used because MongoDB 8.0+ refuses to start on Linux kernel >= 6.19
+# (SERVER-121912), which GitHub runners now use. Switch back to 8.0 once fixed.
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+    env:
+      MONGO_URI: mongodb://localhost:27017/dev-not-used
+      MONGO_URI_TEST: mongodb://localhost:27017/test
+      tokenKey: ci-dummy-token-key
+      GOOGLE_CLIENT_ID: ci-dummy-google-client-id
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm install -g pnpm@12.16.1
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm test
+
+  client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm install -g pnpm@12.16.1
+      # CRA 4 cannot build on Node 26; only check that the install works until Phase 2.
+      - run: pnpm install --frozen-lockfile
+        working-directory: client
+
+  network-tests:
+    # Non-blocking: depends on live Rotten Tomatoes / TMDb, which may block CI IPs.
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    services:
+      mongo:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+    env:
+      MONGO_URI: mongodb://localhost:27017/dev-not-used
+      MONGO_URI_TEST: mongodb://localhost:27017/test
+      tokenKey: ci-dummy-token-key
+      GOOGLE_CLIENT_ID: ci-dummy-google-client-id
+      TMDb_API_KEY: ${{ secrets.TMDB_API_KEY }}
+      RUN_NETWORK_TESTS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm install -g pnpm@12.16.1
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test

@@ -1,7 +1,10 @@
 import '../../config/env'
 import searchUtils from '../../utils/search'
 
-describe('Search', () => {
+// These hit live third-party sites (Rotten Tomatoes, TMDb); run with RUN_NETWORK_TESTS=1
+const describeNetwork = process.env.RUN_NETWORK_TESTS ? describe : describe.skip
+
+describeNetwork('Search', () => {
   describe("getRottenTomatoesUrl", () => {
     beforeEach(() => {
       jest.setTimeout(10000);

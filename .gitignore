@@ -2,9 +2,6 @@
 /build
 /dist
 .env
-.eslint*
-.prettier*
-babel.config.json
 postman.yaml
 # misc
 .env.local
@@ -13,8 +10,7 @@ postman.yaml
 .env.production.local
 
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+pnpm-debug.log*
 
 *.sublime-project
 *.sublime-workspace

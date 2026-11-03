@@ -1,0 +1,6 @@
+allowBuilds:
+  bcrypt: true
+  mozjpeg: false
+  pngquant-bin: false
+  core-js: false
+  nodemon: false
