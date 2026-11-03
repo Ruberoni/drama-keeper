@@ -3,10 +3,10 @@ import Cookies from 'universal-cookie';
 import { IFilm } from '../components/FilmItem/FilmItem'
 import { IFormValues } from '../components/CreateFilm/CreateFilm'
 import * as utils from '../utils/index'
+import axios from 'axios'
 
 const cookies = new Cookies();
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const getFilmsFromAuthUser = async () : Promise<string | IFilm[]>=> {
   try {
     const token = cookies.get('token')
@@ -19,7 +19,7 @@ export const getFilmsFromAuthUser = async () : Promise<string | IFilm[]>=> {
 
     return response.data.films
   } catch (err) {
-    return err.message
+    return utils.errorMessage(err)
   }
 }
 
@@ -40,7 +40,7 @@ export const createFilmAuthUser = async (filmData: IFormValues) : Promise<string
     return true
 
   } catch (err) {
-    return err.message
+    return utils.errorMessage(err)
   }
 }
 
@@ -57,7 +57,7 @@ export const deleteFilm = async (id: string | undefined) => {
     } 
 
   } catch (err) {
-    return err.response.data
+    return axios.isAxiosError(err) ? err.response?.data : utils.errorMessage(err)
   }
 } 
 
@@ -75,6 +75,6 @@ export const deleteFilm = async (id: string | undefined) => {
     } 
 
   } catch (err) {
-    return err.response.data
+    return axios.isAxiosError(err) ? err.response?.data : utils.errorMessage(err)
   }
 } 

@@ -57,15 +57,13 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 ```
 $ pnpm install && pnpm --dir client install
 ```
-3. Rename the file `.env.example` to `.env` and fill it.
+3. Rename the file `.env.example` to `.env` and fill it. Do the same for `client/.env.example` -> `client/.env`.
 4. **Run the app:**
 ```
 $ pnpm app
 ```
 
-> Interim note: until the client moves off Create React App, the client can only build and start on Node 16. Start it separately with
-> `cd client && nvm exec 16 node node_modules/react-scripts/bin/react-scripts.js start`
-> and run only the API with `pnpm start`.
+The API listens on http://localhost:4000 and the client on http://localhost:3000. The client reads its settings from `client/.env` (copy `client/.env.example`).
 
 The app should run ok.
 

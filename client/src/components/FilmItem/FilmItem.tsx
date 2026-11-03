@@ -96,8 +96,7 @@ export interface IFilm {
 
 const _cover = 'https://images-na.ssl-images-amazon.com/images/I/51DzJ4yEp4L._AC_.jpg'
 
-// eslint-disable-next-line no-undef
-export default function FilmItem({_id, title, type, watched, links, images} : IFilm) : JSX.Element {
+export default function FilmItem({_id, title, watched, links, images} : IFilm) : JSX.Element {
   const classes = useStyles();
   const app = useApp()
 

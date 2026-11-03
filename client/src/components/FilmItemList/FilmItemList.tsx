@@ -8,7 +8,6 @@ export interface IFilmItemList {
   filmList: IFilm[]
 }
 
-// eslint-disable-next-line no-undef
 export default function FilmItemList({header, filmList}: IFilmItemList) : JSX.Element {
   return (
     <div className='root'>

@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import API from '../api'
 import { IFormValues } from '../components/Register/Register'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
+import { errorMessage } from '../utils'
 import useAppModal from '../hooks/useAppModal'
 
 const cookies = new Cookies();
@@ -80,8 +81,8 @@ export function AppProvider({ children }: AppProviderProps ) {
         app.dispatch({type: 'LOGIN', token: response.data.token})
         return true
       } catch (err) {
-        alert("Error: " + err.message)
-        return err.message
+        alert("Error: " + errorMessage(err))
+        return errorMessage(err)
       } finally {
         setAppReady(true)
       }
@@ -102,8 +103,8 @@ export function AppProvider({ children }: AppProviderProps ) {
         app.dispatch({type: 'LOGIN', token: response.data.token})
         return true
       } catch (err) {
-        alert("Error: " + err.message)
-        return err.message
+        alert("Error: " + errorMessage(err))
+        return errorMessage(err)
       } finally {
         setAppReady(true)
       }
@@ -116,6 +117,7 @@ export function AppProvider({ children }: AppProviderProps ) {
       app.dispatch({type: 'LOGOUT'})
     },
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const reloadFilms = (reason: reloadFilmsReason) => {
     // I could use 'reason' to display like a simple inobstrusive popup.
     app.dispatch({type: 'FILM/RELOAD'})
