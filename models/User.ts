@@ -58,7 +58,7 @@ userSchema.pre<IUser>("save", async function (next) {
     this.password = encryptedPassword;
     next();
   } catch (err) {
-    next(err);
+    next(err as Error);
   }
 });
 

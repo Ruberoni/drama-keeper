@@ -19,6 +19,7 @@
 import UserModel from "../../models/User";
 import Debug from "debug";
 import { Response, Request } from "express";
+import { errorMessage } from '../../utils/errors'
 
 const debug = Debug("user");
 
@@ -35,8 +36,8 @@ export const getAllUsers = async (
     res.send(users);
     debug("CONTROLLER: getAllUsers | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: getAllUsers | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: getAllUsers | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 };
 
@@ -56,8 +57,8 @@ export const createUser = async (
     res.json({message: "User Created"});
     debug("CONTROLLER: createUser | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: createUser | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: createUser | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 };
 
@@ -75,8 +76,8 @@ export const deleteUserById = async (
     res.send("User deleted");
     debug("CONTROLLER: deleteUserById | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: deleteUserById | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: deleteUserById | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 };
 
@@ -98,7 +99,7 @@ export const updateUserById = async (
     res.send("User updated");
     debug("CONTROLLER: updateUserById | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: updateUserById | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: updateUserById | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 }

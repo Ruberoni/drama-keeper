@@ -1,5 +1,6 @@
 import axios from "axios";
 import Debug from "debug";
+import { errorMessage } from './errors'
 const debug = Debug("utils");
 
 export default {
@@ -25,7 +26,7 @@ export default {
       }
       return ''
     } catch (err) {
-      debug('getRottenTomatoesUrl error:', err.message)
+      debug('getRottenTomatoesUrl error:', errorMessage(err))
       return ''
     }
   },

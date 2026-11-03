@@ -24,6 +24,7 @@ import Debug from "debug";
 import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
+import { errorMessage } from '../../utils/errors'
 
 const debug = Debug("film");
 
@@ -46,8 +47,8 @@ export const getAllFilms = async (
     res.send(films);
     debug("CONTROLLER: getAllFilms | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: getAllFilms | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: getAllFilms | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 };
 
@@ -67,8 +68,8 @@ export const createFilm = async (
     res.send("Film created");
     debug("CONTROLLER: createFilm | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: createFilm | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: createFilm | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 };
 
@@ -93,8 +94,8 @@ export const getFilmsByUserId = async (
     res.json({message: `Films of user ${currentUser}`, films});
     debug("CONTROLLER: getFilmsByUser | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: getFilmsByUser | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: getFilmsByUser | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 };
 
@@ -112,8 +113,8 @@ export const deleteFilmById = async (
     res.send("Film deleted");
     debug("CONTROLLER: deleteFilmById | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: deleteFilmById | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: deleteFilmById | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 };
 
@@ -134,8 +135,8 @@ export const updateFilmById = async (
     res.send("Film updated");
     debug("CONTROLLER: updateFilmById | FINISHED GOOD");
   } catch (err) {
-    debug("CONTROLLER: updateFilmById | ERROR:", err.message);
-    res.status(400).send(err.message);
+    debug("CONTROLLER: updateFilmById | ERROR:", errorMessage(err));
+    res.status(400).send(errorMessage(err));
   }
 }
 
@@ -159,7 +160,7 @@ export const test = {
       res.json({message: `Films of user ${currentUser}`, films});
 
     } catch (err) {
-      res.status(400).json({message: 'error', err: err.message})
+      res.status(400).json({message: 'error', err: errorMessage(err)})
     }
   },
   createFilmAuthorized: async (req: Request, res: Response) => {
@@ -172,7 +173,7 @@ export const test = {
       res.json({message: 'Film created'});
 
     } catch (err) {
-      res.status(400).json({message: 'error', err: err.message})
+      res.status(400).json({message: 'error', err: errorMessage(err)})
     }
   }
 };

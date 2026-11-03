@@ -1,12 +1,15 @@
-const mockVerifyIdToken = jest.fn()
+import type { Mock } from 'vitest'
 
-jest.mock('google-auth-library', () => ({
-  OAuth2Client: jest.fn().mockImplementation(() => ({ verifyIdToken: mockVerifyIdToken })),
+const { mockVerifyIdToken } = vi.hoisted(() => ({ mockVerifyIdToken: vi.fn() }))
+
+vi.mock('google-auth-library', () => ({
+  OAuth2Client: vi.fn(function () {
+    return { verifyIdToken: mockVerifyIdToken }
+  }),
 }))
 
-jest.mock('../../models/User', () => ({
-  __esModule: true,
-  default: { findOneAndUpdate: jest.fn() },
+vi.mock('../../models/User', () => ({
+  default: { findOneAndUpdate: vi.fn() },
 }))
 
 import jwt from 'jsonwebtoken'
@@ -16,7 +19,7 @@ import { googleLogin, verifyGoogleIdToken } from '../../services/Auth'
 const ticket = (payload: object | undefined) => ({ getPayload: () => payload })
 
 beforeEach(() => {
-  jest.clearAllMocks()
+  vi.clearAllMocks()
   process.env.GOOGLE_CLIENT_ID = 'client-id'
   process.env.tokenKey = 'test-key'
 })
@@ -60,7 +63,7 @@ describe('googleLogin', () => {
 
   test('signs a JWT for an existing Google user', async () => {
     verifyIdToken_ok()
-    ;(UserModel.findOneAndUpdate as jest.Mock).mockResolvedValueOnce({ _id: 'user-id' })
+    ;(UserModel.findOneAndUpdate as Mock).mockResolvedValueOnce({ _id: 'user-id' })
     const token = await googleLogin('cred')
     expect(UserModel.findOneAndUpdate).toHaveBeenCalledTimes(1)
     expect((jwt.verify(token, 'test-key') as { _id: string })._id).toBe('user-id')
@@ -70,7 +73,7 @@ describe('googleLogin', () => {
     mockVerifyIdToken.mockResolvedValue(
       ticket({ sub: '123', email: 'A@B.com', email_verified: true })
     )
-    ;(UserModel.findOneAndUpdate as jest.Mock)
+    ;(UserModel.findOneAndUpdate as Mock)
       .mockResolvedValueOnce(null)
       .mockResolvedValueOnce({ _id: 'new-id' })
     const token = await googleLogin('cred')

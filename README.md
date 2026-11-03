@@ -45,7 +45,7 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 
 ### What you need before
 
-- Node.js 24 (see `.nvmrc`; moves to 26 in Phase 4)
+- Node.js 26 (see `.nvmrc`)
 - pnpm 12 (`npm i -g pnpm@12.16.1`)
 - A [MongoDB](https://www.mongodb.com/) database
 - A [TMDb API Key](https://developers.themoviedb.org/3/getting-started/introduction)
@@ -66,6 +66,8 @@ $ pnpm app
 The API listens on http://localhost:4000 and the client on http://localhost:3000. The client reads its settings from `client/.env` (copy `client/.env.example`).
 
 The app should run ok.
+
+Other API scripts: `pnpm dev` (API only, reloads on change), `pnpm test` (Vitest; needs `MONGO_URI_TEST` in `.env`), `pnpm typecheck`, and `pnpm build && pnpm start` (compiled API from `dist/`, as in production).
 
 ## Contact me!
 
