@@ -184,9 +184,6 @@ importers:
       react-dom:
         specifier: ^17.0.2
         version: 17.0.2(react@17.0.2)
-      react-google-login:
-        specifier: ^5.2.2
-        version: 5.2.2(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       universal-cookie:
         specifier: ^4.0.4
         version: 4.0.4
@@ -1670,13 +1667,6 @@ packages:
 
   react-fast-compare@2.0.4:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
-
-  react-google-login@5.2.2:
-    resolution: {integrity: sha512-JUngfvaSMcOuV0lFff7+SzJ2qviuNMQdqlsDJkUM145xkGPVIfqWXq9Ui+2Dr6jdJWH5KYdynz9+4CzKjI5u6g==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      react: ^16 || ^17
-      react-dom: ^16 || ^17
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -3455,13 +3445,6 @@ snapshots:
       scheduler: 0.20.2
 
   react-fast-compare@2.0.4: {}
-
-  react-google-login@5.2.2(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
-    dependencies:
-      '@types/react': 17.0.3
-      prop-types: 15.7.2
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
 
   react-is@16.13.1: {}
 

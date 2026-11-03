@@ -87,11 +87,11 @@ export function AppProvider({ children }: AppProviderProps ) {
         setAppReady(true)
       }
     },
-    googleLogin: async (googleData: any): Promise<boolean | string> => {
+    googleLogin: async (credential: string): Promise<boolean | string> => {
       try {
         setAppReady(false)
         const options = {
-          token: googleData.tokenId,
+          token: credential,
         }
         
         // Do POST fetch
