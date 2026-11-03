@@ -96,6 +96,13 @@ jobs:
         with:
           name: playwright-traces
           path: client/test-results
+      # Desktop (1280px) and mobile (375px) shots of the main screens, for a visual check of UI upgrades.
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: client/screenshots
+          if-no-files-found: ignore
 
   network-tests:
     # Non-blocking: depends on live Rotten Tomatoes / TMDb, which may block CI IPs.

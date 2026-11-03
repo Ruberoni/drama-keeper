@@ -21,3 +21,4 @@ pnpm-debug.log*
 .vercel
 /test-results
 /playwright-report
+/screenshots
