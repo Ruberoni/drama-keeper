@@ -8,14 +8,14 @@ on:
 permissions:
   contents: read
 
-# Runners are pinned to ubuntu-24.04: mongo:8.0 cannot start on Linux kernel >= 6.19
-# (SERVER-121912), which ubuntu-latest now uses.
+# mongo:7.0 is used because MongoDB 8.0+ refuses to start on Linux kernel >= 6.19
+# (SERVER-121912), which GitHub runners now use. Switch back to 8.0 once fixed.
 jobs:
   api:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     services:
       mongo:
-        image: mongo:8.0
+        image: mongo:7.0
         ports:
           - 27017:27017
     env:
@@ -34,7 +34,7 @@ jobs:
       - run: pnpm test
 
   client:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -47,11 +47,11 @@ jobs:
 
   network-tests:
     # Non-blocking: depends on live Rotten Tomatoes / TMDb, which may block CI IPs.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     continue-on-error: true
     services:
       mongo:
-        image: mongo:8.0
+        image: mongo:7.0
         ports:
           - 27017:27017
     env:
