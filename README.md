@@ -45,8 +45,8 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 
 ### What you need before
 
-- Node.js 26 (see `.nvmrc`)
-- pnpm 12 (`npm i -g pnpm@12.16.1`; Node 26 does not bundle Corepack)
+- Node.js 24 (see `.nvmrc`; moves to 26 in Phase 4)
+- pnpm 12 (`npm i -g pnpm@12.16.1`)
 - A [MongoDB](https://www.mongodb.com/) database
 - A [TMDb API Key](https://developers.themoviedb.org/3/getting-started/introduction)
 

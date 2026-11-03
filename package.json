@@ -11,7 +11,7 @@
     "eslint-staged": "LIST=`git diff --cached --name-only | grep .*\\.ts | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST && prettier $LIST --write; fi"
   },
   "engines": {
-    "node": ">=26 <27"
+    "node": ">=24 <25"
   },
   "repository": "https://github.com/Ruberoni/drama-keeper",
   "author": "Ruben Paredes",
