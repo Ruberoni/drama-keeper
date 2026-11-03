@@ -1,12 +1,12 @@
 import { expect, test, type Page } from '@playwright/test'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 
 // Captures the main screens at desktop and mobile widths for a visual check of UI library upgrades.
 // The images land in client/screenshots/ and CI uploads them as the `screenshots` workflow artifact.
 // It also checks that the "Already seen?" checkbox in the add-film form still saves.
 
-const here = path.dirname(fileURLToPath(import.meta.url))
+// Playwright loads specs as CommonJS here (no "type": "module"), so __dirname is available.
+const here = __dirname
 const outDir = path.join(here, '..', 'screenshots')
 const coverFixture = path.join(here, '..', 'src', 'assets', 'img', 'when-harry-met-sally-cover.jpg')
 const apiUrl = 'http://localhost:4000'
