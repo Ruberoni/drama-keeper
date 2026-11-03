@@ -1,4 +1,12 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+// Escape can be swallowed while an alert() is still being dismissed, so retry until the modal is gone.
+async function closeModal(page: Page) {
+  await expect(async () => {
+    await page.keyboard.press('Escape')
+    await expect(page.locator('.modal')).toBeHidden({ timeout: 1000 })
+  }).toPass()
+}
 
 // Register, log in, add a film and delete it. Google sign-in cannot run here.
 test('register, log in, add and delete a film', async ({ page }) => {
@@ -23,7 +31,7 @@ test('register, log in, add and delete a film', async ({ page }) => {
   )
   await registerDialog.getByRole('button', { name: 'Register' }).click()
   expect((await registered).status()).toBe(200)
-  await page.keyboard.press('Escape')
+  await closeModal(page)
 
   // Log in
   await page.getByRole('button', { name: 'Login' }).click()
@@ -32,7 +40,7 @@ test('register, log in, add and delete a film', async ({ page }) => {
   await loginDialog.locator('input[name="password"]').fill(password)
   await loginDialog.getByRole('button', { name: 'Login', exact: true }).click()
   await expect(page.getByLabel('account of current user')).toBeVisible()
-  await page.keyboard.press('Escape')
+  await closeModal(page)
 
   // Add a film
   await page.getByRole('button', { name: 'add' }).click()
@@ -40,7 +48,7 @@ test('register, log in, add and delete a film', async ({ page }) => {
   await createDialog.locator('input[name="title"]').fill(title)
   await createDialog.locator('input[value="Movie"]').check()
   await createDialog.getByRole('button', { name: 'Create' }).click()
-  await page.keyboard.press('Escape')
+  await closeModal(page)
   await expect(page.getByText(title)).toBeVisible()
 
   // Delete it
