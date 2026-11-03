@@ -19,7 +19,8 @@ export default defineConfig({
     {
       command: 'pnpm --dir .. build && pnpm --dir .. start',
       url: 'http://localhost:4000',
-      env: { PORT: '4000' },
+      // Several specs run in parallel against one API; the default 20 requests/min would return 429s.
+      env: { PORT: '4000', RATE_LIMIT_PER_MINUTE: '1000' },
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
