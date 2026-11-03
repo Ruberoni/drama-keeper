@@ -98,13 +98,13 @@ export interface IFilm extends Document {
  */
 filmSchema.post<IFilm>("save", function (film) {
   if (!film.links.rottenTomatoes) {
-    film.getAndSetLink("Rotten Tomatoes").then(() => {null})
+    film.getAndSetLink("Rotten Tomatoes").catch(() => {null})
 
   }
 
   if (!film.images.cover) {
 
-   film.getAndSetCover().then(() => {null})
+   film.getAndSetCover().catch(() => {null})
   }
 });
 
@@ -154,7 +154,7 @@ filmSchema.methods.getAndSetCover = async function (
 ) {
   const cover = await searchUtils.getTMDbCover(this)
   this.images.cover = cover || '#'
-  this.save()
+  await this.save()
 }
 
 
@@ -170,12 +170,12 @@ filmSchema.methods.getAndSetLink = async function (
       const url = await searchUtils.getRottenTomatoesUrl(this)
       this.links.rottenTomatoes = url || "#"
       
-      this.save()
+      await this.save()
       break;
     
     default: 
       this.links.rottenTomatoes = "#"
-      this.save()
+      await this.save()
     
   }
 }
