@@ -1,19 +1,19 @@
 import React from "react";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Fab from '@material-ui/core/Fab';
-import TextField from '@material-ui/core/TextField';
-import Container from '@material-ui/core/Container';
+import { makeStyles } from 'tss-react/mui';
+import Fab from '@mui/material/Fab';
+import TextField from '@mui/material/TextField';
+import Container from '@mui/material/Container';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import GoogleSignIn from '../GoogleSignIn/GoogleSignIn'
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues } from '../Register/Register'
 import { useApp } from '../../context'
 
 
-const useStyles = makeStyles(() =>
-  createStyles({
+const useStyles = makeStyles()(() =>
+  ({
     root: {
       width: "90%",
       maxWidth: 300,
@@ -32,8 +32,7 @@ const useStyles = makeStyles(() =>
     textField: {
       margin: '6px 0px'
     }
-  })
-);
+  }));
 
 const validationSchema = yup.object({
   email: yup
@@ -67,7 +66,7 @@ export function Forms ()  {
   })
 
 
-  const classes = useStyles()
+  const { classes } = useStyles()
 
   return (
     <div>
@@ -109,7 +108,7 @@ export function Forms ()  {
 }
 
 export default function Login() {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const app = useApp();
 
   const handleLogin = async (credential: string) => {
@@ -119,8 +118,9 @@ export default function Login() {
     }
   };
 
+  // maxWidth={false}: Container's responsive max-width would otherwise beat classes.root (300px).
   return (
-    <Container className={classes.root}>
+    <Container maxWidth={false} className={classes.root}>
       <p>
         <UnderlinedHeading text="Login" />
       </p>

@@ -3,7 +3,7 @@ import './App.css';
 import TopBar from './components/TopBar/TopBar'
 import FilmItemList from './components/FilmItemList/FilmItemList'
 import LoadingIndicator from './components/LoadingIndicator/LoadingIndicator'
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import Cookies from 'universal-cookie';
 import { useInterval } from './hooks/useInterval'
 import useFilms from './hooks/useFilms'
