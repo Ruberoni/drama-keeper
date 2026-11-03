@@ -52,7 +52,9 @@ export default function GoogleSignIn({ onCredential }: Props) {
   const container = useRef<HTMLDivElement>(null)
   // Keep the latest callback without re-initialising GIS on every render.
   const callback = useRef(onCredential)
-  callback.current = onCredential
+  useEffect(() => {
+    callback.current = onCredential
+  })
 
   useEffect(() => {
     if (!import.meta.env.VITE_GOOGLE_CLIENT_ID) {

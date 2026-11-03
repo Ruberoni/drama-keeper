@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import Modal from '@mui/material/Modal';
 
-type ModalWrapperProps = {children: JSX.Element}
+type ModalWrapperProps = {children: React.JSX.Element}
 
 /**
  * Hook for easy implement a fully working modal anywhere.
@@ -12,7 +12,7 @@ type ModalWrapperProps = {children: JSX.Element}
  *  'close'  function for close open manually
  *  'isOpen' boolean indicating if the modal is opened or not
  */
-export default function useModal() : [({ children }: ModalWrapperProps) => JSX.Element, () => void, () => void, boolean] {
+export default function useModal() : [({ children }: ModalWrapperProps) => React.JSX.Element, () => void, () => void, boolean] {
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const open = React.useCallback(() => {
