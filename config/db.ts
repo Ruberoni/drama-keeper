@@ -1,21 +1,15 @@
 import mongoose from "mongoose";
-import { errorMessage } from "../utils/errors";
 
-const uri: string = process.env.NODE_ENV == 'test' ? process.env.MONGO_URI_TEST as string : process.env.MONGO_URI as string;
+const uri: string =
+  process.env.NODE_ENV == "test"
+    ? (process.env.MONGO_URI_TEST as string)
+    : (process.env.MONGO_URI as string);
 
 /*
- * Calling this function connects the server to the database
- * In an error, the error is thrown to be handled by the server error handler
+ * Calling this function connects the server to the database.
+ * A connection error is rethrown unchanged for the caller to handle.
  */
 export default async (): Promise<void> => {
-  try {
-    await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-    console.log("Connected to database");
-  } catch (err) {
-    throw new Error(errorMessage(err), { cause: err });
-  }
+  await mongoose.connect(uri);
+  console.log("Connected to database");
 };

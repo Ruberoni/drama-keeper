@@ -23,15 +23,41 @@
   https://gist.github.com/aheckmann/2408370
 
 */
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Model, HydratedDocument, Types } from "mongoose";
 import isURL from "validator/lib/isURL";
-import { IUser } from "./User";
 import Debug from "debug";
 import searchUtils from "../utils/search";
 
 const debug = Debug("models:film");
 
-const filmSchema = new Schema<IFilm>({
+export interface IFilmLinks {
+  rottenTomatoes: string;
+  imdb?: string;
+}
+
+export interface IFilmImages {
+  cover?: string;
+}
+
+export interface IFilm {
+  user?: Types.ObjectId;
+  title: string;
+  type?: string;
+  watched?: boolean;
+  links: IFilmLinks;
+  images: IFilmImages;
+}
+
+export interface IFilmMethods {
+  getAndSetLinks(pages: string[]): Promise<void>;
+  getAndSetLink(page: string): Promise<void>;
+  getAndSetCover(): Promise<void>;
+}
+
+export type FilmModel = Model<IFilm, Record<string, never>, IFilmMethods>;
+export type FilmDocument = HydratedDocument<IFilm, IFilmMethods>;
+
+const filmSchema = new Schema<IFilm, FilmModel, IFilmMethods>({
   user: Schema.Types.ObjectId,
   title: {
     type: String,
@@ -70,33 +96,12 @@ const filmSchema = new Schema<IFilm>({
   },
 });
 
-export interface IFilmLinks extends Document {
-  rottenTomatoes: string;
-  imdb?: string;
-}
-
-export interface IFilmImages extends Document {
-  cover?: string;
-}
-
-export interface IFilm extends Document {
-  user: IUser["_id"];
-  title: string;
-  type?: string;
-  watched?: boolean;
-  links: IFilmLinks;
-  images: IFilmImages;
-  getAndSetLinks: any; // Change type,
-  getAndSetLink: any; // Change type,
-  getAndSetCover: any; // Change type,
-}
-
 /*
  * Post save hook, It performs two things
  * 1. If a rotten tomatoes links has not been provided. It will set one
  * 2. TO DO: If a images.cover has not been provided. It will set one
  */
-filmSchema.post<IFilm>("save", function (film) {
+filmSchema.post("save", function (film) {
   if (!film.links.rottenTomatoes) {
     film.getAndSetLink("Rotten Tomatoes").catch(debug);
   }
@@ -109,10 +114,7 @@ filmSchema.post<IFilm>("save", function (film) {
 /*
  * Sets various links to the doc
  */
-filmSchema.methods.getAndSetLinks = async function (
-  this: IFilm,
-  pages: string[],
-) {
+filmSchema.methods.getAndSetLinks = async function (pages: string[]) {
   for (const page of pages) {
     await this.getAndSetLink(page);
   }
@@ -122,7 +124,7 @@ filmSchema.methods.getAndSetLinks = async function (
  * Set a cover url to the doc
  */
 
-filmSchema.methods.getAndSetCover = async function (this: IFilm) {
+filmSchema.methods.getAndSetCover = async function () {
   const cover = await searchUtils.getTMDbCover(this);
   this.images.cover = cover || "#";
   await this.save();
@@ -131,7 +133,7 @@ filmSchema.methods.getAndSetCover = async function (this: IFilm) {
 /*
  * Set a link to the doc
  */
-filmSchema.methods.getAndSetLink = async function (this: IFilm, page: string) {
+filmSchema.methods.getAndSetLink = async function (page: string) {
   switch (page) {
     case "Rotten Tomatoes": {
       const url = await searchUtils.getRottenTomatoesUrl(this);
@@ -147,5 +149,5 @@ filmSchema.methods.getAndSetLink = async function (this: IFilm, page: string) {
   }
 };
 
-const Film = model<IFilm>("Film", filmSchema);
+const Film = model<IFilm, FilmModel>("Film", filmSchema);
 export default Film;

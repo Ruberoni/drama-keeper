@@ -12,10 +12,6 @@ export default defineConfig(
     files: ["**/*.{ts,mts,js,mjs}"],
     extends: [js.configs.recommended, tseslint.configs.recommended],
     languageOptions: { globals: globals.node },
-    rules: {
-      // IFilm and the Mongoose model code still use `any`; Phase 6 types them properly.
-      "@typescript-eslint/no-explicit-any": "warn",
-    },
   },
   {
     files: ["__tests__/**/*.ts", "test/**/*.ts"],

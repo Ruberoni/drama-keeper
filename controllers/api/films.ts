@@ -146,7 +146,7 @@ export const test = {
     try {
       const currentUser = req.currentUser;
 
-      const films = await FilmsModel.find({ user: currentUser });
+      const films = await FilmsModel.find({ user: currentUser?._id });
 
       res.json({ message: `Films of user ${currentUser}`, films });
     } catch (err) {
