@@ -25,9 +25,11 @@ import indexRouter from "./routes/index";
 /**
  * Initial configuration
  */
+// Without a database the API can't serve anything: exit so the platform restarts it
+// (as the old unhandled rejection did). Tests import this file, so they only log.
 ConnectDB().catch((err) => {
   console.error(err);
-  process.exitCode = 1;
+  if (process.env.NODE_ENV !== "test") process.exit(1);
 });
 const app = express();
 
