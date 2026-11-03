@@ -21,7 +21,7 @@ export const authorize = async (
     const token = authHeader.replace(/^Bearer\s+/, "");
     debug("token:", token);
     const tokenKey: string = process.env.tokenKey as string;
-    const decoded = jwt.verify(token, tokenKey);
+    const decoded = jwt.verify(token, tokenKey, { algorithms: ["HS256"] });
     debug("decoded:", decoded);
     const userId =
       typeof decoded === "object" && decoded !== null

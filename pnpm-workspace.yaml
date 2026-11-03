@@ -1,4 +1,4 @@
 allowBuilds:
-  bcrypt: true
+  bcrypt: false
   esbuild: true
   simple-git-hooks: true

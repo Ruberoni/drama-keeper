@@ -11,7 +11,7 @@ import { Request, Response } from "express";
 import { errorMessage } from "../../utils/errors";
 
 export const login = async (req: Request, res: Response) => {
-  const authData = req.body;
+  const authData = req.body ?? {};
   try {
     const token = await authServices.login(authData);
 
@@ -31,7 +31,7 @@ export const proc = async (req: Request, res: Response) => {
 
 export const googleLogin = async (req: Request, res: Response) => {
   try {
-    const { token: googleToken } = req.body;
+    const { token: googleToken } = req.body ?? {};
     const token = await authServices.googleLogin(googleToken);
 
     return res.json({ message: "Logged In", token });
