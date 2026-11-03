@@ -1,21 +1,21 @@
 import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import Avatar from '@material-ui/core/Avatar';
-import Hidden from '@material-ui/core/Hidden';
-import withWidth from '@material-ui/core/withWidth';
-import Button from '@material-ui/core/Button';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { makeStyles } from 'tss-react/mui';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import Typography from '@mui/material/Typography';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import { useApp } from '../../context'
 
-const useStyles = makeStyles((theme: Theme) => 
-  createStyles({
+const useStyles = makeStyles()((theme) => 
+  ({
     toLeft: {
       marginLeft: 'auto'
     },
@@ -34,18 +34,19 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: 10
     },
     button: {
-      [theme.breakpoints.down("xs")] : {
+      [theme.breakpoints.down('sm')] : {
         width: 10
       }
     },
     login: {
       marginRight: '2%',
     }
-  })
-) 
+  }));
 
 function TopBar() {
-  const classes = useStyles();
+  const { classes } = useStyles();
+  // Show the "Logged In" label from the sm breakpoint up (was <Hidden xsDown>).
+  const showUsername = useMediaQuery(useTheme().breakpoints.up('sm'));
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -94,12 +95,12 @@ function TopBar() {
               aria-haspopup="true"
               onClick={handleMenu}
               color="inherit"
-            >
-              <Hidden xsDown>
+              size="large">
+              {showUsername && (
                 <Typography className={classes.username}>
                   Logged In
-                </Typography> 
-              </Hidden>
+                </Typography>
+              )}
               <Avatar />
             </IconButton>
             <Menu
@@ -128,7 +129,7 @@ function TopBar() {
         )}
       </Toolbar>
     </AppBar>
-  )
+  );
 }
 
-export default withWidth()(TopBar);
+export default TopBar;

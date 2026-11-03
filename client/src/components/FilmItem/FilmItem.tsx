@@ -1,22 +1,22 @@
 import React from "react";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import CardMedia from "@material-ui/core/CardMedia";
-import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from 'tss-react/mui';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import CardMedia from "@mui/material/CardMedia";
+import IconButton from "@mui/material/IconButton";
 import rottenTomatoesLogoPng from '../../assets/img/Rotten_Tomatoes_Logo.svg.png'
 import { useApp } from '../../context'
 import { deleteFilm, updateFilm } from '../../actions/films'
 
 const scale = 1
 
-const useStyles = makeStyles(() =>
-  createStyles({
+const useStyles = makeStyles()(() =>
+  ({
     root: {
       display: "flex",
       maxWidth: 360 * scale  ,
@@ -67,8 +67,7 @@ const useStyles = makeStyles(() =>
       marginLeft: '5%',
       width: 150 * scale
     },
-  })
-);
+  }));
 
 export interface IFilmLinks {
   rottenTomatoes?: string,
@@ -97,7 +96,7 @@ export interface IFilm {
 const _cover = 'https://images-na.ssl-images-amazon.com/images/I/51DzJ4yEp4L._AC_.jpg'
 
 export default function FilmItem({_id, title, watched, links, images} : IFilm) : JSX.Element {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const app = useApp()
 
   const cover = (images?.cover && `https://image.tmdb.org/t/p/w200/${images.cover}`) || _cover
@@ -137,41 +136,46 @@ export default function FilmItem({_id, title, watched, links, images} : IFilm) :
 
   return (
     <Card className={classes.root} square>
-        <div className={classes.bar}>
-        </div>
-        <CardMedia
-          className={classes.media}
-          title="Film cover">
-            <img src={cover} alt="Cover" className={classes.cover} />
-        </CardMedia>
-        <div className={classes.details}>
-          <CardContent className={classes.content}>
-            <Typography variant="body1">{title || 'Film Title'}</Typography>
-            <div className={classes.divider}></div>
-            <div className={classes.rottenTomatoesSection}>
-              <a href={links?.rottenTomatoes || '#'} className={classes.rottenTomatoesLink} target='_blank' rel='noreferrer'>
-                <Typography variant="body2">RottenTomatoes</Typography>
-                <img className={classes.rottenTomatoesLogo} src={rottenTomatoesLogoPng} alt="rt"/>
-              </a>
-            </div>
-          </CardContent>
-        </div>
-        <CardActions className={classes.actions}>
-          <IconButton edge='end' aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-            <MoreHorizIcon />
-          </IconButton>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-              <MenuItem onClick={handleDelete}>Delete</MenuItem>
-              <MenuItem onClick={handleUpdate}>Update</MenuItem>
-              <MenuItem onClick={handleChangeWatched}>{watched ? 'Unwatch' : 'Watched'}</MenuItem>
-        </Menu>
-        </CardActions>
+      <div className={classes.bar}>
+      </div>
+      <CardMedia
+        className={classes.media}
+        title="Film cover">
+          <img src={cover} alt="Cover" className={classes.cover} />
+      </CardMedia>
+      <div className={classes.details}>
+        <CardContent className={classes.content}>
+          <Typography variant="body1">{title || 'Film Title'}</Typography>
+          <div className={classes.divider}></div>
+          <div className={classes.rottenTomatoesSection}>
+            <a href={links?.rottenTomatoes || '#'} className={classes.rottenTomatoesLink} target='_blank' rel='noreferrer'>
+              <Typography variant="body2">RottenTomatoes</Typography>
+              <img className={classes.rottenTomatoesLogo} src={rottenTomatoesLogoPng} alt="rt"/>
+            </a>
+          </div>
+        </CardContent>
+      </div>
+      <CardActions className={classes.actions}>
+        <IconButton
+          edge='end'
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
+          size="large">
+          <MoreHorizIcon />
+        </IconButton>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+            <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            <MenuItem onClick={handleUpdate}>Update</MenuItem>
+            <MenuItem onClick={handleChangeWatched}>{watched ? 'Unwatch' : 'Watched'}</MenuItem>
+      </Menu>
+      </CardActions>
     </Card>
   );
 }

@@ -1,24 +1,24 @@
 import React from "react";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Fab from '@material-ui/core/Fab';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
+import { makeStyles } from 'tss-react/mui';
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Fab from '@mui/material/Fab';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
 import { useFormik } from 'formik'
-import AddIcon from '@material-ui/icons/Add';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
+import AddIcon from '@mui/icons-material/Add';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
 import { UnderlinedHeading } from '../Text/Text'
 import { IFormValues, validationSchema } from '../CreateFilm/CreateFilm'
 import * as filmActions from '../../actions/films'
 import { useApp } from '../../context/index'
 
 
-const useStyles = makeStyles(() =>
-  createStyles({
+const useStyles = makeStyles()(() =>
+  ({
     root: {
       width: "90%",
       maxWidth: 300,
@@ -35,8 +35,7 @@ const useStyles = makeStyles(() =>
     textField: {
       margin: '6px 0px'
     }
-  })
-);
+  }));
 
 export interface IUpdateFilm {
   _id: string
@@ -65,63 +64,65 @@ export function Forms ({_id}: IUpdateFilm)  {
   })
 
 
-  const classes = useStyles()
+  const { classes } = useStyles()
 
   return (
     <div>
-       <form className={classes.form} onSubmit={formik.handleSubmit}>
-         <TextField
-           variant='outlined'
-           size='small'
-           name='title'
-           label='Title'
-           value={formik.values.title}
-           onChange={formik.handleChange}
-           error={formik.touched.title && Boolean(formik.errors.title)}
-           helperText={formik.touched.title && formik.errors.title}
-            className={classes.textField}
-
-         />
-
-         <FormLabel error={formik.touched.type && Boolean(formik.errors.type)}>
-          {formik.touched.type && formik.errors.type}
-        </FormLabel>
-        <RadioGroup aria-label="type" row name="type" id="type" value={formik.values.type} onChange={formik.handleChange}>
-          <FormControlLabel value="TV" control={<Radio />} label="TV" />
-          <FormControlLabel value="Movie" control={<Radio />} label="Movie" />
-        </RadioGroup>
-         
-         <TextField
-           variant='outlined'
-           size='small'
-           name='rottenTomatoesLink'
-           label='Rotten Tomatoes'
-           value={formik.values.rottenTomatoesLink}
-           onChange={formik.handleChange}
-           error={formik.touched.rottenTomatoesLink && Boolean(formik.errors.rottenTomatoesLink)}
-           helperText={formik.touched.rottenTomatoesLink && formik.errors.rottenTomatoesLink}
+      <form className={classes.form} onSubmit={formik.handleSubmit}>
+        <TextField
+          variant='outlined'
+          size='small'
+          name='title'
+          label='Title'
+          value={formik.values.title}
+          onChange={formik.handleChange}
+          error={formik.touched.title && Boolean(formik.errors.title)}
+          helperText={formik.touched.title && formik.errors.title}
            className={classes.textField}
+
+        />
+
+        <FormLabel error={formik.touched.type && Boolean(formik.errors.type)}>
+         {formik.touched.type && formik.errors.type}
+       </FormLabel>
+       <RadioGroup aria-label="type" row name="type" id="type" value={formik.values.type} onChange={formik.handleChange}>
+         <FormControlLabel value="TV" control={<Radio />} label="TV" />
+         <FormControlLabel value="Movie" control={<Radio />} label="Movie" />
+       </RadioGroup>
+        
+        <TextField
+          variant='outlined'
+          size='small'
+          name='rottenTomatoesLink'
+          label='Rotten Tomatoes'
+          value={formik.values.rottenTomatoesLink}
+          onChange={formik.handleChange}
+          error={formik.touched.rottenTomatoesLink && Boolean(formik.errors.rottenTomatoesLink)}
+          helperText={formik.touched.rottenTomatoesLink && formik.errors.rottenTomatoesLink}
+          className={classes.textField}
+        />
+        <div>
+          <Checkbox
+           id='watched'
+           value={formik.values.watched}
+           onChange={formik.handleChange}
+           slotProps={{
+             input: { name: 'watched', 'aria-label': 'primary checkbox' }
+           }}
          />
-         <div>
-           <Checkbox
-            inputProps={{ name: 'watched', 'aria-label': 'primary checkbox' }}
-            id='watched'
-            value={formik.values.watched}
-            onChange={formik.handleChange}
-          />
-          <Typography style={{display: 'inline'}} variant='body2'>Already seen?</Typography>
-        </div>
-         <Fab style={{width: 115}} color='primary' variant='extended' type="submit">
-           <AddIcon /> Update
-         </Fab>
-         
-       </form>
+         <Typography style={{display: 'inline'}} variant='body2'>Already seen?</Typography>
+       </div>
+        <Fab style={{width: 115}} color='primary' variant='extended' type="submit">
+          <AddIcon /> Update
+        </Fab>
+        
+      </form>
     </div>
-  )
+  );
 }
 
 export default function Update({_id}: IUpdateFilm) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <Paper className={classes.root} elevation={0}>
       <p><UnderlinedHeading text="Update a Film" /></p>

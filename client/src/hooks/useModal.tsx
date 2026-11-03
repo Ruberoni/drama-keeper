@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import Modal from '@material-ui/core/Modal';
+import Modal from '@mui/material/Modal';
 
 type ModalWrapperProps = {children: JSX.Element}
 

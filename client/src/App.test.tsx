@@ -1,7 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { red } from '@material-ui/core/colors'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { red } from '@mui/material/colors'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 import App from './App'
 import { AppProvider } from './context'
 
@@ -12,7 +12,7 @@ vi.mock('./api', () => ({
   },
 }))
 
-const theme = createMuiTheme({ palette: { primary: red } })
+const theme = createTheme({ palette: { primary: red } })
 
 test('renders the film lists', async () => {
   render(

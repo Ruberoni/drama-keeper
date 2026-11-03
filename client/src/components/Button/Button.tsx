@@ -1,17 +1,17 @@
 import React from 'react'
-import Fab from '@material-ui/core/Fab';
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import ButtonBase from '@material-ui/core/ButtonBase';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Fab from '@mui/material/Fab';
+import { makeStyles } from 'tss-react/mui';
+import ButtonBase from '@mui/material/ButtonBase';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-const useStyles = makeStyles(() =>
-  createStyles({
+const useStyles = makeStyles()(() =>
+  ({
     focusVisibleClass: {
       border: '1px solid #616161', 
       borderRadius: 5
     }
-  }))
+  }));
 
 export function NotImplementedButton() {
  return (
@@ -28,7 +28,7 @@ export interface IToggler {
 
 export function TogglerAdvancedSettings({ open, handleToggler, style } : IToggler){
 
-  const classes = useStyles()
+  const { classes } = useStyles()
 
   return (
   <ButtonBase 

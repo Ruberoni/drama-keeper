@@ -55,7 +55,7 @@ for (const vp of viewports) {
       const stamp = `${vp.name}-${Date.now()}`
       const email = `shots-${stamp}@example.com`
       const password = 'shots-password'
-      const unwatched = `Unwatched ${stamp}`
+      const unwatched = `Pending ${stamp}`
       const watched = `Watched ${stamp}`
 
       page.on('dialog', (dialog) => dialog.accept())

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useReducer, useContext, useMemo } from 'react'
 import Cookies from 'universal-cookie';
-// import Modal from '@material-ui/core/Modal';
+// import Modal from '@mui/material/Modal';
 import API from '../api'
 import { IFormValues } from '../components/Register/Register'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
