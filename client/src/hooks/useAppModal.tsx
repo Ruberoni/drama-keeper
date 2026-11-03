@@ -8,7 +8,7 @@ import Login from '../components/Login/Login'
 import Register from '../components/Register/Register'
 import UpdateFilm from '../components/UpdateFilm/UpdateFilm'
 
-interface reducerStateProps {modal: JSX.Element, isOpen: boolean}
+interface reducerStateProps {modal: React.JSX.Element, isOpen: boolean}
 type reducerActionProps = 
   | {modal: 'LOGIN'}
   | {modal: 'REGISTER'}
@@ -34,7 +34,7 @@ const reducer = (state: reducerStateProps, action: reducerActionProps) => {
   }
 }  
 
-type useAppModalProps = [() => JSX.Element, (action: reducerActionProps) => void]
+type useAppModalProps = [() => React.JSX.Element, (action: reducerActionProps) => void]
 
 /**
  * Wrapper of useModal hook for easily open a modal by just calling a function with the modal name.

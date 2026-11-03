@@ -8,7 +8,7 @@ export interface IFilmItemList {
   filmList: IFilm[]
 }
 
-export default function FilmItemList({header, filmList}: IFilmItemList) : JSX.Element {
+export default function FilmItemList({header, filmList}: IFilmItemList) : React.JSX.Element {
   return (
     <div className='root'>
       <Typography variant='h2' className='header'>{header}</Typography>  

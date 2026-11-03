@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useReducer, useContext, useMemo } from 'react'
+import React, { useState, createContext, useReducer, useContext, useMemo } from 'react'
 import Cookies from 'universal-cookie';
 // import Modal from '@mui/material/Modal';
 import API from '../api'
@@ -49,15 +49,12 @@ export function AppProvider({ children }: AppProviderProps ) {
       reducer, 
       { reloadFilms: false, authToken: null}
     )
-  const [appReady, setAppReady] = useState(false)
+  // false while a login request is in flight (shows the loading overlay)
+  const [appReady, setAppReady] = useState(true)
 
   const app = useMemo(() => {
     return {state, dispatch}
   },[state, dispatch])
-
-  useEffect(() => {
-    setAppReady(true)
-  }, [])
 
   const authFunctions = {
     /*

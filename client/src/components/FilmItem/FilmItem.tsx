@@ -95,7 +95,7 @@ export interface IFilm {
 
 const _cover = 'https://images-na.ssl-images-amazon.com/images/I/51DzJ4yEp4L._AC_.jpg'
 
-export default function FilmItem({_id, title, watched, links, images} : IFilm) : JSX.Element {
+export default function FilmItem({_id, title, watched, links, images} : IFilm) : React.JSX.Element {
   const { classes } = useStyles();
   const app = useApp()
 
