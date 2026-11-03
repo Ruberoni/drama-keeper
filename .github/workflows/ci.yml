@@ -8,12 +8,14 @@ on:
 permissions:
   contents: read
 
+# mongo:7.0 is used because MongoDB 8.0+ refuses to start on Linux kernel >= 6.19
+# (SERVER-121912), which GitHub runners use (re-checked 2026-11-03). Switch back to 8.0 once fixed.
 jobs:
   api:
     runs-on: ubuntu-latest
     services:
       mongo:
-        image: mongo:8.0
+        image: mongo:7.0
         ports:
           - 27017:27017
     env:
@@ -64,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mongo:
-        image: mongo:8.0
+        image: mongo:7.0
         ports:
           - 27017:27017
     env:
@@ -100,7 +102,7 @@ jobs:
     continue-on-error: true
     services:
       mongo:
-        image: mongo:8.0
+        image: mongo:7.0
         ports:
           - 27017:27017
     env:
