@@ -33,10 +33,11 @@ describeNetwork('Search', () => {
       // Assert
       expect(url).toMatch(/tv/)
     });
-    it("when a serie name (url friendly) and 'Movie' type is supplied, then return url is ''", async () => {
+    it("when a title with no Rotten Tomatoes movie page and 'Movie' type is supplied, then return url is ''", async () => {
       // Arrange
+      // A made-up slug: real series names (e.g. modern_family) now resolve under /m/ on Rotten Tomatoes
       const film = {
-        title: 'modern_family',
+        title: 'drama_keeper_no_such_film_zq7x',
         type: 'Movie'
       }
 
