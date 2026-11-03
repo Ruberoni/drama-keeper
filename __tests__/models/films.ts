@@ -22,7 +22,9 @@ afterEach(async () => {
 });
 
 describe("Films model", () => {
-  describe("Methods", () => {
+  // These hit live third-party sites (Rotten Tomatoes, TMDb); run with RUN_NETWORK_TESTS=1
+  const describeNetwork = process.env.RUN_NETWORK_TESTS ? describe : describe.skip
+  describeNetwork("Methods", () => {
     describe("getAndSetLink", () => {
       it("Calling with param page: 'Rotten Tomatoes', the document should have a rotten tomatoes link", () => {
 

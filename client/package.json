@@ -56,5 +56,6 @@
     "eslint": "^7.23.0",
     "eslint-plugin-react": "^7.23.1",
     "serve": "^11.3.2"
-  }
+  },
+  "packageManager": "pnpm@12.16.1"
 }

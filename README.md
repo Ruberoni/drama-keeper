@@ -45,8 +45,8 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 
 ### What you need before
 
-- Node.js
-- Yarn
+- Node.js 26 (see `.nvmrc`)
+- pnpm 12 (`npm i -g pnpm@12.16.1`; Node 26 does not bundle Corepack)
 - A [MongoDB](https://www.mongodb.com/) database
 - A [TMDb API Key](https://developers.themoviedb.org/3/getting-started/introduction)
 
@@ -55,13 +55,17 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 1. Clone this repository
 2. With terminal project root folder, to install dependencies run:
 ```
-$ yarn && cd client && yarn
+$ pnpm install && pnpm --dir client install
 ```
 3. Rename the file `.env.example` to `.env` and fill it.
 4. **Run the app:**
 ```
-$ yarn dev
+$ pnpm app
 ```
+
+> Interim note: until the client moves off Create React App, the client can only build and start on Node 16. Start it separately with
+> `cd client && nvm exec 16 node node_modules/react-scripts/bin/react-scripts.js start`
+> and run only the API with `pnpm start`.
 
 The app should run ok.
 
