@@ -99,16 +99,24 @@ const filmSchema = new Schema<IFilm, FilmModel, IFilmMethods>({
 /*
  * Post save hook, It performs two things
  * 1. If a rotten tomatoes links has not been provided. It will set one
- * 2. TO DO: If a images.cover has not been provided. It will set one
+ * 2. If a images.cover has not been provided. It will set one
  */
 filmSchema.post("save", function (film) {
-  if (!film.links.rottenTomatoes) {
-    film.getAndSetLink("Rotten Tomatoes").catch(debug);
-  }
+  const needsLink = !film.links.rottenTomatoes;
+  const needsCover = !film.images.cover;
+  if (!needsLink && !needsCover) return;
 
-  if (!film.images.cover) {
-    film.getAndSetCover().catch(debug);
-  }
+  // Fetch both, then save once: two separate saves would run in parallel on
+  // the same doc and one would fail with ParallelSaveError.
+  (async () => {
+    const [url, cover] = await Promise.all([
+      needsLink ? searchUtils.getRottenTomatoesUrl(film) : "",
+      needsCover ? searchUtils.getTMDbCover(film) : "",
+    ]);
+    if (needsLink) film.links.rottenTomatoes = url || "#";
+    if (needsCover) film.images.cover = cover || "#";
+    await film.save();
+  })().catch(debug);
 });
 
 /*

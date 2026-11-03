@@ -129,9 +129,10 @@ describeNetwork('Search', () => {
       expect(coverPath).toMatch(/.jpg/)
     })
 
-    it("With incorrect input: known movie title but with TV type, return should be the empty string", async () => {
+    it("With a title that has no TV match, return should be the empty string", async () => {
       // Arrange
-      const Film = {title:'La la land', type:'TV'}
+      // A made-up title: real movie titles (e.g. La la land) now also match TV results on TMDb
+      const Film = {title:'Drama Keeper No Such Show Zq7x', type:'TV'}
       // Act
       const coverPath = await searchUtils.getTMDbCover(Film)
       // Assert

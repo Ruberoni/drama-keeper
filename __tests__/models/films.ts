@@ -70,12 +70,13 @@ describe("Films model", () => {
         // Arrange
         const filmData = {title: 'La la land', type: 'Movie'}
 
-        return FilmsModel.create(filmData).then(film => {
-          // Act
-          return film.getAndSetCover().then(() => {
-            // Assert
-            expect(film.images.cover).toMatch(/.jpg/)
-          })
+        // Not create(): its post-save hook would fetch and save this same doc in parallel
+        const film = new FilmsModel(filmData)
+
+        // Act
+        return film.getAndSetCover().then(() => {
+          // Assert
+          expect(film.images.cover).toMatch(/.jpg/)
         })
       })
     })
