@@ -3,7 +3,9 @@ import jwt from 'jsonwebtoken'
 import { OAuth2Client } from "google-auth-library"
 import UserModel, { IUserDocument } from '../models/User'
 const debug = Debug('auth') 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+let googleClient: OAuth2Client | undefined
+// Created lazily so GOOGLE_CLIENT_ID is read after env loading
+const getGoogleClient = () => (googleClient ??= new OAuth2Client(process.env.GOOGLE_CLIENT_ID))
 
 /**
  * Checks is email and password exist and are correct, then signs and return a JWT with the user id
@@ -39,23 +41,49 @@ export const login = async ({email, password} : IUserDocument) => {
   return token
 }
 
-export const googleLogin = async (token: string) => {
-  const ticket = await googleClient.verifyIdToken({
-    idToken: token,
+/**
+ * Verifies a Google Identity Services ID token (the `credential` the client
+ * receives) and returns the verified profile. Throws if the token is invalid,
+ * has the wrong audience, or the email is not verified.
+ */
+export const verifyGoogleIdToken = async (idToken: string) => {
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    // Without an audience, google-auth-library would accept tokens minted for any app
+    throw new Error("GOOGLE_CLIENT_ID is not configured");
+  }
+  if (!idToken || typeof idToken !== "string") {
+    throw new Error("Google login error: missing credential");
+  }
+  const ticket = await getGoogleClient().verifyIdToken({
+    idToken,
     audience: process.env.GOOGLE_CLIENT_ID,
   });
   const payload = ticket.getPayload();
-  if (!payload) throw new Error("Google login error");
-  const { email, name, sub } = payload;
-  const _user = {
-    googleId: sub,
-    email,
-  };
-  const User = await UserModel.findOneAndUpdate(
-    { $or: [{ googleId: sub }, { email }] },
-    _user,
-    { upsert: true }
+  if (!payload || !payload.sub || !payload.email) {
+    throw new Error("Google login error");
+  }
+  if (!payload.email_verified) {
+    throw new Error("Google email is not verified");
+  }
+  return { googleId: payload.sub, email: payload.email };
+};
+
+export const googleLogin = async (idToken: string) => {
+  const { googleId, email } = await verifyGoogleIdToken(idToken);
+  const normalizedEmail = email.toLowerCase();
+  // Match by Google id first; otherwise link to (or create) the account with this email.
+  let User = await UserModel.findOneAndUpdate(
+    { googleId },
+    { $set: { googleId } },
+    { new: true }
   );
+  if (!User) {
+    User = await UserModel.findOneAndUpdate(
+      { email: normalizedEmail },
+      { $set: { googleId }, $setOnInsert: { email: normalizedEmail } },
+      { upsert: true, new: true }
+    );
+  }
   if (!User) {
     // This part should never be executed thanks to `upsert` option
     throw new Error("User does not exist");

@@ -251,8 +251,8 @@ importers:
         specifier: ^16.3.0
         version: 16.3.0
       google-auth-library:
-        specifier: ^7.10.1
-        version: 7.10.1(supports-color@5.5.0)
+        specifier: ^7.14.1
+        version: 7.14.1(supports-color@5.5.0)
       helmet:
         specifier: ^4.6.0
         version: 4.6.0
@@ -2050,8 +2050,8 @@ packages:
   fast-safe-stringify@2.0.7:
     resolution: {integrity: sha512-Utm6CdzT+6xsDk2m8S6uL8VHxNwI6Jub+e9NYTcAms28T84pTa25GJQV9j0CY0N1rM8hK4x6grpF2BQf+2qwVA==}
 
-  fast-text-encoding@1.0.3:
-    resolution: {integrity: sha512-dtm4QZH9nZtcDt8qJiOH9fcQd1NAgi+K1O2DbE6GG1PPCK/BWfOH3idCTRQ4ImXRUOyopDEgDEnVEE7Y/2Wrig==}
+  fast-text-encoding@1.0.6:
+    resolution: {integrity: sha512-VhXlQgj9ioXCqGstD37E/HBeqEGV/qOD/kmbVG8h5xKBYvM1L3lR1Zn4555cQ8GkYbJa8aJSipLPndE1k6zK2w==}
 
   fastq@1.11.0:
     resolution: {integrity: sha512-7Eczs8gIPDrVzT+EksYBcupqMyxSHXXrHOLRRxU2/DicV8789MRBRR8+Hc2uWzUupOs4YS4JzBmBxjjCVBxD/g==}
@@ -2205,8 +2205,8 @@ packages:
     resolution: {integrity: sha512-14x4kjc6lkD3ltw589k0NrPD6cCNTD6CWoVUNpB85+DrtONoZn+Rug6xZU5RvSC4+TZPxA5AnBibQYAvZn41Hg==}
     deprecated: This package is no longer supported.
 
-  gaxios@4.3.2:
-    resolution: {integrity: sha512-T+ap6GM6UZ0c4E6yb1y/hy2UB6hTrqhglp3XfmU9qbLCGRYhLVV5aRPpC4EmoG8N8zOnkYCgoBz+ScvGAARY6Q==}
+  gaxios@4.3.3:
+    resolution: {integrity: sha512-gSaYYIO1Y3wUtdfHmjDUZ8LWaxJQpiavzbF5Kq53akSzvmVg0RfyOcFDbO1KJ/KCGRFz2qG+lS81F0nkr7cRJA==}
     engines: {node: '>=10'}
 
   gcp-metadata@4.3.1:
@@ -2291,12 +2291,12 @@ packages:
     resolution: {integrity: sha512-ffdmosjA807y7+lA1NM0jELARVmYul/715xiILEjo3hBLPTcirgQNnXECn5g3mtR8TOLCVbkfua1Hpen25/Xcg==}
     engines: {node: '>=10'}
 
-  google-auth-library@7.10.1:
-    resolution: {integrity: sha512-nQxgM1ZopUMcpMnu95kOSzI+9tJl4YDOZJomSTBGlRLpxfBopdwto7WvzoI87HuN0nQqVETgOsHi/C/po1rppA==}
+  google-auth-library@7.14.1:
+    resolution: {integrity: sha512-5Rk7iLNDFhFeBYc3s8l1CqzbEBcdhwR193RlD4vSNFajIcINKI8W8P0JLmBpwymHqqWbX34pJDQu39cSy/6RsA==}
     engines: {node: '>=10'}
 
-  google-p12-pem@3.1.2:
-    resolution: {integrity: sha512-tjf3IQIt7tWCDsa0ofDQ1qqSCNzahXDxdAGJDbruWqu3eCg5CKLYKN+hi0s6lfvzYZ1GDVr+oDF9OOWlDSdf0A==}
+  google-p12-pem@3.1.4:
+    resolution: {integrity: sha512-HHuHmkLgwjdmVRngf5+gSmpkyaRI6QmOg77J8tkNBHhNEI62sGHyw4/+UkgyZEI7h84NbWprXDJ+sa3xOYFvTg==}
     engines: {node: '>=10'}
     deprecated: Package is no longer maintained
     hasBin: true
@@ -2319,8 +2319,8 @@ packages:
   growly@1.3.0:
     resolution: {integrity: sha512-+xGQY0YyAWCnqy7Cd++hc2JqMYzlm0dG30Jd0beaA64sROr8C4nt8Yc9V5Ro3avlSUDTN0ulqP/VBKi1/lLygw==}
 
-  gtoken@5.3.1:
-    resolution: {integrity: sha512-yqOREjzLHcbzz1UrQoxhBtpk8KjrVhuqPE7od1K2uhyxG2BHjKZetlbLw/SPZak/QqTIQW+addS+EcjqQsZbwQ==}
+  gtoken@5.3.2:
+    resolution: {integrity: sha512-gkvEKREW7dXWF8NV8pVrKfW7WqReAmjjkMBh6lNCCGOM4ucS0r0YyXXl0r/9Yj8wcW/32ISkfc8h5mPTDbtifQ==}
     engines: {node: '>=10'}
 
   har-schema@2.0.0:
@@ -3261,9 +3261,18 @@ packages:
     resolution: {integrity: sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==}
     engines: {node: 4.x || >=6.0.0}
 
-  node-forge@0.10.0:
-    resolution: {integrity: sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==}
-    engines: {node: '>= 6.0.0'}
+  node-fetch@2.7.0:
+    resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
+    engines: {node: 4.x || >=6.0.0}
+    peerDependencies:
+      encoding: ^0.1.0
+    peerDependenciesMeta:
+      encoding:
+        optional: true
+
+  node-forge@1.4.2:
+    resolution: {integrity: sha512-rRtAR5XLJ8gCKd9du4qrKAsgCG1ObGP4gLeNJMa4vYSeq4bmBMOJk5IHkrviBV0q7uoAJlVd8HEQYQSVUb4FGQ==}
+    engines: {node: '>= 6.13.0'}
 
   node-int64@0.4.0:
     resolution: {integrity: sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==}
@@ -4275,6 +4284,9 @@ packages:
     resolution: {integrity: sha512-tHdtEpQCMrc1YLrMaqXXcj6AxhYi/xgit6mZu1+EDWUn+qhUf8wMQoFIy9NXuq23zAwtcB0t/MjACGR18pcRbg==}
     engines: {node: '>=6'}
 
+  tr46@0.0.3:
+    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
+
   tr46@2.0.2:
     resolution: {integrity: sha512-3n1qG+/5kg+jrbTzwAykB5yRYtQCTqOGKq5U5PE3b0a1/mzo6snDhjGS0zJVJunO0NrT3Dg1MLy5TjWP/UJppg==}
     engines: {node: '>=8'}
@@ -4483,6 +4495,9 @@ packages:
   walker@1.0.7:
     resolution: {integrity: sha512-cF4je9Fgt6sj1PKfuFt9jpQPeHosM+Ryma/hfY9U7uXGKM7pJCsF0v2r55o+Il54+i77SyYWetB4tD1dEygRkw==}
 
+  webidl-conversions@3.0.1:
+    resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
+
   webidl-conversions@5.0.0:
     resolution: {integrity: sha512-VlZwKPCkYKxQgeSbH5EyngOmRp7Ww7I9rQLERETtf5ofd9pGeswWiOtogpEO850jziPRarreGxn5QIiTqpb2wA==}
     engines: {node: '>=8'}
@@ -4497,6 +4512,9 @@ packages:
 
   whatwg-mimetype@2.3.0:
     resolution: {integrity: sha512-M4yMwr6mAnQz76TbJm914+gPpB/nCwvZbJU28cUD6dR004SAxDLOOSUaB1JDRqLtaOV/vi0IC5lEAGFgrjGv/g==}
+
+  whatwg-url@5.0.0:
+    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
 
   whatwg-url@8.5.0:
     resolution: {integrity: sha512-fy+R77xWv0AiqfLl4nuGUlQ3/6b5uNfQ4WAbGQVMYshCTCCPK9psC1nWh3XHuxGVCtlcDDQPQW1csmmIQo+fwg==}
@@ -6917,7 +6935,7 @@ snapshots:
 
   fast-safe-stringify@2.0.7: {}
 
-  fast-text-encoding@1.0.3: {}
+  fast-text-encoding@1.0.6: {}
 
   fastq@1.11.0:
     dependencies:
@@ -7072,21 +7090,23 @@ snapshots:
       strip-ansi: 3.0.1
       wide-align: 1.1.3
 
-  gaxios@4.3.2(supports-color@5.5.0):
+  gaxios@4.3.3(supports-color@5.5.0):
     dependencies:
       abort-controller: 3.0.0
       extend: 3.0.2
       https-proxy-agent: 5.0.0(supports-color@5.5.0)
       is-stream: 2.0.0
-      node-fetch: 2.6.1
+      node-fetch: 2.7.0
     transitivePeerDependencies:
+      - encoding
       - supports-color
 
   gcp-metadata@4.3.1(supports-color@5.5.0):
     dependencies:
-      gaxios: 4.3.2(supports-color@5.5.0)
+      gaxios: 4.3.3(supports-color@5.5.0)
       json-bigint: 1.0.0
     transitivePeerDependencies:
+      - encoding
       - supports-color
 
   gensync@1.0.0-beta.2: {}
@@ -7175,23 +7195,24 @@ snapshots:
       merge2: 1.4.1
       slash: 3.0.0
 
-  google-auth-library@7.10.1(supports-color@5.5.0):
+  google-auth-library@7.14.1(supports-color@5.5.0):
     dependencies:
       arrify: 2.0.1
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
-      fast-text-encoding: 1.0.3
-      gaxios: 4.3.2(supports-color@5.5.0)
+      fast-text-encoding: 1.0.6
+      gaxios: 4.3.3(supports-color@5.5.0)
       gcp-metadata: 4.3.1(supports-color@5.5.0)
-      gtoken: 5.3.1(supports-color@5.5.0)
+      gtoken: 5.3.2(supports-color@5.5.0)
       jws: 4.0.0
       lru-cache: 6.0.0
     transitivePeerDependencies:
+      - encoding
       - supports-color
 
-  google-p12-pem@3.1.2:
+  google-p12-pem@3.1.4:
     dependencies:
-      node-forge: 0.10.0
+      node-forge: 1.4.2
 
   got@7.1.0:
     dependencies:
@@ -7255,12 +7276,13 @@ snapshots:
   growly@1.3.0:
     optional: true
 
-  gtoken@5.3.1(supports-color@5.5.0):
+  gtoken@5.3.2(supports-color@5.5.0):
     dependencies:
-      gaxios: 4.3.2(supports-color@5.5.0)
-      google-p12-pem: 3.1.2
+      gaxios: 4.3.3(supports-color@5.5.0)
+      google-p12-pem: 3.1.4
       jws: 4.0.0
     transitivePeerDependencies:
+      - encoding
       - supports-color
 
   har-schema@2.0.0: {}
@@ -8369,7 +8391,11 @@ snapshots:
 
   node-fetch@2.6.1: {}
 
-  node-forge@0.10.0: {}
+  node-fetch@2.7.0:
+    dependencies:
+      whatwg-url: 5.0.0
+
+  node-forge@1.4.2: {}
 
   node-int64@0.4.0: {}
 
@@ -9414,6 +9440,8 @@ snapshots:
       punycode: 2.1.1
       universalify: 0.1.2
 
+  tr46@0.0.3: {}
+
   tr46@2.0.2:
     dependencies:
       punycode: 2.1.1
@@ -9605,6 +9633,8 @@ snapshots:
     dependencies:
       makeerror: 1.0.11
 
+  webidl-conversions@3.0.1: {}
+
   webidl-conversions@5.0.0: {}
 
   webidl-conversions@6.1.0: {}
@@ -9614,6 +9644,11 @@ snapshots:
       iconv-lite: 0.4.24
 
   whatwg-mimetype@2.3.0: {}
+
+  whatwg-url@5.0.0:
+    dependencies:
+      tr46: 0.0.3
+      webidl-conversions: 3.0.1
 
   whatwg-url@8.5.0:
     dependencies:

@@ -41,6 +41,6 @@ export const googleLogin = async (req: Request, res: Response) => {
     return res.json({message: 'Logged In', token})
 
   } catch(err) {
-    return res.status(400).send(err.message)
+    return res.status(401).send('Invalid Google credential')
   }
 }  
