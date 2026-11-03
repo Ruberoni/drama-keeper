@@ -4,7 +4,7 @@ import app from "./index";
 
 const debug = Debug("http");
 
-const port: number = normalizePort(process.env.PORT || 3000);
+const port: number = normalizePort(process.env.PORT || 4000);
 
 /**
  * Start server

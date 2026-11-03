@@ -3,11 +3,6 @@ import { IFilm } from '../components/FilmItem/FilmItem'
 import { IFormValues } from '../components/CreateFilm/CreateFilm'
 
 /*
- * Returns the string so img.src can read it and display the buffer image correctly
- */
-export const correctImageBuffer = (buffer: Buffer) : string => 'data:image/jpeg;base64,' + buffer.toString('base64');
-
-/*
  * Checks if the auth cookie is set
  */
 export const isAuth = () : boolean => {
@@ -22,7 +17,6 @@ export const isAuth = () : boolean => {
 export const fixFilmData = (filmData: IFormValues ): IFilm => {
   const fixedFilmData : any = {}
   for (const prop in filmData) {
-    // eslint-disable-next-line @typescript-eslint/ban-types
     const value = filmData[prop as keyof IFormValues]
 
     if (prop === 'rottenTomatoesLink') {
@@ -37,3 +31,9 @@ export const fixFilmData = (filmData: IFormValues ): IFilm => {
   }
   return fixedFilmData
 }
+
+/*
+ * Gets a message out of anything thrown (catch clauses give `unknown`)
+ */
+export const errorMessage = (err: unknown) : string =>
+  err instanceof Error ? err.message : String(err)

@@ -35,15 +35,56 @@ jobs:
 
   client:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
       - run: npm install -g pnpm@12.16.1
-      # CRA 4 cannot build on Node 26; only check that the install works until Phase 2.
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+
+  e2e:
+    # Built client + real API + MongoDB: register, log in, add and delete a film.
+    # Google sign-in cannot run here and stays a manual check.
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+    env:
+      MONGO_URI: mongodb://localhost:27017/e2e
+      tokenKey: ci-dummy-token-key
+      GOOGLE_CLIENT_ID: ci-dummy-google-client-id
+      VITE_API_URL: http://localhost:4000
+      VITE_GOOGLE_CLIENT_ID: ci-dummy-google-client-id
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm install -g pnpm@12.16.1
+      - run: pnpm install --frozen-lockfile
       - run: pnpm install --frozen-lockfile
         working-directory: client
+      - run: pnpm build
+        working-directory: client
+      - run: pnpm exec playwright install --with-deps chromium
+        working-directory: client
+      - run: pnpm e2e
+        working-directory: client
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: client/test-results
 
   network-tests:
     # Non-blocking: depends on live Rotten Tomatoes / TMDb, which may block CI IPs.

@@ -1,6 +1,7 @@
 import API from '../api'
 import { IFormValues } from '../components/Register/Register'
 import Cookies from 'universal-cookie';
+import { errorMessage } from '../utils'
 
 const cookies = new Cookies();
 
@@ -24,7 +25,7 @@ export const login = async (userData: IFormValues) : Promise<boolean | string> =
     cookies.set('token', response.data.token)
     return true
   } catch (err) {
-    return err.message
+    return errorMessage(err)
   }
 }
 
@@ -56,7 +57,7 @@ export const register = async (userData: IFormValues) : Promise<boolean | string
     return true
     
   } catch (err) {
-    return err.message
+    return errorMessage(err)
   }
 
 }

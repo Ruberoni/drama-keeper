@@ -147,7 +147,7 @@ export default function Login() {
         <UnderlinedHeading text="Register" />
       </p>
       <GoogleLogin
-        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
+        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
         buttonText="Login with Google"
         onSuccess={handleLogin}
         onFailure={handleLogin}
