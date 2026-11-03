@@ -8,26 +8,23 @@ const isClient = (file) => !path.relative(clientDir, file).startsWith("..");
 const quote = (files) => files.map((f) => JSON.stringify(f)).join(" ");
 
 export default {
-  "*.{ts,mts,js,mjs}": (files) => {
-    const root = files.filter((f) => !isClient(f));
-    const client = files.filter(isClient);
+  "*.{ts,tsx,mts,js,mjs}": (files) => {
+    const root = files.filter((f) => !isClient(f) && !f.endsWith(".tsx"));
+    const client = files
+      .filter(isClient)
+      .map((f) => path.relative(clientDir, f));
     const commands = [];
     if (root.length) {
       commands.push(
-        `eslint --fix ${quote(root)}`,
+        `eslint --fix --no-warn-ignored ${quote(root)}`,
         `prettier --write ${quote(root)}`,
       );
     }
     if (client.length) {
-      const rel = client.map((f) => path.relative(clientDir, f));
-      commands.push(`pnpm --dir client exec eslint --fix ${quote(rel)}`);
+      commands.push(
+        `pnpm --dir client exec eslint --fix --no-warn-ignored ${quote(client)}`,
+      );
     }
     return commands;
-  },
-  "*.tsx": (files) => {
-    const rel = files.filter(isClient).map((f) => path.relative(clientDir, f));
-    return rel.length
-      ? [`pnpm --dir client exec eslint --fix ${quote(rel)}`]
-      : [];
   },
 };
