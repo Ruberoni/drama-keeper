@@ -47,6 +47,10 @@ export const login = async ({email, password} : IUserDocument) => {
  * has the wrong audience, or the email is not verified.
  */
 export const verifyGoogleIdToken = async (idToken: string) => {
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    // Without an audience, google-auth-library would accept tokens minted for any app
+    throw new Error("GOOGLE_CLIENT_ID is not configured");
+  }
   if (!idToken || typeof idToken !== "string") {
     throw new Error("Google login error: missing credential");
   }
@@ -66,11 +70,20 @@ export const verifyGoogleIdToken = async (idToken: string) => {
 
 export const googleLogin = async (idToken: string) => {
   const { googleId, email } = await verifyGoogleIdToken(idToken);
-  const User = await UserModel.findOneAndUpdate(
-    { $or: [{ googleId }, { email }] },
-    { googleId, email },
-    { upsert: true, new: true }
+  const normalizedEmail = email.toLowerCase();
+  // Match by Google id first; otherwise link to (or create) the account with this email.
+  let User = await UserModel.findOneAndUpdate(
+    { googleId },
+    { $set: { googleId } },
+    { new: true }
   );
+  if (!User) {
+    User = await UserModel.findOneAndUpdate(
+      { email: normalizedEmail },
+      { $set: { googleId }, $setOnInsert: { email: normalizedEmail } },
+      { upsert: true, new: true }
+    );
+  }
   if (!User) {
     // This part should never be executed thanks to `upsert` option
     throw new Error("User does not exist");

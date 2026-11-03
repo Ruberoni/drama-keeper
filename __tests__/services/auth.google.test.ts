@@ -52,19 +52,39 @@ describe('verifyGoogleIdToken', () => {
 })
 
 describe('googleLogin', () => {
-  test('upserts the user (returning the new doc) and signs a JWT', async () => {
-    mockVerifyIdToken.mockResolvedValue(
-      ticket({ sub: '123', email: 'a@b.com', email_verified: true })
-    )
-    ;(UserModel.findOneAndUpdate as jest.Mock).mockResolvedValue({ _id: 'user-id' })
+  test('rejects when GOOGLE_CLIENT_ID is not configured', async () => {
+    delete process.env.GOOGLE_CLIENT_ID
+    await expect(verifyGoogleIdToken('cred')).rejects.toThrow('not configured')
+    expect(mockVerifyIdToken).not.toHaveBeenCalled()
+  })
 
+  test('signs a JWT for an existing Google user', async () => {
+    verifyIdToken_ok()
+    ;(UserModel.findOneAndUpdate as jest.Mock).mockResolvedValueOnce({ _id: 'user-id' })
     const token = await googleLogin('cred')
-
-    expect(UserModel.findOneAndUpdate).toHaveBeenCalledWith(
-      { $or: [{ googleId: '123' }, { email: 'a@b.com' }] },
-      { googleId: '123', email: 'a@b.com' },
-      { upsert: true, new: true }
-    )
+    expect(UserModel.findOneAndUpdate).toHaveBeenCalledTimes(1)
     expect((jwt.verify(token, 'test-key') as { _id: string })._id).toBe('user-id')
   })
+
+  test('links or creates by lowercased email when googleId is unknown', async () => {
+    mockVerifyIdToken.mockResolvedValue(
+      ticket({ sub: '123', email: 'A@B.com', email_verified: true })
+    )
+    ;(UserModel.findOneAndUpdate as jest.Mock)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce({ _id: 'new-id' })
+    const token = await googleLogin('cred')
+    expect(UserModel.findOneAndUpdate).toHaveBeenLastCalledWith(
+      { email: 'a@b.com' },
+      { $set: { googleId: '123' }, $setOnInsert: { email: 'a@b.com' } },
+      { upsert: true, new: true }
+    )
+    expect((jwt.verify(token, 'test-key') as { _id: string })._id).toBe('new-id')
+  })
 })
+
+function verifyIdToken_ok() {
+  mockVerifyIdToken.mockResolvedValue(
+    ticket({ sub: '123', email: 'a@b.com', email_verified: true })
+  )
+}

@@ -2,6 +2,8 @@ import { expect, test, vi } from 'vitest'
 import { render, waitFor } from '@testing-library/react'
 import GoogleSignIn from './GoogleSignIn'
 
+vi.stubEnv('VITE_GOOGLE_CLIENT_ID', 'test-client-id')
+
 test('initialises GIS, renders the button and forwards the credential', async () => {
   let callback: (r: { credential: string }) => void = () => {}
   const initialize = vi.fn((config) => { callback = config.callback })

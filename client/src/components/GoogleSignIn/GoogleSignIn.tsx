@@ -55,6 +55,10 @@ export default function GoogleSignIn({ onCredential }: Props) {
   callback.current = onCredential
 
   useEffect(() => {
+    if (!import.meta.env.VITE_GOOGLE_CLIENT_ID) {
+      console.warn('VITE_GOOGLE_CLIENT_ID is not set: Google sign-in disabled')
+      return
+    }
     let cancelled = false
     loadGis()
       .then((id) => {

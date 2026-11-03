@@ -136,7 +136,7 @@ export default function Login() {
   const app = useApp();
 
   const handleLogin = async (credential: string) => {
-    const loginOK = app.auth.googleLogin(credential);
+    const loginOK = await app.auth.googleLogin(credential);
     if (loginOK === !true) {
       console.warn(loginOK);
     }
