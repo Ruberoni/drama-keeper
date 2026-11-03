@@ -19,7 +19,7 @@
 import UserModel from "../../models/User";
 import Debug from "debug";
 import { Response, Request } from "express";
-import { errorMessage } from '../../utils/errors'
+import { errorMessage } from "../../utils/errors";
 
 const debug = Debug("user");
 
@@ -28,7 +28,7 @@ const debug = Debug("user");
  */
 export const getAllUsers = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void | Response> => {
   debug("CONTROLLER: getAllUsers | EXECUTED");
   try {
@@ -47,14 +47,14 @@ export const getAllUsers = async (
  */
 export const createUser = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void | Response> => {
   debug("CONTROLLER: createUser | EXECUTED");
 
   try {
-    const userInfo = req.body;
+    const userInfo = req.body ?? {};
     await UserModel.create(userInfo);
-    res.json({message: "User Created"});
+    res.json({ message: "User Created" });
     debug("CONTROLLER: createUser | FINISHED GOOD");
   } catch (err) {
     debug("CONTROLLER: createUser | ERROR:", errorMessage(err));
@@ -63,12 +63,12 @@ export const createUser = async (
 };
 
 /*
- * Deletes a user by id. 
+ * Deletes a user by id.
  */
 export const deleteUserById = async (
   req: Request,
-  res: Response
-  ): Promise<void | Response> => {
+  res: Response,
+): Promise<void | Response> => {
   debug("CONTROLLER: deleteUserById | EXECUTED");
   try {
     const id = req.params.id;
@@ -87,12 +87,12 @@ export const deleteUserById = async (
  */
 export const updateUserById = async (
   req: Request,
-  res: Response
-  ): Promise<void | Response> => {
+  res: Response,
+): Promise<void | Response> => {
   debug("CONTROLLER: updateUserById | EXECUTED");
   try {
     const id = req.params.id;
-    const userInfo = req.body;
+    const userInfo = req.body ?? {};
 
     await UserModel.findByIdAndUpdate(id, userInfo);
 
@@ -102,4 +102,4 @@ export const updateUserById = async (
     debug("CONTROLLER: updateUserById | ERROR:", errorMessage(err));
     res.status(400).send(errorMessage(err));
   }
-}
+};

@@ -57,7 +57,7 @@ export const createFilm = async (
   debug("CONTROLLER: createFilm | EXECUTED");
 
   try {
-    const filmInfo = req.body;
+    const filmInfo = req.body ?? {};
     await FilmsModel.create(filmInfo);
     res.send("Film created");
     debug("CONTROLLER: createFilm | FINISHED GOOD");
@@ -122,7 +122,7 @@ export const updateFilmById = async (
   debug("CONTROLLER: updateFilmById | EXECUTED");
   try {
     const id = req.params.id;
-    const filmInfo = req.body;
+    const filmInfo = req.body ?? {};
 
     await FilmsModel.findByIdAndUpdate(id, filmInfo);
 
@@ -156,7 +156,7 @@ export const test = {
   createFilmAuthorized: async (req: Request, res: Response) => {
     try {
       const currentUser = req.currentUser;
-      const filmData = req.body;
+      const filmData = req.body ?? {};
 
       await FilmsModel.create({ user: currentUser?._id, ...filmData });
 

@@ -1,17 +1,17 @@
 /**
  * Import Modules
  */
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import ConnectDB from "./config/db";
-import compression from 'compression'
-import helmet from 'helmet'
-import cors from 'cors'
+import compression from "compression";
+import helmet from "helmet";
+import cors from "cors";
 
 /**
  * Import Middlewares
  */
-import { appRateLimiter } from './middlewares/rateLimiter'
-import requestAuthorization from './middlewares/requestAuthorization'
+import { appRateLimiter } from "./middlewares/rateLimiter";
+import requestAuthorization from "./middlewares/requestAuthorization";
 
 /**
  * Import routes
@@ -33,33 +33,29 @@ ConnectDB().catch((err) => {
 });
 const app = express();
 
+// Railway's edge proxy sits in front of the API: trust one hop so req.ip (and the rate
+// limiter's key) is the client's address, not the proxy's.
+app.set("trust proxy", 1);
+
 /**
  * Apply Middlewares
  */
 app.use(express.json());
-app.use((req: Request, resp: Response, next: NextFunction) => {
-    next()
-  }, cors({
-  maxAge: 86000
-}))
+// Also answers CORS preflight (OPTIONS) requests for every route.
+app.use(
+  cors({
+    maxAge: 86000,
+  }),
+);
 app.use(express.urlencoded({ extended: false }));
-app.use(appRateLimiter) 
-app.use(compression())
-app.use(helmet())
-app.use(requestAuthorization)
+app.use(appRateLimiter);
+app.use(compression());
+app.use(helmet());
+app.use(requestAuthorization);
 
 /**
  * Apply Routing
  */
 app.use("/", indexRouter);
-
-/**
- * Enable cors on options request
- */
-app.options('*', (req: Request, resp: Response, next: NextFunction) => {
-    next()
-  },cors({
-  maxAge: 86000
-}))
 
 export default app;
