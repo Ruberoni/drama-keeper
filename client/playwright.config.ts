@@ -20,7 +20,13 @@ export default defineConfig({
       command: 'pnpm --dir .. build && pnpm --dir .. start',
       url: 'http://localhost:4000',
       // Several specs run in parallel against one API; the default 20 requests/min would return 429s.
-      env: { PORT: '4000', RATE_LIMIT_PER_MINUTE: '1000' },
+      // In CI the API runs as in production (NODE_ENV=production turns on the SERVER_AUTH_TOKEN check),
+      // so the workflow sets SERVER_AUTH_TOKEN and the matching VITE_SERVER_AUTH_TOKEN.
+      env: {
+        PORT: '4000',
+        RATE_LIMIT_PER_MINUTE: '1000',
+        ...(process.env.CI ? { NODE_ENV: 'production' } : {}),
+      },
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },

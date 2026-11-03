@@ -34,12 +34,15 @@ The server uses the [TMDb API](https://www.themoviedb.org/) to get film poster i
 
 ## Tech used
 
-* [Node.js](https://nodejs.dev/)
-* [Express](https://expressjs.com/) - For the server
-* [MongoDB](https://www.mongodb.com/) - For the database
+* [Node.js](https://nodejs.org/) 26 and [pnpm](https://pnpm.io/) 12
+* [Express](https://expressjs.com/) 5 - For the server
+* [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/) - For the database
 * [TypeScript](https://www.typescriptlang.org/) - For the strong typing
-* [React](https://reactjs.org/) - For the frontend
-* [Material UI](https://material-ui.com/) - To make it cute
+* [React](https://react.dev/) 19 with [Vite](https://vite.dev/) - For the frontend
+* [MUI](https://mui.com/) - To make it cute
+* [Google Identity Services](https://developers.google.com/identity/gsi/web) - For "Sign in with Google"
+* [Vitest](https://vitest.dev/) and [Playwright](https://playwright.dev/) - For the tests
+* Hosting: the API on [Railway](https://railway.com/), the client on [Vercel](https://vercel.com/)
 
 ## Build the app
 
@@ -67,7 +70,35 @@ The API listens on http://localhost:4000 and the client on http://localhost:3000
 
 The app should run ok.
 
-Other API scripts: `pnpm dev` (API only, reloads on change), `pnpm test` (Vitest; needs `MONGO_URI_TEST` in `.env`), `pnpm typecheck`, and `pnpm build && pnpm start` (compiled API from `dist/`, as in production).
+Other API scripts: `pnpm dev` (API only, reloads on change), `pnpm test` (Vitest; needs `MONGO_URI_TEST` in `.env`), `pnpm typecheck`, `pnpm lint`, and `pnpm build && pnpm start` (compiled API from `dist/`, as in production).
+
+Client scripts (run with `pnpm --dir client <script>`): `dev`, `build`, `preview`, `test`, `typecheck`, `lint`, and `e2e` (Playwright; needs MongoDB and the API env vars, CI runs it).
+
+## Environment variables
+
+The API reads `.env` at the project root (see `.env.example`):
+
+| Variable | Required | Description |
+| --- | --- | --- |
+| `PORT` | No | Port the API listens on. Defaults to `4000`. |
+| `MONGO_URI` | Yes | MongoDB connection string. |
+| `MONGO_URI_TEST` | For tests | Separate MongoDB database used by `pnpm test`. Tests wipe it. |
+| `tokenKey` | Yes | Secret used to sign login JWTs. |
+| `TMDb_API_KEY` | Yes | TMDb API key, used to find film posters. |
+| `SERVER_AUTH_TOKEN` | In production | Token the client must send in the `server-authorization` header. Only checked when `NODE_ENV=production`. |
+| `GOOGLE_CLIENT_ID` | For Google sign-in | Google OAuth Web client ID. |
+| `RATE_LIMIT_PER_MINUTE` | No | Requests per minute per IP. Defaults to `20`. |
+| `NODE_ENV` | In production | Set to `production` to enable the `SERVER_AUTH_TOKEN` check. |
+
+The client reads `client/.env` (see `client/.env.example`). Vite bakes these into the bundle at build time, so they are public:
+
+| Variable | Description |
+| --- | --- |
+| `VITE_API_URL` | Base URL of the API, e.g. `http://localhost:4000`. |
+| `VITE_SERVER_AUTH_TOKEN` | Same value as the API's `SERVER_AUTH_TOKEN`. |
+| `VITE_GOOGLE_CLIENT_ID` | Same value as the API's `GOOGLE_CLIENT_ID`. |
+
+For Google sign-in, the client's origin (for local development, `http://localhost` and `http://localhost:3000`) must be an authorized JavaScript origin of the OAuth client in Google Cloud Console.
 
 ## Contact me!
 

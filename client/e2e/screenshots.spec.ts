@@ -66,7 +66,11 @@ for (const vp of viewports) {
       // Keep Google's sign-in button out of the shots; it can't load the dummy client id anyway.
       await page.route(/accounts\.google\.com/, (route) => route.abort())
 
-      const registered = await request.post(`${apiUrl}/api/users`, { data: { email, password } })
+      const registered = await request.post(`${apiUrl}/api/users`, {
+        data: { email, password },
+        // Needed when the API runs with NODE_ENV=production (as in CI); ignored otherwise.
+        headers: { 'server-authorization': `Bearer ${process.env.VITE_SERVER_AUTH_TOKEN ?? ''}` },
+      })
       expect(registered.status()).toBe(200)
 
       // Logged-out home
