@@ -142,6 +142,17 @@ describe("authorize middleware", () => {
     expect(req.currentUser?.email).toBe("a@b.com");
   });
 
+  test("rejects a valid token for a user that no longer exists", async () => {
+    const token = jwt.sign(
+      { _id: new mongoose.Types.ObjectId().toString() },
+      process.env.tokenKey as string,
+    );
+    const { req, res, next } = await run(`Bearer ${token}`);
+    expect(next).not.toHaveBeenCalled();
+    expect(req.currentUser).toBeUndefined();
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
   test("rejects a token without _id", async () => {
     const token = jwt.sign({ foo: "bar" }, process.env.tokenKey as string);
     const { res, next } = await run(`Bearer ${token}`);

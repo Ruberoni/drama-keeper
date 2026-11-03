@@ -29,8 +29,10 @@ export const authorize = async (
         : undefined;
     if (typeof userId !== "string") throw new Error("Invalid token payload");
 
-    const _currentUser = await UserModel.findById(userId);
-    const currentUser = _currentUser || undefined;
+    // A valid token for a deleted user must not reach the routes:
+    // find({ user: undefined }) would match every film without an owner.
+    const currentUser = await UserModel.findById(userId);
+    if (!currentUser) throw new Error("User does not exist");
     debug("currentUser:", currentUser);
 
     req.currentUser = currentUser;
