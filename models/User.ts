@@ -15,7 +15,7 @@
 - Compare Passwords
 **/
 
-import { Schema, model, Document, Model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import isEmail from "validator/lib/isEmail";
 import bcrypt from "bcrypt";
 
@@ -27,15 +27,15 @@ const userSchema = new Schema<IUser>({
     lowercase: true,
     validate: {
       validator: (val: string) => isEmail(val),
-      message: "{VALUE} is not an email"
-    }
+      message: "{VALUE} is not an email",
+    },
   },
   password: {
     type: String,
     required: true,
-    minLength: 7
+    minLength: 7,
   },
-  googleId: String
+  googleId: String,
 });
 
 export interface IUserDocument extends Document {
@@ -44,7 +44,7 @@ export interface IUserDocument extends Document {
 }
 
 export interface IUser extends IUserDocument {
-  verifyPassword: (arg0: string) => Promise<boolean>
+  verifyPassword: (arg0: string) => Promise<boolean>;
 }
 
 /*
@@ -68,7 +68,7 @@ userSchema.pre<IUser>("save", async function (next) {
  */
 userSchema.methods.verifyPassword = async function (
   this: IUser,
-  passwordAttempt: string
+  passwordAttempt: string,
 ) {
   return await bcrypt.compare(passwordAttempt, this.password);
 };

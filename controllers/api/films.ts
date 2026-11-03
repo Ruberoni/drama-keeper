@@ -22,27 +22,21 @@
 import FilmsModel from "../../models/Film";
 import Debug from "debug";
 import { Request, Response } from "express";
-import fs from "fs";
-import path from "path";
-import { errorMessage } from '../../utils/errors'
+import { errorMessage } from "../../utils/errors";
 
 const debug = Debug("film");
 
 /*
  * Send all the films as the response.
  */
-export const getAllFilms = async (
-  req: Request,
-  res: Response
-  ) => {
+export const getAllFilms = async (req: Request, res: Response) => {
   debug("CONTROLLER: getAllFilms | EXECUTED");
   try {
-
     let films = await FilmsModel.find();
-    const watchedString = req.query.watched
+    const watchedString = req.query.watched;
     if (watchedString) {
-      const watched = (watchedString === 'true')
-      films = films.filter((film) => film?.watched === watched)
+      const watched = watchedString === "true";
+      films = films.filter((film) => film?.watched === watched);
     }
     res.send(films);
     debug("CONTROLLER: getAllFilms | FINISHED GOOD");
@@ -58,8 +52,8 @@ export const getAllFilms = async (
  */
 export const createFilm = async (
   req: Request,
-  res: Response
-  ): Promise<void | Response> => {
+  res: Response,
+): Promise<void | Response> => {
   debug("CONTROLLER: createFilm | EXECUTED");
 
   try {
@@ -78,20 +72,20 @@ export const createFilm = async (
  */
 export const getFilmsByUserId = async (
   req: Request,
-  res: Response
-  ): Promise<void | Response> => {
+  res: Response,
+): Promise<void | Response> => {
   debug("CONTROLLER: getFilmsByUser | EXECUTED");
   try {
-    const currentUser = req.params.user_id || '';
-    let films = await FilmsModel.find({user: currentUser});
+    const currentUser = req.params.user_id || "";
+    let films = await FilmsModel.find({ user: currentUser });
 
-    const watchedString = req.query.watched
+    const watchedString = req.query.watched;
     if (watchedString) {
-      const watched = (watchedString === 'true')
-      films = films.filter((film) => film?.watched === watched)
+      const watched = watchedString === "true";
+      films = films.filter((film) => film?.watched === watched);
     }
 
-    res.json({message: `Films of user ${currentUser}`, films});
+    res.json({ message: `Films of user ${currentUser}`, films });
     debug("CONTROLLER: getFilmsByUser | FINISHED GOOD");
   } catch (err) {
     debug("CONTROLLER: getFilmsByUser | ERROR:", errorMessage(err));
@@ -100,12 +94,12 @@ export const getFilmsByUserId = async (
 };
 
 /*
- * Deletes a film by id. 
+ * Deletes a film by id.
  */
 export const deleteFilmById = async (
   req: Request,
-  res: Response
-  ): Promise<void | Response> => {
+  res: Response,
+): Promise<void | Response> => {
   debug("CONTROLLER: deleteFilmById | EXECUTED");
   try {
     const id = req.params.id;
@@ -119,12 +113,12 @@ export const deleteFilmById = async (
 };
 
 /*
- * Updates a film by id. 
+ * Updates a film by id.
  */
 export const updateFilmById = async (
   req: Request,
-  res: Response
-  ): Promise<void | Response> => {
+  res: Response,
+): Promise<void | Response> => {
   debug("CONTROLLER: updateFilmById | EXECUTED");
   try {
     const id = req.params.id;
@@ -138,42 +132,37 @@ export const updateFilmById = async (
     debug("CONTROLLER: updateFilmById | ERROR:", errorMessage(err));
     res.status(400).send(errorMessage(err));
   }
-}
-
-const imagePath = path.resolve("./assets/img/panes.png");
+};
 
 /*
  * TESTING PURPOSES CONTROLLERS
  * CALL THEM WITH /api/films/test/<function name>/<uri params>
  */
 export const test = {
-
   /*
    * Retrieve the films of the user in the req.uerId
    */
   getFilmsAuthorized: async (req: Request, res: Response) => {
     try {
-      const currentUser = req.currentUser
+      const currentUser = req.currentUser;
 
-      const films = await FilmsModel.find({user: currentUser})
+      const films = await FilmsModel.find({ user: currentUser });
 
-      res.json({message: `Films of user ${currentUser}`, films});
-
+      res.json({ message: `Films of user ${currentUser}`, films });
     } catch (err) {
-      res.status(400).json({message: 'error', err: errorMessage(err)})
+      res.status(400).json({ message: "error", err: errorMessage(err) });
     }
   },
   createFilmAuthorized: async (req: Request, res: Response) => {
     try {
-      const currentUser = req.currentUser
-      const filmData = req.body
+      const currentUser = req.currentUser;
+      const filmData = req.body;
 
-      await FilmsModel.create({user: currentUser?._id, ...filmData})
+      await FilmsModel.create({ user: currentUser?._id, ...filmData });
 
-      res.json({message: 'Film created'});
-
+      res.json({ message: "Film created" });
     } catch (err) {
-      res.status(400).json({message: 'error', err: errorMessage(err)})
+      res.status(400).json({ message: "error", err: errorMessage(err) });
     }
-  }
+  },
 };

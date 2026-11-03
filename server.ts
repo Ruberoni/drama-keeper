@@ -1,8 +1,5 @@
 import "./config/env";
-import Debug from "debug";
 import app from "./index";
-
-const debug = Debug("http");
 
 const port: number = normalizePort(process.env.PORT || 4000);
 
